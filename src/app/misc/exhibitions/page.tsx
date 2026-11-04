@@ -20,7 +20,8 @@ export default function ExhibitionsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[1100px] px-4 pb-8 pt-28 md:pt-36">
+    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24">
+      <div className="mx-auto w-[min(541px,100%)]">
       <Link href="/misc" className="inline-block text-muted transition-colors hover:text-fg">
         ← Misc
       </Link>
@@ -30,26 +31,26 @@ export default function ExhibitionsPage() {
         per="word"
         preset="fade-in-blur"
         speedReveal={1.4}
-        className="mt-8 max-w-[10ch] text-[clamp(40px,8vw,104px)] leading-[0.95] tracking-[-0.04em]"
+        className="mt-10 font-semibold"
       >
         Exhibition Visits
       </TextEffect>
-      <Reveal className="mt-8 text-[18px] text-muted md:text-[22px]">
+      <Reveal className="mt-2 text-muted">
         <p>A record of my art explorations from 2019 onwards.</p>
       </Reveal>
 
-      <div className="mt-14 flex flex-col gap-14 md:mt-20">
+      <div className="mt-10 flex flex-col gap-10">
         {groups.map((g) => (
-          <section key={g.year} className="grid gap-4 md:grid-cols-[120px_1fr] md:gap-10">
-            <h2 className="text-muted tabular-nums">{g.year}</h2>
+          <section key={g.year} className="grid gap-2">
+            <h2 className="font-semibold tabular-nums">{g.year}</h2>
             <ul className="divide-y divide-line border-y border-line">
               {g.items.map((e, i) => (
                 <li
                   key={`${e.title}-${i}`}
-                  className="grid gap-1 py-4 sm:grid-cols-[1fr_auto] sm:gap-8"
+                  className="grid gap-1 py-3 sm:grid-cols-[1fr_auto] sm:gap-8"
                 >
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[16px] leading-snug md:text-[17px]">{e.title}</span>
+                    <span>{e.title}</span>
                     <span className="text-muted">
                       {e.venue}, {e.city}
                       {e.note ? ` · ${e.note}` : ""}
@@ -61,6 +62,7 @@ export default function ExhibitionsPage() {
             </ul>
           </section>
         ))}
+      </div>
       </div>
     </div>
   );

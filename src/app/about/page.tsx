@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import { Reveal } from "@/components/reveal";
-import { TextEffect } from "@/components/motion-primitives/text-effect";
+import { CopyEmail } from "@/components/copy-email";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -10,68 +8,102 @@ export const metadata: Metadata = {
   description: site.description,
 };
 
-const para = "text-[18px] leading-[1.5] md:text-[22px] md:leading-[1.4] tracking-[-0.01em]";
+const link =
+  "underline decoration-line decoration-1 underline-offset-[5px] transition-colors hover:decoration-fg";
+const h = "font-semibold";
+const body = "mt-2 space-y-[22px]";
+
+const disciplines: [string, string][] = [
+  ["UX & Product Design", "U-M GPT, SoundScape"],
+  [
+    "Graphic Design & Branding",
+    "MBGNA Posters, Lotus Flower Brochure, African Roots Poster, Fate & Fragrance",
+  ],
+  ["3D & Fine Art", "Lamp Holder, Fine Art"],
+];
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-[1100px] px-4 pb-8 pt-28 md:pt-36">
-      <TextEffect
-        as="h1"
-        per="char"
-        preset="fade-in-blur"
-        speedReveal={1.6}
-        className="mb-12 text-[clamp(40px,8vw,104px)] leading-[0.95] tracking-[-0.04em] md:mb-16"
-      >
-        About
-      </TextEffect>
+    <div className="about-veil relative min-h-svh px-[var(--edge)] pb-16 pt-[120px]">
+      <div className="relative mx-auto w-[min(397px,100%)]">
+        <Link
+          href="/"
+          aria-label="Close"
+          className="absolute -top-8 right-0 text-[18px] leading-none text-muted transition-colors hover:text-fg md:-right-16 md:top-0"
+        >
+          ×
+        </Link>
 
-      <div className="grid gap-10 md:grid-cols-[minmax(0,360px)_1fr] md:gap-16">
-        <Reveal>
-          <Image
-            src={site.profileImage.src}
-            alt={site.profileImage.alt}
-            width={site.profileImage.w}
-            height={site.profileImage.h}
-            priority
-            sizes="(min-width: 768px) 360px, 100vw"
-            className="h-auto w-full rounded-md bg-fg/[0.04]"
-          />
-        </Reveal>
+        <div className="space-y-[22px]">
+          <p>
+            I’m {site.name}, also known as {site.nickname} — a UX designer and artist who creates
+            thoughtful, human-centered experiences, and an aspiring product designer. Also a
+            creative director.
+          </p>
+          <p>
+            As an international student who has lived in the UK, Korea, and the United States,
+            I’ve learned to see the world from multiple perspectives.
+          </p>
+        </div>
 
-        <div className="flex flex-col gap-7">
-          <Reveal>
-            <p className={para}>
-              I’m {site.name}, also known as {site.nickname} — a UX designer and artist who
-              creates thoughtful, human-centered experiences, and an aspiring product designer.
+        <section className="mt-14">
+          <h2 className={h}>Education</h2>
+          <div className={body}>
+            <p>
+              Dual degree at the University of Michigan, Ann Arbor: User Experience Research &amp;
+              Design at the School of Information, and Graphic Design at the Stamps School of Art
+              &amp; Design.
             </p>
-          </Reveal>
-          <Reveal>
-            <p className={para}>
-              I’m pursuing a dual degree at the University of Michigan, Ann Arbor: User
-              Experience Research &amp; Design at the School of Information, and Graphic Design
-              at the Stamps School of Art &amp; Design.
-            </p>
-          </Reveal>
-          <Reveal>
-            <p className={para}>
-              As an international student who has lived in the UK, Korea, and the United
-              States, I’ve learned to see the world from multiple perspectives.
-            </p>
-          </Reveal>
-          <Reveal>
-            <p className={para}>
-              Outside of coursework I’m drawn to design, new technologies, AI, art history,
-              editorials, and photography. You can find a record of the{" "}
-              <Link
-                href="/misc/exhibitions"
-                className="underline decoration-line decoration-1 underline-offset-[6px] transition-colors hover:decoration-fg"
-              >
-                exhibitions I’ve visited here
+          </div>
+        </section>
+
+        <section className="mt-14">
+          <h2 className={h}>Interests</h2>
+          <div className={body}>
+            <p>
+              Design, new technologies, AI, art history, editorials, and photography. A record of
+              the{" "}
+              <Link href="/misc/exhibitions" className={link}>
+                exhibitions I’ve visited
               </Link>
               .
             </p>
-          </Reveal>
-        </div>
+          </div>
+        </section>
+
+        <section className="mt-14">
+          <h2 className={h}>Disciplines</h2>
+          <dl className="mt-2 grid grid-cols-[116px_1fr] gap-x-4 gap-y-6">
+            {disciplines.map(([k, v]) => (
+              <div key={k} className="contents">
+                <dt className="text-muted">{k}</dt>
+                <dd>{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section className="mt-14">
+          <h2 className={h}>Links</h2>
+          <p className="mt-2 flex flex-wrap gap-x-5">
+            <a href={site.links.linkedin} target="_blank" rel="noopener noreferrer" className={link}>
+              LinkedIn
+            </a>
+            <a href={site.links.resume} target="_blank" rel="noopener noreferrer" className={link}>
+              Resume
+            </a>
+            <a href={site.links.pinterest} target="_blank" rel="noopener noreferrer" className={link}>
+              Pinterest
+            </a>
+          </p>
+        </section>
+
+        <section className="mt-14">
+          <h2 className={h}>Contact</h2>
+          <p className="mt-2">
+            <CopyEmail email={site.email} />
+          </p>
+        </section>
       </div>
     </div>
   );

@@ -3,9 +3,9 @@ import type { Project } from "@/data/projects";
 
 function Placeholder({ project }: { project: Project }) {
   return (
-    <div className="flex h-full w-full flex-col justify-between border border-line bg-fg/[0.04] p-5 text-left">
-      <span className="text-[13px] text-muted">{project.category}</span>
-      <span className="text-[clamp(22px,3vw,34px)] leading-[1.05] tracking-[-0.03em]">
+    <div className="flex h-full w-full flex-col justify-between border border-line bg-fg/[0.04] p-4 text-left">
+      <span className="text-[length:var(--fs-cap)] text-muted">{project.category}</span>
+      <span className="font-semibold">
         {project.short}
       </span>
     </div>

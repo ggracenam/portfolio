@@ -4,17 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { ContactPill, MobileContact } from "@/components/contact-pill";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { site } from "@/data/site";
 import { cn } from "@/lib/utils";
 
-const left = [
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
 const right = [
-  { href: "/work", label: "Work" },
+  { href: "/projects", label: "Projects" },
   { href: "/misc", label: "Misc" },
 ];
+const menu = [{ href: "/about", label: "About" }, ...right];
 
 function NavLink({
   href,
@@ -70,11 +69,10 @@ export function SiteHeader() {
           aria-hidden
           className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-bg via-bg/70 to-transparent"
         />
-        <div className="pointer-events-auto relative grid grid-cols-[1fr_auto_1fr] items-start px-4 py-3.5 text-[14px]">
+        <div className="pointer-events-auto relative grid grid-cols-[1fr_auto_1fr] items-start px-[var(--edge)] py-5">
           <nav aria-label="Primary" className="-ml-2.5 hidden items-center gap-1 md:flex">
-            {left.map((l) => (
-              <NavLink key={l.href} {...l} />
-            ))}
+            <NavLink href="/about" label="About" />
+            <ContactPill email={site.email} />
           </nav>
 
           <button
@@ -103,13 +101,9 @@ export function SiteHeader() {
           <Link
             href="/"
             onClick={() => setOpen(false)}
-            className="text-center leading-[1.15] tracking-[0.04em]"
+            className="py-1.5 text-center"
           >
-            You Rim Nam
-            <br />
-            Product &amp; UX
-            <br />
-            Designer
+            {site.name}
           </Link>
 
           <div className="-mr-2 flex items-center justify-end gap-1">
@@ -131,9 +125,9 @@ export function SiteHeader() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[45] flex flex-col justify-center gap-2 bg-bg px-6 md:hidden"
+            className="fixed inset-0 z-[45] flex flex-col justify-center gap-2 bg-bg px-[var(--edge)] md:hidden"
           >
-            {[...left, ...right].map((l, i) => (
+            {menu.map((l, i) => (
               <motion.div
                 key={l.href}
                 initial={{ opacity: 0, y: 16 }}
@@ -143,10 +137,17 @@ export function SiteHeader() {
                 <NavLink
                   {...l}
                   onClick={() => setOpen(false)}
-                  className="-ml-3 inline-block text-[44px] leading-none tracking-[-0.03em]"
+                  className="-ml-3 inline-block text-[22px] leading-none"
                 />
               </motion.div>
             ))}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.06 * menu.length + 0.05, duration: 0.4 }}
+            >
+              <MobileContact email={site.email} />
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

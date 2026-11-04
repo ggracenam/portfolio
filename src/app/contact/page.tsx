@@ -17,31 +17,32 @@ const rows = [
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-[1100px] px-4 pb-8 pt-28 md:pt-36">
+    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24">
+      <div className="mx-auto w-[min(541px,100%)]">
       <TextEffect
         as="h1"
         per="word"
         preset="fade-in-blur"
         speedReveal={1.4}
-        className="max-w-[12ch] text-[clamp(40px,8vw,104px)] leading-[0.95] tracking-[-0.04em]"
+        className="font-semibold"
       >
         Let’s get in touch!
       </TextEffect>
 
-      <Reveal className="mt-8 max-w-[44ch] text-[18px] leading-[1.5] text-muted md:text-[22px]">
+      <Reveal className="mt-2 text-muted">
         <p>Get in touch with me for any work inquiries.</p>
       </Reveal>
 
-      <Reveal className="mt-14 md:mt-20">
+      <Reveal className="mt-10">
         <dl className="divide-y divide-line border-y border-line">
-          <div className="grid gap-2 py-5 sm:grid-cols-[200px_1fr] sm:gap-10">
+          <div className="grid gap-2 py-3 sm:grid-cols-[116px_1fr] sm:gap-4">
             <dt className="text-muted">Email</dt>
             <dd>
               <CopyEmail email={site.email} />
             </dd>
           </div>
           {rows.map((r) => (
-            <div key={r.label} className="grid gap-2 py-5 sm:grid-cols-[200px_1fr] sm:gap-10">
+            <div key={r.label} className="grid gap-2 py-3 sm:grid-cols-[116px_1fr] sm:gap-4">
               <dt className="text-muted">{r.label}</dt>
               <dd>
                 <a
@@ -57,6 +58,7 @@ export default function ContactPage() {
           ))}
         </dl>
       </Reveal>
+      </div>
     </div>
   );
 }

@@ -14,7 +14,7 @@ export function generateStaticParams() {
 export const dynamicParams = false;
 
 export async function generateMetadata(
-  props: PageProps<"/work/[slug]">,
+  props: PageProps<"/projects/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const project = getProject(slug);
@@ -26,7 +26,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
+export default async function ProjectPage(props: PageProps<"/projects/[slug]">) {
   const { slug } = await props.params;
   const project = getProject(slug);
   if (!project) notFound();
@@ -42,67 +42,67 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
   ];
 
   return (
-    <article className="mx-auto max-w-[1100px] px-4 pb-8 pt-28 md:pt-36">
+    <article className="mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24">
+      <div className="mx-auto w-[min(541px,100%)]">
       <Link
-        href="/work"
+        href="/projects"
         className="inline-block text-muted transition-colors hover:text-fg"
       >
-        ← All work
+        ← All projects
       </Link>
 
-      <header className="mt-8 flex flex-col gap-8 md:mt-10 md:gap-12">
+      <header className="mt-10 flex flex-col gap-6">
         <TextEffect
           as="h1"
           per="word"
           preset="fade-in-blur"
           speedReveal={1.4}
-          className="max-w-[20ch] text-[clamp(30px,5.4vw,68px)] leading-[1.02] tracking-[-0.035em]"
+          className="font-semibold"
         >
           {project.title}
         </TextEffect>
 
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-5 border-y border-line py-5 md:grid-cols-4">
+        <dl className="grid grid-cols-[116px_1fr] gap-x-4 gap-y-1">
           {meta.map((m) => (
-            <div key={m.label} className="flex flex-col gap-1">
+            <div key={m.label} className="contents">
               <dt className="text-muted">{m.label}</dt>
               <dd>{m.value}</dd>
             </div>
           ))}
         </dl>
       </header>
+      </div>
 
       {project.cover && (
-        <Reveal className="mt-10 md:mt-14">
+        <Reveal className="mt-[clamp(48px,6.78vw,96px)]">
           <Image
             src={project.cover.src}
             alt={project.cover.alt}
             width={project.cover.w}
             height={project.cover.h}
             priority
-            sizes="(min-width: 1100px) 1068px, 100vw"
-            className="h-auto w-full rounded-md bg-fg/[0.04]"
+            sizes="(min-width: 1280px) 1232px, 100vw"
+            className="h-auto w-full rounded-sm bg-fg/[0.04]"
           />
         </Reveal>
       )}
 
-      <div className="mt-14 md:mt-24">
+      <div className="mt-[clamp(48px,6.78vw,96px)]">
         <ProjectBlocks blocks={project.blocks} />
       </div>
 
-      <Reveal className="mt-24 md:mt-36">
+      <Reveal className="mt-[clamp(96px,13.56vw,192px)]">
         <Link
-          href={`/work/${next.slug}`}
-          className="group flex items-end justify-between gap-6 border-t border-line pt-6"
+          href={`/projects/${next.slug}`}
+          className="group mx-auto flex w-[min(541px,100%)] items-baseline justify-between gap-6 border-t border-line pt-4"
         >
-          <span className="flex flex-col gap-2">
+          <span className="flex gap-4">
             <span className="text-muted">Next project</span>
-            <span className="text-[clamp(24px,4vw,48px)] leading-[1.05] tracking-[-0.03em]">
-              {next.short}
-            </span>
+            <span>{next.short}</span>
           </span>
           <span
             aria-hidden
-            className="pb-1 text-[28px] transition-transform duration-300 group-hover:translate-x-1.5"
+            className="transition-transform duration-300 group-hover:translate-x-1"
           >
             →
           </span>

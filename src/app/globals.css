@@ -11,6 +11,19 @@
   --line: rgb(0 0 0 / 0.1);
   --pill: rgb(255 255 255 / 0.82);
   color-scheme: light;
+
+  /* Type + spacing scale (measured from dmcg.co: 14px / 22px, 0.04em, weight 500). */
+  --edge: 24px;
+  --fs: 14px;
+  --lh: 22px;
+  --fs-cap: 12px;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --fs: 13px;
+    --lh: 20px;
+  }
 }
 
 :root[data-theme="dark"] {
@@ -53,10 +66,10 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 450;
-  line-height: 1.45;
-  letter-spacing: 0.005em;
+  font-size: var(--fs);
+  font-weight: 500;
+  line-height: var(--lh);
+  letter-spacing: 0.04em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   transition:
@@ -90,4 +103,17 @@ button {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Home: cursor-following label on mouse devices, static label under image on touch. */
+.label-hover { display: none; }
+.label-static { display: inline-flex; }
+@media (hover: hover) and (pointer: fine) {
+  .label-hover { display: inline-flex; }
+  .label-static { display: none; }
+}
+
+/* About: faint glow behind the centered column. */
+.about-veil {
+  background: radial-gradient(ellipse 55% 45% at 50% 40%, color-mix(in srgb, var(--fg) 5%, transparent), transparent 75%);
 }
