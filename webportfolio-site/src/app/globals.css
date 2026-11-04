@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+/* `dark:` follows the data-theme attribute (set by the toggle / inline script). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------- Theme tokens ---------- */
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+  --muted: #8b8b8b;
+  --line: rgb(0 0 0 / 0.1);
+  --pill: rgb(255 255 255 / 0.82);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b0b0b;
+  --fg: #f3f3f3;
+  --muted: #7f7f7f;
+  --line: rgb(255 255 255 / 0.14);
+  --pill: rgb(22 22 22 / 0.82);
+  color-scheme: dark;
+}
+
+/* No-JS fallback: follow the system setting until the script sets data-theme. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #0b0b0b;
+    --fg: #f3f3f3;
+    --muted: #7f7f7f;
+    --line: rgb(255 255 255 / 0.14);
+    --pill: rgb(22 22 22 / 0.82);
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-pill: var(--pill);
+  --font-sans: "Inter Tight Variable", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+}
+
+/* ---------- Base ---------- */
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 450;
+  line-height: 1.45;
+  letter-spacing: 0.005em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease;
+}
+
+::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--fg);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
