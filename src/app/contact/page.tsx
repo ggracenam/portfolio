@@ -11,8 +11,6 @@ export const metadata: Metadata = {
 
 const rows = [
   { label: "LinkedIn", href: site.links.linkedin, text: "linkedin.com/in/gracenam4" },
-  { label: "Resume", href: site.links.resume, text: "View on Google Drive" },
-  { label: "Pinterest", href: site.links.pinterest, text: "pin.it/56I9TevFQ" },
 ];
 
 export default function ContactPage() {

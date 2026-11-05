@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PaintingSlides } from "@/components/painting-slides";
 import { Reveal } from "@/components/reveal";
 import type { Block, Img } from "@/data/projects";
 import { cn } from "@/lib/utils";
@@ -24,14 +25,15 @@ function Section({
 
 function Photo({ img }: { img: Img }) {
   return (
-    <Image
-      src={img.src}
-      alt={img.alt}
-      width={img.w}
-      height={img.h}
-      sizes="(min-width: 1280px) 616px, 100vw"
-      className="h-auto w-full rounded-sm bg-fg/[0.04]"
-    />
+    <div className="media-round">
+      <Image
+        src={img.src}
+        alt={img.alt}
+        width={img.w}
+        height={img.h}
+        sizes="(min-width: 990px) 463px, 100vw"
+      />
+    </div>
   );
 }
 
@@ -72,6 +74,10 @@ function BlockView({ block }: { block: Block }) {
       );
 
     case "artworks":
+      // When the works carry their own images, give each one its own screen.
+      if (block.items.some((a) => a.image)) {
+        return <PaintingSlides items={block.items} />;
+      }
       return (
         <Section heading={block.heading}>
           <ul className="flex flex-col divide-y divide-line border-y border-line">
@@ -97,7 +103,7 @@ function BlockView({ block }: { block: Block }) {
           {block.heading && (
             <h2 className="mx-auto w-[min(541px,100%)] font-semibold">{block.heading}</h2>
           )}
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="mx-auto grid w-[min(942px,100%)] gap-4 md:grid-cols-2">
             {block.images.map((img) => {
               const wide = img.w / img.h >= 1.45;
               return (

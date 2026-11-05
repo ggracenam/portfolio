@@ -10,10 +10,16 @@ import { site } from "@/data/site";
 import { cn } from "@/lib/utils";
 
 const right = [
-  { href: "/projects", label: "Projects" },
+  { href: "/", label: "Projects" },
+  { href: "/studio", label: "Studio" },
   { href: "/misc", label: "Misc" },
 ];
 const menu = [{ href: "/about", label: "About" }, ...right];
+
+/** Tell the Projects page to go back to its default (Scroll) view. */
+function showScrollView() {
+  window.dispatchEvent(new Event("show-scroll-view"));
+}
 
 function NavLink({
   href,
@@ -28,11 +34,17 @@ function NavLink({
 }) {
   const pathname = usePathname();
   const current = pathname.replace(/\/$/, "") || "/";
-  const active = current === href || current.startsWith(`${href}/`);
+  const active =
+    href === "/"
+      ? current === "/" || current.startsWith("/projects")
+      : current === href || current.startsWith(`${href}/`);
   return (
     <Link
       href={href}
-      onClick={onClick}
+      onClick={() => {
+        if (href === "/") showScrollView();
+        onClick?.();
+      }}
       aria-current={active ? "page" : undefined}
       className={cn(
         "rounded-md border px-2.5 py-1.5 transition-colors hover:border-line",
@@ -70,7 +82,7 @@ export function SiteHeader() {
           className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-bg via-bg/70 to-transparent"
         />
         <div className="pointer-events-auto relative grid grid-cols-[1fr_auto_1fr] items-start px-[var(--edge)] py-5">
-          <nav aria-label="Primary" className="-ml-2.5 hidden items-center gap-1 md:flex">
+          <nav aria-label="Primary" className="-ml-2.5 hidden items-center gap-1 min-[901px]:flex">
             <NavLink href="/about" label="About" />
             <ContactPill email={site.email} />
           </nav>
@@ -80,7 +92,7 @@ export function SiteHeader() {
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="grid size-8 place-items-center justify-self-start md:hidden"
+            className="grid size-8 place-items-center justify-self-start min-[901px]:hidden"
           >
             <span className="relative block h-3 w-5">
               <span
@@ -100,14 +112,17 @@ export function SiteHeader() {
 
           <Link
             href="/"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              showScrollView();
+              setOpen(false);
+            }}
             className="py-1.5 text-center"
           >
             {site.name}
           </Link>
 
           <div className="-mr-2 flex items-center justify-end gap-1">
-            <nav aria-label="Secondary" className="hidden items-center gap-1 md:flex">
+            <nav aria-label="Secondary" className="hidden items-center gap-1 min-[901px]:flex">
               {right.map((l) => (
                 <NavLink key={l.href} {...l} />
               ))}
@@ -125,7 +140,7 @@ export function SiteHeader() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[45] flex flex-col justify-center gap-2 bg-bg px-[var(--edge)] md:hidden"
+            className="fixed inset-0 z-[45] flex flex-col justify-center gap-2 bg-bg px-[var(--edge)] min-[901px]:hidden"
           >
             {menu.map((l, i) => (
               <motion.div

@@ -3,6 +3,7 @@ import "@fontsource-variable/inter-tight";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { HaloCursor } from "@/components/halo-cursor";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        <HaloCursor />
       </body>
     </html>
   );

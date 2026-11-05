@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -12,6 +13,8 @@ import {
   useTransform,
 } from "motion/react";
 import { Cover } from "@/components/cover";
+import { Reveal } from "@/components/reveal";
+import { useCompact } from "@/lib/use-compact";
 import type { Project } from "@/data/projects";
 import { site } from "@/data/site";
 
@@ -19,22 +22,65 @@ const small = "text-[length:var(--fs)] leading-[var(--lh)]";
 const pill =
   "items-baseline gap-2 whitespace-nowrap rounded-xl border border-line bg-pill px-3 py-1.5 text-[length:var(--fs-cap)] leading-[16px] backdrop-blur-md";
 
-function Intro() {
+/** Other paintings from the project, for the hover fan (the cover itself is left out). */
+function fanImages(project: Project) {
+  const out: { src: string; alt: string }[] = [];
+  for (const b of project.blocks) {
+    if (b.type !== "artworks") continue;
+    for (const a of b.items) {
+      if (a.image && a.image.src !== project.cover?.src) out.push(a.image);
+    }
+  }
+  return out.slice(0, 3);
+}
+
+// A hand of cards: the cover and the other paintings all pivot on one point at their bottom
+// centre. The cover tilts furthest left and stays on top; the rest follow in even steps to the right.
+const FRONT = -18;
+const STEP = 12;
+const FAN = [0, 1, 2].map((i) => ({ r: FRONT + STEP * (i + 1), x: 0 }));
+
+/** Cards tucked behind the cover; they fan out like a hand of cards while hovered. */
+function CoverFan({ images, open, reduce }: { images: { src: string; alt: string }[]; open: boolean; reduce: boolean | null }) {
   return (
     <>
-      {site.intro.map((line) => (
-        <span key={line} className="mb-2 block last:mb-0">
-          {line}
-        </span>
-      ))}
+      {images.map((img, i) => {
+        const f = FAN[i];
+        return (
+          <motion.div
+            key={img.src}
+            aria-hidden
+            initial={false}
+            animate={open ? { rotate: f.r, x: f.x, y: 0, opacity: 1 } : { rotate: 0, x: 0, y: 0, opacity: 0 }}
+            transition={
+              reduce
+                ? { duration: 0 }
+                : { type: "spring", stiffness: 190, damping: 20, mass: 0.8, delay: open ? i * 0.04 : 0 }
+            }
+            style={{ transformOrigin: "50% 100%", zIndex: -1 - i }}
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl bg-bg shadow-[0_0_0_1px_var(--line),0_18px_40px_-24px_rgb(0_0_0/0.5)] "
+          >
+            <Image src={img.src} alt="" fill sizes="400px" className="object-cover" />
+          </motion.div>
+        );
+      })}
     </>
   );
 }
 
-function ShowcaseItem({ project, first }: { project: Project; first: boolean }) {
+function ShowcaseItem({
+  project,
+  compact,
+  base,
+}: {
+  project: Project;
+  compact: boolean;
+  base: string;
+}) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const [hovered, setHovered] = useState(false);
+  const fan = fanImages(project);
 
   // Cursor-following label (mouse only).
   const x = useMotionValue(0);
@@ -61,30 +107,38 @@ function ShowcaseItem({ project, first }: { project: Project; first: boolean }) 
     target: ref,
     offset: ["start end", "end start"],
   });
-  const opacity = useTransform(scrollYProgress, [0.1, 0.36, 0.64, 0.9], [0, 1, 1, 0]);
-  const blur = useTransform(scrollYProgress, [0.1, 0.36, 0.64, 0.9], [26, 0, 0, 26]);
+  // Phones/tablets use short sections, so the next project is already half on screen:
+  // the fade has to be gentler there or it would still be invisible.
+  const stops = compact ? [0, 0.12, 0.3, 0.7, 0.88, 1] : [0.1, 0.36, 0.36, 0.64, 0.64, 0.9];
+  const opacity = useTransform(
+    scrollYProgress,
+    stops,
+    compact ? [0.15, 0.7, 1, 1, 0.7, 0.15] : [0, 1, 1, 1, 1, 0],
+  );
+  const blur = useTransform(
+    scrollYProgress,
+    stops,
+    compact ? [10, 3, 0, 0, 3, 10] : [26, 0, 0, 0, 0, 26],
+  );
   const filter = useMotionTemplate`blur(${blur}px)`;
-  const scale = useTransform(scrollYProgress, [0.1, 0.5, 0.9], [0.9, 1, 0.9]);
+  const scale = useTransform(
+    scrollYProgress,
+    stops,
+    compact ? [0.95, 0.98, 1, 1, 0.98, 0.95] : [0.9, 1, 1, 1, 1, 0.9],
+  );
 
   return (
     <section
       ref={ref}
       aria-label={project.title}
-      className="relative flex h-svh snap-center items-center justify-center px-[var(--edge)]"
+      className="relative flex items-center justify-center px-[var(--edge)] py-9 first:pt-24 last-of-type:pb-32 lg:h-svh lg:snap-center lg:py-0 lg:first:pt-0 lg:last-of-type:pb-0"
     >
-      {/* On small screens the intro sits above the first project. */}
-      {first && (
-        <p className={`absolute inset-x-[var(--edge)] top-24 text-center lg:hidden ${small}`}>
-          <Intro />
-        </p>
-      )}
-
       <motion.div
         style={reduce ? undefined : { opacity, filter, scale }}
         className="relative"
       >
         <Link
-          href={`/projects/${project.slug}`}
+          href={`/${base}/${project.slug}`}
           aria-label={`${project.short} — ${project.category}`}
           className="group relative block"
           onPointerEnter={(e) => {
@@ -94,9 +148,23 @@ function ShowcaseItem({ project, first }: { project: Project; first: boolean }) 
           }}
           onPointerMove={(e) => track(e)}
           onPointerLeave={() => setHovered(false)}
+          onFocus={() => fan.length > 0 && setHovered(true)}
+          onBlur={() => setHovered(false)}
         >
-          <div className="rounded-md shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)] transition-transform duration-500 ease-out group-hover:scale-[1.018]">
-            <Cover project={project} mode="showcase" />
+          <div className="relative isolate">
+            {fan.length > 0 && <CoverFan images={fan} open={hovered} reduce={reduce} />}
+            <motion.div
+              initial={false}
+              animate={{ rotate: fan.length > 0 && hovered ? FRONT : 0 }}
+              transition={
+                reduce ? { duration: 0 } : { type: "spring", stiffness: 190, damping: 20, mass: 0.8 }
+              }
+              style={{ transformOrigin: "50% 100%" }}
+            >
+              <div className="rounded-md shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)] transition-transform duration-500 ease-out group-hover:scale-[1.018]">
+                <Cover project={project} mode="showcase" />
+              </div>
+            </motion.div>
           </div>
 
           {/* Mouse: title + category follow the cursor while hovering. */}
@@ -125,40 +193,124 @@ function ShowcaseItem({ project, first }: { project: Project; first: boolean }) 
   );
 }
 
-export function Showcase({ projects }: { projects: Project[] }) {
+type View = "scroll" | "grid";
+
+function ProjectGrid({ projects, base }: { projects: Project[]; base: string }) {
+  return (
+    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-24 pt-24">
+      <div className="grid gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        {projects.map((project, i) => (
+          <Reveal key={project.slug} delay={(i % 3) * 0.08}>
+            <Link href={`/${base}/${project.slug}`} className="group block">
+              <Cover project={project} mode="card" />
+              <div className="mt-2.5 flex items-baseline justify-between gap-4">
+                <span>{project.short}</span>
+                <span className="text-muted">{project.category}</span>
+              </div>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Projects: a scroll of the works, with a Grid view as an alternative. */
+export function Showcase({
+  projects,
+  base = "projects",
+  allowGrid = true,
+}: {
+  projects: Project[];
+  base?: "projects" | "studio";
+  /** Offer the Scroll | Grid switch (Projects only). */
+  allowGrid?: boolean;
+}) {
+  const [view, setView] = useState<View>("scroll");
+  const compact = useCompact();
+  // Phones and tablets only get the scroll view.
+  const shown: View = compact || !allowGrid ? "scroll" : view;
   const { scrollYProgress } = useScroll();
-  // The fixed text fades out as the footer comes into view.
+  // In the scroll view the fixed bar fades out at the very end.
   const fade = useTransform(scrollYProgress, [0.9, 0.97], [1, 0]);
 
-  // Gentle snapping so each project settles in the middle of the screen.
+  // Remember the view in the address (#grid) so a reload or shared link keeps it.
   useEffect(() => {
+    if (allowGrid && window.location.hash === "#grid") setView("grid");
+  }, [allowGrid]);
+
+  // Clicking the name (or the Projects tab) while already here returns to the Scroll view.
+  useEffect(() => {
+    const reset = () => {
+      setView("scroll");
+      window.scrollTo({ top: 0 });
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    };
+    window.addEventListener("show-scroll-view", reset);
+    return () => window.removeEventListener("show-scroll-view", reset);
+  }, []);
+
+  function choose(next: View) {
+    if (next === view) return;
+    setView(next);
+    window.scrollTo({ top: 0 });
+    const url = window.location.pathname + window.location.search + (next === "grid" ? "#grid" : "");
+    window.history.replaceState(null, "", url);
+  }
+
+  // Gentle snapping so each project settles in the middle of the screen (scroll view only).
+  useEffect(() => {
+    if (shown !== "scroll" || compact) return;
     const root = document.documentElement;
     root.style.scrollSnapType = "y proximity";
     return () => {
       root.style.scrollSnapType = "";
     };
-  }, []);
+  }, [shown, compact]);
 
   return (
     <div>
-      {/* Intro text on the side (large screens). */}
-      <motion.p
-        style={{ opacity: fade }}
-        className={`pointer-events-none fixed left-[var(--edge)] top-1/2 z-30 hidden w-[200px] -translate-y-1/2 lg:block xl:w-[240px] ${small}`}
-      >
-        <Intro />
-      </motion.p>
-
-      {projects.map((project, i) => (
-        <ShowcaseItem key={project.slug} project={project} first={i === 0} />
-      ))}
+      {shown === "scroll" ? (
+        projects.map((project) => (
+          <ShowcaseItem key={project.slug} project={project} compact={compact} base={base} />
+        ))
+      ) : (
+        <ProjectGrid projects={projects} base={base} />
+      )}
 
       <motion.div
-        style={{ opacity: fade }}
-        className={`pointer-events-none fixed inset-x-0 bottom-0 z-40 flex items-end justify-between bg-gradient-to-t from-bg via-bg/70 to-transparent px-[var(--edge)] pb-5 pt-12 ${small}`}
+        style={{ opacity: shown === "scroll" ? fade : 1 }}
+        className={`pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 items-end bg-gradient-to-t from-bg via-bg/70 to-transparent px-[var(--edge)] pb-5 pt-12 lg:grid-cols-[1fr_auto_1fr] ${small}`}
       >
-        <span>{site.footerLeft}</span>
-        <span>{site.footerRight}</span>
+        <span>
+          {site.footerLeft}
+        </span>
+        {allowGrid ? (
+        <div
+          role="group"
+          aria-label="View"
+          className={`pointer-events-auto hidden justify-center gap-1 lg:flex`}
+        >
+          {(["scroll", "grid"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => choose(v)}
+              aria-pressed={shown === v}
+              className={`rounded-md border px-2.5 py-1 capitalize transition-colors ${
+                shown === v ? "border-line bg-pill" : "border-transparent text-muted hover:text-fg"
+              }`}
+            >
+              {v}
+            </button>
+          ))}
+        </div>
+        ) : (
+          <span aria-hidden />
+        )}
+        <span className="justify-self-end">
+          {site.footerRight}
+        </span>
       </motion.div>
     </div>
   );

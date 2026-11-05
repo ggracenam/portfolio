@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CopyEmail } from "@/components/copy-email";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -12,15 +11,6 @@ const link =
   "underline decoration-line decoration-1 underline-offset-[5px] transition-colors hover:decoration-fg";
 const h = "font-semibold";
 const body = "mt-2 space-y-[22px]";
-
-const disciplines: [string, string][] = [
-  ["UX & Product Design", "U-M GPT, SoundScape"],
-  [
-    "Graphic Design & Branding",
-    "MBGNA Posters, Lotus Flower Brochure, African Roots Poster, Fate & Fragrance",
-  ],
-  ["3D & Fine Art", "Lamp Holder, Fine Art"],
-];
 
 export default function AboutPage() {
   return (
@@ -69,40 +59,6 @@ export default function AboutPage() {
               .
             </p>
           </div>
-        </section>
-
-        <section className="mt-14">
-          <h2 className={h}>Disciplines</h2>
-          <dl className="mt-2 grid grid-cols-[116px_1fr] gap-x-4 gap-y-6">
-            {disciplines.map(([k, v]) => (
-              <div key={k} className="contents">
-                <dt className="text-muted">{k}</dt>
-                <dd>{v}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section className="mt-14">
-          <h2 className={h}>Links</h2>
-          <p className="mt-2 flex flex-wrap gap-x-5">
-            <a href={site.links.linkedin} target="_blank" rel="noopener noreferrer" className={link}>
-              LinkedIn
-            </a>
-            <a href={site.links.resume} target="_blank" rel="noopener noreferrer" className={link}>
-              Resume
-            </a>
-            <a href={site.links.pinterest} target="_blank" rel="noopener noreferrer" className={link}>
-              Pinterest
-            </a>
-          </p>
-        </section>
-
-        <section className="mt-14">
-          <h2 className={h}>Contact</h2>
-          <p className="mt-2">
-            <CopyEmail email={site.email} />
-          </p>
         </section>
       </div>
     </div>

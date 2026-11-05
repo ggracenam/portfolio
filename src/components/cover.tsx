@@ -49,7 +49,7 @@ export function Cover({
       className="relative overflow-hidden rounded-md"
       style={{
         aspectRatio: ratio,
-        width: `min(82vw, 560px, calc(56svh * ${ratio}))`,
+        width: `min(82vw, clamp(560px, 32vw, 800px), calc(56svh * ${ratio}))`,
       }}
     >
       {img ? (
@@ -58,7 +58,7 @@ export function Cover({
           alt={img.alt}
           fill
           priority={false}
-          sizes="(min-width: 768px) 560px, 82vw"
+          sizes="(min-width: 768px) 800px, 82vw"
           className="object-cover"
         />
       ) : (

@@ -6,8 +6,6 @@ import { site } from "@/data/site";
 
 const social = [
   { label: "LinkedIn", href: site.links.linkedin },
-  { label: "Resume", href: site.links.resume },
-  { label: "Pinterest", href: site.links.pinterest },
 ];
 
 const link =
@@ -16,8 +14,8 @@ const link =
 export function SiteFooter() {
   const pathname = usePathname();
   const current = pathname.replace(/\/$/, "") || "/";
-  // The home page is just the works (it has its own fixed bar), so no footer there.
-  if (current === "/") return null;
+  // The home and Studio pages are just the works (it has its own fixed bar), so no footer there.
+  if (current === "/" || current === "/studio") return null;
 
   // Don't link a page to itself.
   const showStory = current !== "/about";

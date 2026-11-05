@@ -18,12 +18,16 @@ export type Block =
   | {
       type: "artworks";
       heading: string;
-      items: { title: string; year: string; medium: string; size: string; note?: string }[];
+      items: { title: string; year: string; medium: string; size: string; note?: string; image?: Img }[];
     }
   | { type: "images"; heading?: string; images: Img[] };
 
 export type Project = {
   slug: string;
+  /** Skip the big cover image at the top of the page (used when the works carry their own images). */
+  hideCover?: boolean;
+  /** Which page it lives on: the Projects scroll or the Studio page. */
+  section: "projects" | "studio";
   title: string;
   /** Short name used on the home page and cards. */
   short: string;
@@ -48,9 +52,10 @@ const fr = (id: string, ext: "png" | "jpg", w: number, h: number, alt: string): 
   alt,
 });
 
-export const projects: Project[] = [
+const all: Project[] = [
   {
     slug: "mbgna-posters",
+    section: "projects",
     title: "Poster Set for the Matthaei Botanical Gardens & Nichols Arboretum",
     short: "MBGNA Posters",
     category: "Graphic Design",
@@ -142,6 +147,7 @@ export const projects: Project[] = [
   },
   {
     slug: "soundscape",
+    section: "projects",
     title: "SoundScape: A location-aware music discovery platform",
     short: "SoundScape",
     category: "UX Design",
@@ -212,6 +218,7 @@ export const projects: Project[] = [
   },
   {
     slug: "umgpt",
+    section: "projects",
     title: "U-M GPT: An AI-powered conversational assistant for the University of Michigan",
     short: "U-M GPT",
     category: "UX Design",
@@ -365,6 +372,7 @@ export const projects: Project[] = [
   },
   {
     slug: "brochure",
+    section: "projects",
     title: "Brochure for the poem “Lotus Flower” (Korean)",
     short: "Lotus Flower Brochure",
     category: "Graphic Design",
@@ -414,6 +422,7 @@ export const projects: Project[] = [
   },
   {
     slug: "article-poster",
+    section: "projects",
     title: "Poster for Audrey Bennett’s “The African Roots of Swiss Design”",
     short: "African Roots Poster",
     category: "Graphic Design",
@@ -496,6 +505,7 @@ export const projects: Project[] = [
   },
   {
     slug: "lamp",
+    section: "projects",
     title: "Lamp Holder: Scenery through a window",
     short: "Lamp Holder",
     category: "3D Design",
@@ -561,6 +571,7 @@ export const projects: Project[] = [
   },
   {
     slug: "perfume",
+    section: "projects",
     title: "Perfume Packaging & Branding: Fate and Fragrance",
     short: "Fate & Fragrance",
     category: "Branding",
@@ -614,43 +625,43 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "fine-art",
-    title: "Collection of Fine Art",
-    short: "Fine Art",
+    slug: "portrait-paintings",
+    section: "studio",
+    title: "Portrait Paintings",
+    short: "Portrait Paintings",
     category: "Fine Art",
     client: "Personal",
-    role: "Artist",
+    role: "",
     timeframe: "2021 – 2022",
     summary: "Selected paintings and mixed-media work from 2021 and 2022.",
-    cover: fr("9OoLlBiYqxvnv2ZMQkBjsPdHxQ", "jpg", 1030, 1262, "Fine art collection"),
+    hideCover: true,
+    cover: fr("9OoLlBiYqxvnv2ZMQkBjsPdHxQ", "jpg", 1030, 1262, "Portrait painting"),
     blocks: [
       {
         type: "artworks",
         heading: "Works",
         items: [
-          { title: "Perspectives", year: "2022", medium: "Acrylics on canvas", size: "60.6 × 50.0 cm" },
-          { title: "Sacrifice", year: "2022", medium: "Acrylics on canvas", size: "100.0 × 80.3 cm" },
+          { title: "Perspectives", year: "2022", medium: "Acrylics on canvas", size: "60.6 × 50.0 cm", image: fr("9OoLlBiYqxvnv2ZMQkBjsPdHxQ", "jpg", 1030, 1262, "Perspectives, acrylics on canvas") },
+          { title: "Sacrifice", year: "2022", medium: "Acrylics on canvas", size: "100.0 × 80.3 cm", image: fr("OadVbuj9CTtYCZEG9moJILxOQ", "jpg", 1620, 2205, "Sacrifice, acrylics on canvas") },
           {
             title: "Memento Mori",
             year: "2022",
             medium: "Mixed media on canvas",
             size: "100.0 × 72.7 cm",
             note: "Veil, beads, plastic bone model, acrylics",
+            image: fr("sQxEar0E7QubKQBFJrFqgfjDXM", "jpg", 1913, 1451, "Memento Mori, mixed media on canvas"),
           },
-          { title: "Father’s Portrait", year: "2021", medium: "Acrylics on canvas", size: "60.6 × 50.0 cm" },
-        ],
-      },
-      {
-        type: "images",
-        images: [
-          fr("9OoLlBiYqxvnv2ZMQkBjsPdHxQ", "jpg", 1030, 1262, "Painting from the fine art collection, 1"),
-          fr("OadVbuj9CTtYCZEG9moJILxOQ", "jpg", 1620, 2205, "Painting from the fine art collection, 2"),
-          fr("sQxEar0E7QubKQBFJrFqgfjDXM", "jpg", 1913, 1451, "Painting from the fine art collection, 3"),
-          fr("3XXT4uXbPYK7wi2OE5mDoenVg", "jpg", 1762, 2047, "Painting from the fine art collection, 4"),
+          { title: "Father’s Portrait", year: "2021", medium: "Acrylics on canvas", size: "60.6 × 50.0 cm", image: fr("3XXT4uXbPYK7wi2OE5mDoenVg", "jpg", 1762, 2047, "Father’s Portrait, acrylics on canvas") },
         ],
       },
     ],
   },
 ];
 
-export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
+/** Everything on the Projects page. */
+export const projects = all.filter((p) => p.section === "projects");
+/** Everything on the Studio page. */
+export const studio = all.filter((p) => p.section === "studio");
+
+export const getProject = (slug: string) => all.find((p) => p.slug === slug);
+export const sectionOf = (p: Project) => (p.section === "studio" ? studio : projects);
