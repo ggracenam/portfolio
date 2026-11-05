@@ -230,9 +230,6 @@ export function Showcase({
   const compact = useCompact();
   // Phones and tablets only get the scroll view.
   const shown: View = compact || !allowGrid ? "scroll" : view;
-  const { scrollYProgress } = useScroll();
-  // In the scroll view the fixed bar fades out at the very end.
-  const fade = useTransform(scrollYProgress, [0.9, 0.97], [1, 0]);
 
   // Remember the view in the address (#grid) so a reload or shared link keeps it.
   useEffect(() => {
@@ -278,8 +275,7 @@ export function Showcase({
         <ProjectGrid projects={projects} base={base} />
       )}
 
-      <motion.div
-        style={{ opacity: shown === "scroll" ? fade : 1 }}
+      <div
         className={`pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 items-end bg-gradient-to-t from-bg via-bg/70 to-transparent px-[var(--edge)] pb-5 pt-12 lg:grid-cols-[1fr_auto_1fr] ${small}`}
       >
         <span>
@@ -311,7 +307,7 @@ export function Showcase({
         <span className="justify-self-end">
           {site.footerRight}
         </span>
-      </motion.div>
+      </div>
     </div>
   );
 }
