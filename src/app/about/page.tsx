@@ -59,7 +59,7 @@ export default function AboutPage() {
             <p>
               Design, AI, fashion, music, editorials, art history, new technologies, and
               photography. Anything vintage. I love to visit{" "}
-              <Link href="/misc/exhibitions" className={link}>
+              <Link href="/archive/misc/exhibitions" className={link}>
                 art exhibitions
               </Link>{" "}
               too.

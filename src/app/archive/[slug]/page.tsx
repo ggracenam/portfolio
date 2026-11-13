@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export const dynamicParams = false;
 
 export async function generateMetadata(
-  props: PageProps<"/studio/[slug]">,
+  props: PageProps<"/archive/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const project = getProject(slug);
@@ -22,12 +22,12 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page(props: PageProps<"/studio/[slug]">) {
+export default async function Page(props: PageProps<"/archive/[slug]">) {
   const { slug } = await props.params;
   const project = getProject(slug);
   if (!project || !list.includes(project)) notFound();
 
   const index = list.indexOf(project);
   const next = list[(index + 1) % list.length];
-  return <ProjectDetail project={project} next={next} base="studio" />;
+  return <ProjectDetail project={project} next={next} base="archive" />;
 }

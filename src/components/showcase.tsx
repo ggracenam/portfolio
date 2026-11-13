@@ -173,7 +173,7 @@ function ShowcaseItem({
             style={{ x: sx, y: sy }}
             animate={{ opacity: hovered ? 1 : 0 }}
             transition={{ duration: 0.18 }}
-            className="label-hover pointer-events-none absolute left-0 top-0 z-10 h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px] dark:bg-[rgb(30_30_30/0.35)] dark:shadow-[inset_0_0_0_0.7px_rgb(255_255_255/0.12)]"
+            className="label-hover pointer-events-none absolute left-0 top-0 z-10 h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
           >
             <span>{project.short}</span>
             <span className="opacity-40">{project.category}</span>
@@ -220,11 +220,14 @@ export function Showcase({
   projects,
   base = "projects",
   allowGrid = true,
+  showBar = true,
 }: {
   projects: Project[];
-  base?: "projects" | "studio";
+  base?: "projects" | "archive";
   /** Offer the Scroll | Grid switch (Projects only). */
   allowGrid?: boolean;
+  /** Show the fixed bottom bar (the Archive pages have their own). */
+  showBar?: boolean;
 }) {
   const [view, setView] = useState<View>("scroll");
   const compact = useCompact();

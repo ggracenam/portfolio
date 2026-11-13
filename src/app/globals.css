@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-/* `dark:` follows the data-theme attribute (set by the toggle / inline script). */
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
-
 /* ---------- Theme tokens ---------- */
 :root {
   --bg: #ffffff;
@@ -23,27 +20,6 @@
   :root {
     --fs: 13px;
     --lh: 20px;
-  }
-}
-
-:root[data-theme="dark"] {
-  --bg: #0b0b0b;
-  --fg: #f3f3f3;
-  --muted: #7f7f7f;
-  --line: rgb(255 255 255 / 0.14);
-  --pill: rgb(22 22 22 / 0.82);
-  color-scheme: dark;
-}
-
-/* No-JS fallback: follow the system setting until the script sets data-theme. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --bg: #0b0b0b;
-    --fg: #f3f3f3;
-    --muted: #7f7f7f;
-    --line: rgb(255 255 255 / 0.14);
-    --pill: rgb(22 22 22 / 0.82);
-    color-scheme: dark;
   }
 }
 
@@ -131,16 +107,6 @@ button {
     rgb(255 238 195 / 0.95) 22%,
     rgb(255 226 160 / 0.6) 42%,
     rgb(255 218 150 / 0.22) 64%,
-    transparent 100%
-  );
-}
-:root[data-theme="dark"] .halo {
-  background: radial-gradient(
-    closest-side,
-    rgb(255 250 236 / 1) 0%,
-    rgb(255 243 212 / 0.9) 24%,
-    rgb(255 232 180 / 0.5) 44%,
-    rgb(255 222 160 / 0.2) 66%,
     transparent 100%
   );
 }

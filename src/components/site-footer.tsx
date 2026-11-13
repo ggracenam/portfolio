@@ -14,8 +14,8 @@ const link =
 export function SiteFooter() {
   const pathname = usePathname();
   const current = pathname.replace(/\/$/, "") || "/";
-  // Home and Studio have their own fixed bar, and Archive and Notebook are just their content, so no footer on those.
-  if (["/", "/studio", "/archive", "/notebook"].includes(current)) return null;
+  // Home and the whole Archive section have a fixed bottom bar instead of a footer.
+  if (current === "/" || current.startsWith("/archive")) return null;
 
   // Don't link a page to itself.
   const showStory = current !== "/about";

@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Misc" };
 
 export default function MiscPage() {
   return (
-    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24">
+    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-28 pt-24">
       <div className="mx-auto w-[min(541px,100%)]">
       <TextEffect
         as="h1"
@@ -25,7 +25,7 @@ export default function MiscPage() {
 
       <Reveal className="mt-10">
         <Link
-          href="/misc/exhibitions"
+          href="/archive/misc/exhibitions"
           className="group flex items-end justify-between gap-6 border-y border-line py-4 transition-colors hover:border-fg"
         >
           <span className="flex gap-4">

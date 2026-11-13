@@ -13,7 +13,7 @@ export function ProjectDetail({
 }: {
   project: Project;
   next: Project;
-  base: "projects" | "studio";
+  base: "projects" | "archive";
 }) {
   const meta = [
     { label: "Client", value: project.client },
@@ -26,10 +26,10 @@ export function ProjectDetail({
     <article className="mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24">
       <div className="mx-auto w-[min(541px,100%)]">
       <Link
-        href={base === "studio" ? "/studio" : "/"}
+        href={base === "archive" ? "/archive" : "/"}
         className="inline-block text-muted transition-colors hover:text-fg"
       >
-        {base === "studio" ? "← Studio" : "← All projects"}
+        {base === "archive" ? "← Studio" : "← All projects"}
       </Link>
 
       <header className={project.hideCover ? "mt-6 flex flex-col gap-4" : "mt-10 flex flex-col gap-6"}>

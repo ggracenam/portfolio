@@ -1,8 +1,8 @@
 /**
- * Items for the Archive (travel photos and videos) and the Notebook (illustration pages).
+ * Items for the Gallery (travel photos and videos) and the Notebook (illustration pages).
  *
- * To add one: drop the file into  public/archive/  or  public/notebook/  and add a line below.
- * `src` is the path from the public folder, e.g. "/archive/kyoto-01.jpg".
+ * To add one: drop the file into  public/media/gallery/  or  public/media/notebook/  and add a line below.
+ * `src` is the path from the public folder, e.g. "/media/gallery/kyoto-01.jpg".
  */
 export type MediaItem = {
   type: "image" | "video";
@@ -15,11 +15,11 @@ export type MediaItem = {
   poster?: string;
 };
 
-export const archive: MediaItem[] = [
-  // { type: "image", src: "/archive/kyoto-01.jpg", alt: "Street in Kyoto at dusk", caption: "Kyoto, 2025" },
-  // { type: "video", src: "/archive/seoul-01.mp4", alt: "Han River at night", caption: "Seoul, 2025" },
+export const gallery: MediaItem[] = [
+  // { type: "image", src: "/media/gallery/kyoto-01.jpg", alt: "Street in Kyoto at dusk", caption: "Kyoto, 2025" },
+  // { type: "video", src: "/media/gallery/seoul-01.mp4", alt: "Han River at night", caption: "Seoul, 2025" },
 ];
 
 export const notebook: MediaItem[] = [
-  // { type: "image", src: "/notebook/page-01.jpg", alt: "Ink illustration of a sleeping cat", caption: "Page 1" },
+  // { type: "image", src: "/media/notebook/page-01.jpg", alt: "Ink illustration of a sleeping cat", caption: "Page 1" },
 ];
