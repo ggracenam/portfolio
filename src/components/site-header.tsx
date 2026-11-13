@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 const right = [
   { href: "/", label: "Projects" },
   { href: "/studio", label: "Studio" },
+  { href: "/archive", label: "Archive" },
+  { href: "/notebook", label: "Notebook" },
   { href: "/misc", label: "Misc" },
 ];
 const menu = [{ href: "/about", label: "About" }, ...right];
@@ -82,7 +84,7 @@ export function SiteHeader() {
           className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-bg via-bg/70 to-transparent"
         />
         <div className="pointer-events-auto relative grid grid-cols-[1fr_auto_1fr] items-start px-[var(--edge)] py-5">
-          <nav aria-label="Primary" className="-ml-2.5 hidden items-center gap-1 min-[901px]:flex">
+          <nav aria-label="Primary" className="-ml-2.5 hidden items-center gap-1 min-[1100px]:flex">
             <NavLink href="/about" label="About" />
             <ContactPill email={site.email} />
           </nav>
@@ -92,7 +94,7 @@ export function SiteHeader() {
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="grid size-8 place-items-center justify-self-start min-[901px]:hidden"
+            className="grid size-8 place-items-center justify-self-start min-[1100px]:hidden"
           >
             <span className="relative block h-3 w-5">
               <span
@@ -122,7 +124,7 @@ export function SiteHeader() {
           </Link>
 
           <div className="-mr-2 flex items-center justify-end gap-1">
-            <nav aria-label="Secondary" className="hidden items-center gap-1 min-[901px]:flex">
+            <nav aria-label="Secondary" className="hidden items-center gap-1 min-[1100px]:flex">
               {right.map((l) => (
                 <NavLink key={l.href} {...l} />
               ))}
@@ -140,7 +142,7 @@ export function SiteHeader() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[45] flex flex-col justify-center gap-2 bg-bg px-[var(--edge)] min-[901px]:hidden"
+            className="fixed inset-0 z-[45] flex flex-col justify-center gap-2 bg-bg px-[var(--edge)] min-[1100px]:hidden"
           >
             {menu.map((l, i) => (
               <motion.div

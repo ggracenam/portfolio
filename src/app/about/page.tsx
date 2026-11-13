@@ -26,13 +26,19 @@ export default function AboutPage() {
 
         <div className="space-y-[22px]">
           <p>
-            I’m {site.name}, also known as {site.nickname} — a UX designer and artist who creates
-            thoughtful, human-centered experiences, and an aspiring product designer. Also a
-            creative director.
+            Hi, I’m You Rim, I also go by Grace! I’m a curious designer that started my journey
+            from fine art to the digital world of graphic design and also UI/UX. As someone who
+            loves to take photos, does illustrations as a side hobby, and is my family and
+            friends’s personal stylist I see myself as a creative director.
           </p>
           <p>
-            As an international student who has lived in the UK, Korea, and the United States,
-            I’ve learned to see the world from multiple perspectives.
+            As someone who lived in England, Korea, and the United States, I have a very
+            multicultural background.
+          </p>
+          <p>
+            My main source of inspiration comes from my travels and artistic endeavours. I get
+            inspired by even the smallest and the most specific things, like how silverware
+            cutleries next to the window reflect light.
           </p>
         </div>
 
@@ -41,7 +47,7 @@ export default function AboutPage() {
           <div className={body}>
             <p>
               Dual degree at the University of Michigan, Ann Arbor: User Experience Research &amp;
-              Design at the School of Information, and Graphic Design at the Stamps School of Art
+              Design at the School of Information, and Visual Design at the Stamps School of Art
               &amp; Design.
             </p>
           </div>
@@ -51,13 +57,20 @@ export default function AboutPage() {
           <h2 className={h}>Interests</h2>
           <div className={body}>
             <p>
-              Design, new technologies, AI, art history, editorials, and photography. A record of
-              the{" "}
+              Design, AI, fashion, music, editorials, art history, new technologies, and
+              photography. Anything vintage. I love to visit{" "}
               <Link href="/misc/exhibitions" className={link}>
-                exhibitions I’ve visited
-              </Link>
-              .
+                art exhibitions
+              </Link>{" "}
+              too.
             </p>
+          </div>
+        </section>
+
+        <section className="mt-14">
+          <h2 className={h}>Languages</h2>
+          <div className={body}>
+            <p>English, Korean, French B2, and a bit of Spanish :)</p>
           </div>
         </section>
       </div>

@@ -202,3 +202,17 @@ button {
     --avail-w: 584px;
   }
 }
+
+/* liquid-glass-react: use the site's type and a gentler shadow instead of its built-in ones */
+.glass-wrap * {
+  font-family: inherit;
+}
+.glass-wrap [style*="font:"] {
+  font: inherit !important;
+  font-size: inherit !important;
+  text-shadow: none !important;
+}
+.glass-wrap [style*="70px"],
+.glass-wrap [style*="40px"] {
+  box-shadow: 0 10px 28px -10px rgb(0 0 0 / 0.22) !important;
+}

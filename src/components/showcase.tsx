@@ -173,10 +173,10 @@ function ShowcaseItem({
             style={{ x: sx, y: sy }}
             animate={{ opacity: hovered ? 1 : 0 }}
             transition={{ duration: 0.18 }}
-            className={`label-hover pointer-events-none absolute left-0 top-0 z-10 ${pill}`}
+            className="label-hover pointer-events-none absolute left-0 top-0 z-10 h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px] dark:bg-[rgb(30_30_30/0.35)] dark:shadow-[inset_0_0_0_0.7px_rgb(255_255_255/0.12)]"
           >
             <span>{project.short}</span>
-            <span className="text-muted">{project.category}</span>
+            <span className="opacity-40">{project.category}</span>
           </motion.span>
         </Link>
 
@@ -282,25 +282,25 @@ export function Showcase({
           {site.footerLeft}
         </span>
         {allowGrid ? (
-        <div
-          role="group"
-          aria-label="View"
-          className={`pointer-events-auto hidden justify-center gap-1 lg:flex`}
-        >
-          {(["scroll", "grid"] as const).map((v) => (
-            <button
-              key={v}
-              type="button"
-              onClick={() => choose(v)}
-              aria-pressed={shown === v}
-              className={`rounded-md border px-2.5 py-1 capitalize transition-colors ${
-                shown === v ? "border-line bg-pill" : "border-transparent text-muted hover:text-fg"
-              }`}
-            >
-              {v}
-            </button>
-          ))}
-        </div>
+          <div
+            role="group"
+            aria-label="View"
+            className="pointer-events-auto hidden justify-center gap-1 lg:flex"
+          >
+            {(["scroll", "grid"] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => choose(v)}
+                aria-pressed={shown === v}
+                className={`rounded-md border px-2.5 py-1 capitalize transition-colors ${
+                  shown === v ? "border-line bg-pill" : "border-transparent text-muted hover:text-fg"
+                }`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
         ) : (
           <span aria-hidden />
         )}
