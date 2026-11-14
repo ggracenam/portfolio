@@ -284,25 +284,77 @@ function ShowcaseItem({
 
 type View = "scroll" | "grid";
 
+function GridCard({
+  project,
+  base,
+  playing,
+  setPlaying,
+}: {
+  project: Project;
+  base: string;
+  playing: string | null;
+  setPlaying: (slug: string | null) => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 420, damping: 38, mass: 0.6 });
+  const sy = useSpring(y, { stiffness: 420, damping: 38, mass: 0.6 });
+
+  function track(e: React.PointerEvent<HTMLElement>, jump = false) {
+    if (e.pointerType !== "mouse") return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const nx = e.clientX - r.left + 18;
+    const ny = e.clientY - r.top + 18;
+    x.set(nx);
+    y.set(ny);
+    if (jump) {
+      sx.jump(nx);
+      sy.jump(ny);
+    }
+  }
+
+  return (
+    <Link
+      href={`/${base}/${project.slug}`}
+      aria-label={`${project.short} — ${project.category}`}
+      className="group relative block"
+      onPointerEnter={(e) => {
+        if (e.pointerType !== "mouse") return;
+        track(e, true);
+        setHovered(true);
+        setPlaying(project.slug);
+      }}
+      onPointerMove={(e) => track(e)}
+      onPointerLeave={() => {
+        setHovered(false);
+        setPlaying(null);
+      }}
+    >
+      <Cover project={project} mode="card" playing={playing === project.slug} />
+      {/* Title + category follow the cursor while hovering, as in the scroll view. */}
+      <motion.span
+        aria-hidden
+        style={{ x: sx, y: sy }}
+        animate={{ opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.18 }}
+        className="pointer-events-none absolute left-0 top-0 z-10 inline-flex h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
+      >
+        <span>{project.short}</span>
+        <span className="opacity-40">{project.category}</span>
+      </motion.span>
+    </Link>
+  );
+}
+
 function ProjectGrid({ projects, base }: { projects: Project[]; base: string }) {
   const [playing, setPlaying] = useState<string | null>(null);
   return (
     <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-24 pt-24">
-      <div className="grid gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, i) => (
-          <Reveal key={project.slug} delay={(i % 3) * 0.08}>
-            <Link
-              href={`/${base}/${project.slug}`}
-              className="group block"
-              onPointerEnter={(e) => e.pointerType === "mouse" && setPlaying(project.slug)}
-              onPointerLeave={() => setPlaying(null)}
-            >
-              <Cover project={project} mode="card" playing={playing === project.slug} />
-              <div className="mt-2.5 flex items-baseline justify-between gap-4">
-                <span>{project.short}</span>
-                <span className="text-muted">{project.category}</span>
-              </div>
-            </Link>
+          <Reveal key={project.slug} delay={(i % 3) * 0.08} className="relative hover:z-20">
+            <GridCard project={project} base={base} playing={playing} setPlaying={setPlaying} />
           </Reveal>
         ))}
       </div>
