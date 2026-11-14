@@ -77,13 +77,22 @@ export function Cover({
             alt={img.alt}
             fill
             sizes="(min-width: 768px) 33vw, 100vw"
-            className={`${fit} transition-transform duration-700 ease-out ${project.video ? "" : "group-hover:scale-[1.04]"}`}
+            className={`${fit} transition-transform duration-700 ease-out ${project.video || project.hoverCover ? "" : "group-hover:scale-[1.04]"}`}
           />
         ) : (
           <Placeholder project={project} />
         )}
         {img && project.video && (
           <HoverVideo webm={project.video.webm} mp4={project.video.mp4} active={playing} fit={fit} />
+        )}
+        {project.hoverCover && (
+          <Image
+            src={project.hoverCover.src}
+            alt=""
+            fill
+            sizes="(min-width: 768px) 33vw, 100vw"
+            className={`${fit} transition-opacity duration-[600ms] ease-out ${playing ? "opacity-100" : "opacity-0"}`}
+          />
         )}
       </div>
     );
@@ -114,6 +123,15 @@ export function Cover({
       )}
       {img && project.video && (
         <HoverVideo webm={project.video.webm} mp4={project.video.mp4} active={playing} />
+      )}
+      {project.hoverCover && (
+        <Image
+          src={project.hoverCover.src}
+          alt=""
+          fill
+          sizes="(min-width: 768px) 800px, 82vw"
+          className={`object-cover transition-opacity duration-[600ms] ease-out ${playing ? "opacity-100" : "opacity-0"}`}
+        />
       )}
     </div>
   );

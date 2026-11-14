@@ -45,6 +45,8 @@ export type Project = {
    * partner, the rest sit tucked behind it.
    */
   spread?: Img[];
+  /** A second picture that fades in over the cover on hover (same framing, so the object does not move). */
+  hoverCover?: Img;
   /** Show the whole cover in grid cards instead of cropping it to 4:3. */
   containCover?: boolean;
   /** A short muted clip that plays over the cover on hover (same frame size as the cover). */
@@ -569,7 +571,9 @@ const all: Project[] = [
     ],
     summary:
       "A lamp holder inspired by Korean landscape painting and window lattices, like looking out at a calm view.",
-    cover: fr("WQfuwk9XGsMP8hcKQNf1xtqLQ2s", "jpg", 4032, 3024, "Lamp holder"),
+    cover: { src: "/projects/lamp/cover.jpg", w: 1500, h: 1875, alt: "Lamp holder with a pine branch painted on rice paper, unlit" },
+    hoverCover: { src: "/projects/lamp/hover.jpg", w: 1500, h: 1875, alt: "The same lamp holder lit from inside" },
+    containCover: true,
     blocks: [
       {
         type: "text",

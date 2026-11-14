@@ -237,7 +237,7 @@ function ShowcaseItem({
               style={{ transformOrigin: "50% 100%" }}
             >
               <div className={`${project.phone || project.containCover || project.reveal || project.fold || project.wind ? "" : "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"} ${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} transition-transform duration-500 ease-out ${
-                  fan.length > 0 || spread.length > 0 || project.video || project.reveal || project.fold || project.wind ? "" : "group-hover:scale-[1.018]"
+                  fan.length > 0 || spread.length > 0 || project.video || project.hoverCover || project.reveal || project.fold || project.wind ? "" : "group-hover:scale-[1.018]"
                 }`}>
                 {project.wind && project.cover ? (
                   <WindCover project={project} hovered={hovered} reduce={reduce} />
