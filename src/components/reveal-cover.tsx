@@ -177,7 +177,7 @@ export function RevealCover({ project, hovered, reduce }: { project: Project; ho
   const spring = reduce ? { duration: 0 } : { type: "spring" as const, stiffness: 150, damping: 20 };
 
   return (
-    <div ref={boxRef} className="relative" style={{ aspectRatio: SW / SH, width: `min(90vw, clamp(620px, 40vw, 1000px), calc(70svh * ${SW / SH}))` }}>
+    <div ref={boxRef} className="relative" style={{ aspectRatio: SW / SH, width: `min(90vw, calc(66svh * ${SW / SH}))` }}>
       <div className="absolute left-0 top-0" style={{ width: SW, height: SH, transform: `scale(${scale})`, transformOrigin: "0 0" }}>
         {/* The tilted cover; its lower part fades away. */}
         <motion.div style={{ opacity: coverOpacity }} className="absolute inset-0">

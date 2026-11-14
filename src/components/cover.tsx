@@ -70,7 +70,7 @@ export function Cover({
   if (mode === "card") {
     const fit = project.containCover ? "object-contain" : "object-cover";
     return (
-      <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-fg/[0.04]">
+      <div className={`relative aspect-[4/3] overflow-hidden bg-fg/[0.04] ${project.wind ? "rounded-none" : "rounded-md"}`}>
         {img ? (
           <Image
             src={img.src}
@@ -92,7 +92,7 @@ export function Cover({
   const ratio = img ? img.w / img.h : 4 / 3;
   return (
     <div
-      className={`relative overflow-hidden ${project.spread?.length ? "rounded-[2px]" : "rounded-md"}`}
+      className={`relative overflow-hidden ${project.spread?.length || project.wind ? "rounded-[2px]" : "rounded-md"}`}
       style={{
         aspectRatio: ratio,
         width: project.video

@@ -52,6 +52,8 @@ export type Project = {
   /** On hover the cover zooms into `main`, then `sides` slide out next to it (Infinite Machine style). */
   /** A four-panel brochure that folds up on hover. front = A,B,C,D left to right; back = the reverse side as seen from behind (left to right). */
   fold?: { front: Img[]; back: Img[] };
+  /** On hover the poster's edges lift as if a breeze were blowing from the side (square corners). */
+  wind?: boolean;
   reveal?: { main: Img; sides: [Img, Img]; onCover: [[number, number], [number, number], [number, number], [number, number]] };
   /** A Figma prototype shown inside an iPhone frame instead of a cover image. */
   phone?: { src: string; words?: string[] };
@@ -471,7 +473,8 @@ const all: Project[] = [
     slug: "article-poster",
     section: "projects",
     title: "Poster for Audrey Bennett’s “The African Roots of Swiss Design”",
-    short: "African Roots Poster",
+    short: "Article Poster",
+    wind: true,
     category: "Graphic Design",
     client: "Audrey G. Bennett",
     role: "Graphic Designer",

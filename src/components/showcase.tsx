@@ -14,6 +14,7 @@ import {
 } from "motion/react";
 import { Cover } from "@/components/cover";
 import { RevealCover } from "@/components/reveal-cover";
+import { WindCover } from "@/components/wind-cover";
 import { FoldCover } from "@/components/fold-cover";
 import { Reveal } from "@/components/reveal";
 import { useCompact } from "@/lib/use-compact";
@@ -218,7 +219,7 @@ function ShowcaseItem({
           }}
           onPointerMove={(e) => track(e)}
           onPointerLeave={() => setHovered(false)}
-          onFocus={() => (fan.length > 0 || spread.length > 0 || !!project.reveal || !!project.fold) && setHovered(true)}
+          onFocus={() => (fan.length > 0 || spread.length > 0 || !!project.reveal || !!project.fold || !!project.wind) && setHovered(true)}
           onBlur={() => setHovered(false)}
         >
           <div className="relative isolate">
@@ -235,10 +236,12 @@ function ShowcaseItem({
               }
               style={{ transformOrigin: "50% 100%" }}
             >
-              <div className={`${project.phone || project.containCover || project.reveal || project.fold ? "" : "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"} ${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} transition-transform duration-500 ease-out ${
-                  fan.length > 0 || spread.length > 0 || project.video || project.reveal || project.fold ? "" : "group-hover:scale-[1.018]"
+              <div className={`${project.phone || project.containCover || project.reveal || project.fold || project.wind ? "" : "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"} ${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} transition-transform duration-500 ease-out ${
+                  fan.length > 0 || spread.length > 0 || project.video || project.reveal || project.fold || project.wind ? "" : "group-hover:scale-[1.018]"
                 }`}>
-                {project.fold && project.cover ? (
+                {project.wind && project.cover ? (
+                  <WindCover project={project} hovered={hovered} reduce={reduce} />
+                ) : project.fold && project.cover ? (
                   <FoldCover project={project} hovered={hovered} reduce={reduce} />
                 ) : project.reveal && project.cover ? (
                   <RevealCover project={project} hovered={hovered} reduce={reduce} />

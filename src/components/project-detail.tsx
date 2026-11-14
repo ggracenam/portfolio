@@ -94,7 +94,7 @@ export function ProjectDetail({
               ))}
             </div>
           ) : (
-          <div className={project.video ? "relative mx-auto w-[min(520px,100%)]" : project.reveal || project.fold ? "mx-auto w-[min(942px,100%)]" : "media-round mx-auto w-[min(942px,100%)]"}>
+          <div className={project.video ? "relative mx-auto w-[min(520px,100%)]" : project.reveal || project.fold || project.wind ? "mx-auto w-[min(942px,100%)]" : "media-round mx-auto w-[min(942px,100%)]"}>
             <Image
               src={project.cover.src}
               alt={project.cover.alt}
