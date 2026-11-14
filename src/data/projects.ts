@@ -45,6 +45,12 @@ export type Project = {
    * partner, the rest sit tucked behind it.
    */
   spread?: Img[];
+  /** Show the whole cover in grid cards instead of cropping it to 4:3. */
+  containCover?: boolean;
+  /** A short muted clip that plays over the cover on hover (same frame size as the cover). */
+  video?: { webm: string; mp4: string };
+  /** A Figma prototype shown inside an iPhone frame instead of a cover image. */
+  phone?: { src: string; words?: string[] };
   blocks: Block[];
 };
 
@@ -177,7 +183,9 @@ const all: Project[] = [
     year: "2026",
     summary:
       "A music app that turns physical location into a living playlist, blending your taste with what people nearby are listening to.",
-    // cover: add an image here, e.g. fr("<id>", "png", 1600, 1200, "SoundScape app screens"),
+    cover: { src: "/projects/soundscape/cover.png", w: 680, h: 1000, alt: "SoundScape app, globe screen in an iPhone" },
+    containCover: true,
+    video: { webm: "/projects/soundscape/hover.webm", mp4: "/projects/soundscape/hover.mp4" },
     blocks: [
       {
         type: "text",

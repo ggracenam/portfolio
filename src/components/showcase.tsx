@@ -109,6 +109,32 @@ function PosterSpread({
   );
 }
 
+/** Swaps through a list of words while active, like the category text in the dmcg.co archive. */
+function CyclingWord({ words, active }: { words: string[]; active: boolean }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (!active) {
+      setI(0);
+      return;
+    }
+    const t = setInterval(() => setI((n) => (n + 1) % words.length), 750);
+    return () => clearInterval(t);
+  }, [active, words.length]);
+  return (
+    <span className="relative inline-block min-w-[4.2em] opacity-40">
+      <motion.span
+        key={i}
+        initial={{ opacity: 0, y: 5, filter: "blur(3px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.25 }}
+        className="inline-block"
+      >
+        {words[i]}
+      </motion.span>
+    </span>
+  );
+}
+
 function ShowcaseItem({
   project,
   compact,
@@ -207,10 +233,10 @@ function ShowcaseItem({
               }
               style={{ transformOrigin: "50% 100%" }}
             >
-              <div className={`${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)] transition-transform duration-500 ease-out ${
+              <div className={`${project.phone || project.containCover ? "" : "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"} ${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} transition-transform duration-500 ease-out ${
                   fan.length > 0 || spread.length > 0 ? "" : "group-hover:scale-[1.018]"
                 }`}>
-                <Cover project={project} mode="showcase" />
+                <Cover project={project} mode="showcase" playing={hovered} />
               </div>
             </motion.div>
           </div>
@@ -224,7 +250,11 @@ function ShowcaseItem({
             className="label-hover pointer-events-none absolute left-0 top-0 z-10 h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
           >
             <span>{project.short}</span>
-            <span className="opacity-40">{project.category}</span>
+            {project.phone?.words ? (
+              <CyclingWord words={project.phone.words} active={hovered} />
+            ) : (
+              <span className="opacity-40">{project.category}</span>
+            )}
           </motion.span>
         </Link>
 
@@ -244,13 +274,19 @@ function ShowcaseItem({
 type View = "scroll" | "grid";
 
 function ProjectGrid({ projects, base }: { projects: Project[]; base: string }) {
+  const [playing, setPlaying] = useState<string | null>(null);
   return (
     <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-24 pt-24">
       <div className="grid gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, i) => (
           <Reveal key={project.slug} delay={(i % 3) * 0.08}>
-            <Link href={`/${base}/${project.slug}`} className="group block">
-              <Cover project={project} mode="card" />
+            <Link
+              href={`/${base}/${project.slug}`}
+              className="group block"
+              onPointerEnter={(e) => e.pointerType === "mouse" && setPlaying(project.slug)}
+              onPointerLeave={() => setPlaying(null)}
+            >
+              <Cover project={project} mode="card" playing={playing === project.slug} />
               <div className="mt-2.5 flex items-baseline justify-between gap-4">
                 <span>{project.short}</span>
                 <span className="text-muted">{project.category}</span>

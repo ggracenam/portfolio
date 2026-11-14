@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ProjectBlocks } from "@/components/project-blocks";
 import { Reveal } from "@/components/reveal";
 import { TextEffect } from "@/components/motion-primitives/text-effect";
+import { HoverVideo } from "@/components/hover-video";
+import { Phone } from "@/components/phone";
 import type { Project } from "@/data/projects";
 
 /** One project / studio piece, laid out like a dmcg.co case study. */
@@ -61,6 +63,18 @@ export function ProjectDetail({
       </header>
       </div>
 
+      {project.phone && (
+        <Reveal className="mt-[clamp(48px,6.78vw,96px)]">
+          <Phone
+            src={project.phone.src}
+            title={project.title}
+            interactive
+            className="mx-auto"
+            style={{ width: "min(88vw, 360px)" }}
+          />
+        </Reveal>
+      )}
+
       {project.cover && !project.hideCover && (
         <Reveal className="mt-[clamp(48px,6.78vw,96px)]">
           {project.spread?.length ? (
@@ -80,7 +94,7 @@ export function ProjectDetail({
               ))}
             </div>
           ) : (
-          <div className="media-round mx-auto w-[min(942px,100%)]">
+          <div className={project.containCover ? "relative mx-auto w-[min(520px,100%)]" : "media-round mx-auto w-[min(942px,100%)]"}>
             <Image
               src={project.cover.src}
               alt={project.cover.alt}
@@ -89,6 +103,9 @@ export function ProjectDetail({
               priority
               sizes="(min-width: 990px) 942px, 100vw"
             />
+            {project.video && (
+              <HoverVideo webm={project.video.webm} mp4={project.video.mp4} active autoPlay />
+            )}
           </div>
           )}
         </Reveal>
