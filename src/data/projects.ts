@@ -49,6 +49,8 @@ export type Project = {
   containCover?: boolean;
   /** A short muted clip that plays over the cover on hover (same frame size as the cover). */
   video?: { webm: string; mp4: string };
+  /** On hover the cover zooms into `main`, then `sides` slide out next to it (Infinite Machine style). */
+  reveal?: { main: Img; sides: [Img, Img]; onCover: [[number, number], [number, number], [number, number], [number, number]] };
   /** A Figma prototype shown inside an iPhone frame instead of a cover image. */
   phone?: { src: string; words?: string[] };
   blocks: Block[];
@@ -256,7 +258,17 @@ const all: Project[] = [
     year: "2025",
     summary:
       "A semester-long redesign of the University of Michigan’s generative AI platform, focused on usability, accessibility, and visual coherence.",
-    cover: fr("buOJjPm5CWlar82lwwNyIkrzIdg", "png", 1600, 1200, "U-M GPT redesign"),
+    cover: { src: "/projects/umgpt/cover.png", w: 1412, h: 1026, alt: "U-M GPT home page, tilted" },
+    containCover: true,
+    reveal: {
+      // Where the main page's corners (TL, TR, BR, BL) sit on the tilted cover, in the cover's own pixels.
+      onCover: [[272.0, 209.1], [786.0, 64.2], [927.2, 376.0], [411.4, 521.4]],
+      main: { src: "/projects/umgpt/page-2.jpg", w: 1610, h: 988, alt: "U-M GPT home page" },
+      sides: [
+        { src: "/projects/umgpt/page-1.jpg", w: 1640, h: 1186, alt: "U-M GPT landing page" },
+        { src: "/projects/umgpt/page-3.jpg", w: 1450, h: 1052, alt: "U-M GPT folders" },
+      ],
+    },
     blocks: [
       {
         type: "text",

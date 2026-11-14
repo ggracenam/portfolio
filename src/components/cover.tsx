@@ -95,7 +95,7 @@ export function Cover({
       className={`relative overflow-hidden ${project.spread?.length ? "rounded-[2px]" : "rounded-md"}`}
       style={{
         aspectRatio: ratio,
-        width: project.containCover
+        width: project.video
           ? `min(82vw, calc(min(40vw, 64svh) * ${ratio}))`
           : `min(82vw, clamp(560px, 32vw, 800px), calc(56svh * ${ratio}))`,
       }}

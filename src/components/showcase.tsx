@@ -13,6 +13,7 @@ import {
   useTransform,
 } from "motion/react";
 import { Cover } from "@/components/cover";
+import { RevealCover } from "@/components/reveal-cover";
 import { Reveal } from "@/components/reveal";
 import { useCompact } from "@/lib/use-compact";
 import type { Project } from "@/data/projects";
@@ -216,7 +217,7 @@ function ShowcaseItem({
           }}
           onPointerMove={(e) => track(e)}
           onPointerLeave={() => setHovered(false)}
-          onFocus={() => (fan.length > 0 || spread.length > 0) && setHovered(true)}
+          onFocus={() => (fan.length > 0 || spread.length > 0 || !!project.reveal) && setHovered(true)}
           onBlur={() => setHovered(false)}
         >
           <div className="relative isolate">
@@ -233,10 +234,14 @@ function ShowcaseItem({
               }
               style={{ transformOrigin: "50% 100%" }}
             >
-              <div className={`${project.phone || project.containCover ? "" : "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"} ${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} transition-transform duration-500 ease-out ${
-                  fan.length > 0 || spread.length > 0 ? "" : "group-hover:scale-[1.018]"
+              <div className={`${project.phone || project.containCover || project.reveal ? "" : "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"} ${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} transition-transform duration-500 ease-out ${
+                  fan.length > 0 || spread.length > 0 || project.video || project.reveal ? "" : "group-hover:scale-[1.018]"
                 }`}>
-                <Cover project={project} mode="showcase" playing={hovered} />
+                {project.reveal && project.cover ? (
+                  <RevealCover project={project} hovered={hovered} reduce={reduce} />
+                ) : (
+                  <Cover project={project} mode="showcase" playing={hovered} />
+                )}
               </div>
             </motion.div>
           </div>
