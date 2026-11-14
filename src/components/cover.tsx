@@ -3,9 +3,13 @@ import type { Project } from "@/data/projects";
 import { HoverVideo } from "@/components/hover-video";
 import { Phone } from "@/components/phone";
 
+/** Grid card hover, matched to dmcg.co: lifts 2px with a soft shadow falling beneath (outline only on keyboard focus). */
+const CARD_HOVER =
+  "transition-[transform,box-shadow] duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:shadow-[0_22px_22px_-20px_rgb(0_0_0/0.5)] group-focus-visible:-translate-y-0.5 group-focus-visible:shadow-[0_22px_22px_-20px_rgb(0_0_0/0.5),0_0_0_3px_#fff,0_0_0_4px_rgb(0_0_0/0.7)]";
+
 function Placeholder({ project }: { project: Project }) {
   return (
-    <div className="flex h-full w-full flex-col justify-between border border-line bg-fg/[0.04] p-4 text-left">
+    <div className="flex h-full w-full flex-col justify-between border border-line bg-white p-4 text-left">
       <span className="text-[length:var(--fs-cap)] text-muted">{project.category}</span>
       <span className="font-semibold">
         {project.short}
@@ -16,7 +20,7 @@ function Placeholder({ project }: { project: Project }) {
 
 /**
  * "showcase": sized to the image's own proportions, capped by viewport (home page).
- * "card": fixed 4:3 crop that fills its container (work grid).
+ * "card": fixed 4:3 frame; the whole design fits inside it, uncropped (work grid).
  */
 export function Cover({
   project,
@@ -33,7 +37,7 @@ export function Cover({
   if (project.phone) {
     if (mode === "card") {
       return (
-        <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md bg-fg/[0.04]">
+        <div className={`flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md bg-white ${CARD_HOVER}`}>
           <Phone src={project.phone.src} title={project.short} className="h-[88%]" />
         </div>
       );
@@ -51,7 +55,7 @@ export function Cover({
   if (mode === "card" && img && project.spread?.length) {
     const pair = [img, project.spread[0]];
     return (
-      <div className="grid aspect-[4/3] grid-cols-2 gap-px overflow-hidden rounded-[2px] bg-fg/[0.04]">
+      <div className={`grid aspect-[4/3] grid-cols-2 gap-px overflow-hidden rounded-[2px] bg-white ${CARD_HOVER}`}>
         {pair.map((p, i) => (
           <div key={p.src} className="relative">
             <Image
@@ -59,7 +63,7 @@ export function Cover({
               alt={i === 0 ? p.alt : ""}
               fill
               sizes="(min-width: 768px) 17vw, 50vw"
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              className="object-contain"
             />
           </div>
         ))}
@@ -68,16 +72,19 @@ export function Cover({
   }
 
   if (mode === "card") {
-    const fit = project.containCover ? "object-contain" : "object-cover";
+    // The whole design always shows (never cropped); any spare space is white.
+    const fit = "object-contain";
     return (
-      <div className={`relative aspect-[4/3] overflow-hidden bg-fg/[0.04] ${project.wind ? "rounded-none" : "rounded-md"}`}>
+      <div
+        className={`relative aspect-[4/3] overflow-hidden bg-white ${CARD_HOVER} ${project.wind ? "rounded-none" : "rounded-md"}`}
+      >
         {img ? (
           <Image
             src={img.src}
             alt={img.alt}
             fill
             sizes="(min-width: 768px) 33vw, 100vw"
-            className={`${fit} transition-transform duration-700 ease-out ${project.video || project.hoverCover ? "" : "group-hover:scale-[1.04]"}`}
+            className={fit}
           />
         ) : (
           <Placeholder project={project} />
