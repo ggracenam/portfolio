@@ -25,7 +25,10 @@ function Section({
 
 function Photo({ img }: { img: Img }) {
   return (
-    <div className="media-round">
+    <div
+      className="media-round mx-auto"
+      style={{ width: `min(100%, calc(var(--fit-h) * ${img.w / img.h}))` }}
+    >
       <Image
         src={img.src}
         alt={img.alt}

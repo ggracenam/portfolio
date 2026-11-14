@@ -182,3 +182,6 @@ button {
 .glass-wrap [style*="40px"] {
   box-shadow: 0 10px 28px -10px rgb(0 0 0 / 0.22) !important;
 }
+
+/* Project pages: every image is capped to fit one screen (below the header), width follows its proportions. */
+:root { --fit-h: calc(100svh - 150px); }

@@ -70,7 +70,7 @@ export function ProjectDetail({
             title={project.title}
             interactive
             className="mx-auto"
-            style={{ width: "min(88vw, 360px)" }}
+            style={{ width: "min(88vw, 360px, calc(var(--fit-h) * 696 / 1368))" }}
           />
         </Reveal>
       )}
@@ -79,7 +79,10 @@ export function ProjectDetail({
         <Reveal className="mt-[clamp(48px,6.78vw,96px)]">
           {project.spread?.length ? (
             // Poster sets: the first two pages side by side, like the opened cover on the home page.
-            <div className="mx-auto grid w-[min(942px,100%)] grid-cols-2 gap-3">
+            <div
+              className="mx-auto grid grid-cols-2 gap-3"
+              style={{ width: `min(942px, 100%, calc(var(--fit-h) * ${(project.cover.w / project.cover.h) * 2} + 12px))` }}
+            >
               {[project.cover, project.spread[0]].map((img, i) => (
                 <div key={img.src} className="media-round" style={{ borderRadius: 2 }}>
                   <Image
@@ -94,7 +97,10 @@ export function ProjectDetail({
               ))}
             </div>
           ) : (
-          <div className={project.video ? "relative mx-auto w-[min(520px,100%)]" : project.reveal || project.fold || project.wind ? "mx-auto w-[min(942px,100%)]" : "media-round mx-auto w-[min(942px,100%)]"}>
+          <div
+            className={project.video ? "relative mx-auto" : project.reveal || project.fold || project.wind ? "mx-auto" : "media-round mx-auto"}
+            style={{ width: `min(${project.video ? "520px" : "942px"}, 100%, calc(var(--fit-h) * ${project.cover.w / project.cover.h}))` }}
+          >
             <Image
               src={project.cover.src}
               alt={project.cover.alt}
