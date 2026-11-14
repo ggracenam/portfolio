@@ -9,6 +9,17 @@ export type Exhibition = {
 
 // [title, venue, city, date, note?]
 const rows: [string, string, string, string, string?][] = [
+  ["Artists at the Café: From the Impressionists, Van Gogh and Toulouse-Lautrec to Picasso", "Mitsubishi Ichigokan Museum", "Tokyo", "08.2026"],
+  ["ARCHI-DEPOT (ft. Kengo Kuma, Shigeru Ban, etc.)", "WHAT MUSEUM", "Tokyo", "08.2026"],
+  ["Corrugated/Coral: Eight Practices to Project Architecture Afar", "WHAT MUSEUM", "Tokyo", "08.2026"],
+  ["Model Competition Winning Works Exhibition", "WHAT MUSEUM", "Tokyo", "08.2026"],
+  ["Yamaguchi Kayo: A Retrospective", "Sompo Museum of Art", "Tokyo", "08.2026"],
+  ["Love! Vanguard!! (A Collector’s Eye for the Avant-Garde: Yayoi Kusama, Stanley William Hayter and more)", "Oita Prefectural Art Museum (OPAM)", "Oita", "07.2026"],
+  ["Fernando Botero: The Triumph of Form", "Seoul Arts Center", "Seoul", "07.2026"],
+  ["That Inward Eye: Joan Snyder, Megan Rooney, Han Bing", "Thaddeus Ropac", "Seoul", "07.2026"],
+  ["Park Young Sook: When Form Meets Gesture", "Pace Gallery", "Seoul", "07.2026"],
+  ["Kim Tschang-Yeul Atelier", "Kim Tschang-Yeul’s former home and studio", "Seoul", "06.2026"],
+  ["Yoo Youngkuk: A Mountain Within Me", "Seoul Museum of Art", "Seoul", "06.2026"],
   ["Joan Miró: Sculptures", "Thaddeus Ropac", "Seoul", "01.2026"],
   ["Heemin Chung: Garden of Turmoil", "Thaddeus Ropac", "Seoul", "01.2026"],
   ["From Impressionism to Early Modernism: Collectors of Light (The Robert Lehman Collection at The Metropolitan Museum of Art)", "National Museum of Korea", "Seoul", "12.2025"],

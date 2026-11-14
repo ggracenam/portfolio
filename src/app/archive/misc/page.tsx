@@ -29,7 +29,6 @@ export default function MiscPage() {
           className="group flex items-end justify-between gap-6 border-y border-line py-4 transition-colors hover:border-fg"
         >
           <span className="flex gap-4">
-            <span className="text-muted">Personal</span>
             <span>Exhibition Visits</span>
           </span>
           <span className="flex items-center gap-4">
