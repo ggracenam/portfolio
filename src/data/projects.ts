@@ -50,6 +50,8 @@ export type Project = {
   /** A short muted clip that plays over the cover on hover (same frame size as the cover). */
   video?: { webm: string; mp4: string };
   /** On hover the cover zooms into `main`, then `sides` slide out next to it (Infinite Machine style). */
+  /** A four-panel brochure that folds up on hover. front = A,B,C,D left to right; back = the reverse side as seen from behind (left to right). */
+  fold?: { front: Img[]; back: Img[] };
   reveal?: { main: Img; sides: [Img, Img]; onCover: [[number, number], [number, number], [number, number], [number, number]] };
   /** A Figma prototype shown inside an iPhone frame instead of a cover image. */
   phone?: { src: string; words?: string[] };
@@ -426,7 +428,12 @@ const all: Project[] = [
     ],
     summary:
       "A Valentine’s Day brochure for a Korean love poem, exploring the geometry of Korean letterforms.",
-    cover: fr("H04HNYh6wD9tWT2xp9GvZPnGbI", "png", 1848, 1344, "Lotus Flower brochure"),
+    cover: { src: "/projects/brochure/still.jpg", w: 2224, h: 556, alt: "Lotus Flower brochure, laid flat" },
+    containCover: true,
+    fold: {
+      front: ["a", "b", "c", "d"].map((k) => ({ src: `/projects/brochure/front-${k}.jpg`, w: 556, h: 556, alt: "Lotus Flower brochure panel" })),
+      back: ["a", "b", "c", "d"].map((k) => ({ src: `/projects/brochure/back-${k}.jpg`, w: 556, h: 556, alt: "Lotus Flower brochure, inside panel" })),
+    },
     blocks: [
       {
         type: "text",
