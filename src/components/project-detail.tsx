@@ -63,6 +63,23 @@ export function ProjectDetail({
 
       {project.cover && !project.hideCover && (
         <Reveal className="mt-[clamp(48px,6.78vw,96px)]">
+          {project.spread?.length ? (
+            // Poster sets: the first two pages side by side, like the opened cover on the home page.
+            <div className="mx-auto grid w-[min(942px,100%)] grid-cols-2 gap-3">
+              {[project.cover, project.spread[0]].map((img, i) => (
+                <div key={img.src} className="media-round" style={{ borderRadius: 2 }}>
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    width={img.w}
+                    height={img.h}
+                    priority={i === 0}
+                    sizes="(min-width: 990px) 465px, 50vw"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
           <div className="media-round mx-auto w-[min(942px,100%)]">
             <Image
               src={project.cover.src}
@@ -73,6 +90,7 @@ export function ProjectDetail({
               sizes="(min-width: 990px) 942px, 100vw"
             />
           </div>
+          )}
         </Reveal>
       )}
 

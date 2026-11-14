@@ -68,6 +68,47 @@ function CoverFan({ images, open, reduce }: { images: { src: string; alt: string
   );
 }
 
+// Poster sets: the cover's partner slides out to its right, the rest stay tucked behind it.
+const SPREAD_GAP = 52; // percent of the cover's width: centres of the two posters, a hair apart
+const SPREAD_STEP = 6.5; // how far each further poster peeks out past the one before
+
+function PosterSpread({
+  pages,
+  open,
+  reduce,
+}: {
+  pages: { src: string; alt: string }[];
+  open: boolean;
+  reduce: boolean | null;
+}) {
+  return (
+    <>
+      {pages.map((img, i) => (
+        <motion.div
+          key={img.src}
+          initial={false}
+          aria-hidden={i > 0 ? true : undefined}
+          animate={{
+            x: open ? `${SPREAD_GAP + i * SPREAD_STEP}%` : "0%",
+            opacity: open ? 1 : 0,
+          }}
+          transition={
+            reduce ? { duration: 0 } : { type: "spring", stiffness: 190, damping: 22, mass: 0.8, delay: open ? i * 0.03 : 0 }
+          }
+          style={{ zIndex: -1 - i }}
+          className={`pointer-events-none absolute inset-0 overflow-hidden rounded-[2px] ${
+            i === 0
+              ? "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"
+              : "shadow-[0_14px_30px_-26px_rgb(0_0_0/0.35)]"
+          }`}
+        >
+          <Image src={img.src} alt={i === 0 ? img.alt : ""} fill sizes="400px" className="object-cover" />
+        </motion.div>
+      ))}
+    </>
+  );
+}
+
 function ShowcaseItem({
   project,
   compact,
@@ -81,6 +122,7 @@ function ShowcaseItem({
   const reduce = useReducedMotion();
   const [hovered, setHovered] = useState(false);
   const fan = fanImages(project);
+  const spread = project.spread ?? [];
 
   // Cursor-following label (mouse only).
   const x = useMotionValue(0);
@@ -148,20 +190,26 @@ function ShowcaseItem({
           }}
           onPointerMove={(e) => track(e)}
           onPointerLeave={() => setHovered(false)}
-          onFocus={() => fan.length > 0 && setHovered(true)}
+          onFocus={() => (fan.length > 0 || spread.length > 0) && setHovered(true)}
           onBlur={() => setHovered(false)}
         >
           <div className="relative isolate">
             {fan.length > 0 && <CoverFan images={fan} open={hovered} reduce={reduce} />}
+            {spread.length > 0 && <PosterSpread pages={spread} open={hovered} reduce={reduce} />}
             <motion.div
               initial={false}
-              animate={{ rotate: fan.length > 0 && hovered ? FRONT : 0 }}
+              animate={{
+                rotate: fan.length > 0 && hovered ? FRONT : 0,
+                x: spread.length > 0 && hovered ? `-${SPREAD_GAP}%` : "0%",
+              }}
               transition={
                 reduce ? { duration: 0 } : { type: "spring", stiffness: 190, damping: 20, mass: 0.8 }
               }
               style={{ transformOrigin: "50% 100%" }}
             >
-              <div className="rounded-md shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)] transition-transform duration-500 ease-out group-hover:scale-[1.018]">
+              <div className={`${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)] transition-transform duration-500 ease-out ${
+                  fan.length > 0 || spread.length > 0 ? "" : "group-hover:scale-[1.018]"
+                }`}>
                 <Cover project={project} mode="showcase" />
               </div>
             </motion.div>

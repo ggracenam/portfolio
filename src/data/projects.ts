@@ -40,6 +40,11 @@ export type Project = {
   summary: string;
   /** Leave undefined to show a typographic placeholder until you add one. */
   cover?: Img;
+  /**
+   * Further pages that open out next to the cover on hover (poster sets): the first is the cover's
+   * partner, the rest sit tucked behind it.
+   */
+  spread?: Img[];
   blocks: Block[];
 };
 
@@ -49,6 +54,14 @@ const fr = (id: string, ext: "png" | "jpg", w: number, h: number, alt: string): 
   src: `https://framerusercontent.com/images/${id}.${ext}?scale-down-to=2048&width=${w}&height=${h}`,
   w,
   h,
+  alt,
+});
+
+// MBGNA poster pages, exported from the PDF into /public/projects/mbgna.
+const poster = (n: number, alt: string): Img => ({
+  src: `/projects/mbgna/page-${n}.jpg`,
+  w: 1100,
+  h: 1634,
   alt,
 });
 
@@ -65,7 +78,14 @@ const all: Project[] = [
     year: "2026",
     summary:
       "A six-poster series that reframes a botanical garden network as a living museum you take part in, not just look at.",
-    // cover: add an image here, e.g. fr("<id>", "png", 1600, 2000, "MBGNA poster series"),
+    cover: poster(1, "Matthaei Botanical Gardens and Nichols Arboretum poster"),
+    spread: [
+      poster(2, "2026 Events poster"),
+      poster(3, "Peony Garden poster"),
+      poster(4, "Bonsai Garden poster"),
+      poster(5, "Campus Farm poster"),
+      poster(6, "Beaver Family poster"),
+    ],
     blocks: [
       {
         type: "text",

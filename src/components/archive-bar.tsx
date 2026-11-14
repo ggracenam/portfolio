@@ -20,7 +20,7 @@ const tabs = [
 export function ArchiveBar() {
   const pathname = usePathname();
   const current = pathname.replace(/\/$/, "") || "/";
-  const onSection = tabs.some((t) => t.href === current) || current.startsWith("/archive/misc");
+  const onSection = tabs.some((t) => t.href === current);
   if (!onSection) return null;
 
   return (
@@ -31,8 +31,7 @@ export function ArchiveBar() {
       <span className="hidden justify-self-start min-[901px]:block">{site.footerLeft}</span>
       <div className="pointer-events-auto flex items-center gap-1">
         {tabs.map((t) => {
-          const active =
-            t.href === "/archive/misc" ? current.startsWith("/archive/misc") : current === t.href;
+          const active = current === t.href;
           return (
             <Link
               key={t.href}

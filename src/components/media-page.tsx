@@ -10,11 +10,17 @@ import type { MediaItem } from "@/data/media";
 export function MediaPage({
   title,
   intro,
+  body,
+  children,
   items,
   layout,
 }: {
   title: string;
-  intro: string;
+  intro?: string;
+  /** Optional paragraphs under the intro. */
+  body?: string[];
+  /** Optional extra content (sections of text) under the title and intro. */
+  children?: React.ReactNode;
   items: MediaItem[];
   layout: "grid" | "pages";
 }) {
@@ -24,9 +30,19 @@ export function MediaPage({
         <TextEffect as="h1" per="word" preset="fade-in-blur" speedReveal={1.4} className="font-semibold">
           {title}
         </TextEffect>
-        <Reveal className="mt-2 text-muted">
-          <p>{intro}</p>
-        </Reveal>
+        {intro && (
+          <Reveal className="mt-2 text-muted">
+            <p>{intro}</p>
+          </Reveal>
+        )}
+        {body && body.length > 0 && (
+          <Reveal className="mt-6 space-y-[22px]">
+            {body.map((para) => (
+              <p key={para}>{para}</p>
+            ))}
+          </Reveal>
+        )}
+        {children}
       </div>
 
       {items.length === 0 ? (

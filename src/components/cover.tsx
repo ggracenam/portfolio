@@ -25,6 +25,26 @@ export function Cover({
 }) {
   const img = project.cover;
 
+  // Poster sets: the grid card shows the first two pages as a pair (two 2:3 pages make a 4:3 frame).
+  if (mode === "card" && img && project.spread?.length) {
+    const pair = [img, project.spread[0]];
+    return (
+      <div className="grid aspect-[4/3] grid-cols-2 gap-px overflow-hidden rounded-[2px] bg-fg/[0.04]">
+        {pair.map((p, i) => (
+          <div key={p.src} className="relative">
+            <Image
+              src={p.src}
+              alt={i === 0 ? p.alt : ""}
+              fill
+              sizes="(min-width: 768px) 17vw, 50vw"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (mode === "card") {
     return (
       <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-fg/[0.04]">
@@ -46,7 +66,7 @@ export function Cover({
   const ratio = img ? img.w / img.h : 4 / 3;
   return (
     <div
-      className="relative overflow-hidden rounded-md"
+      className={`relative overflow-hidden ${project.spread?.length ? "rounded-[2px]" : "rounded-md"}`}
       style={{
         aspectRatio: ratio,
         width: `min(82vw, clamp(560px, 32vw, 800px), calc(56svh * ${ratio}))`,
