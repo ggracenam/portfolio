@@ -635,7 +635,8 @@ const all: Project[] = [
     details: [{ label: "Tools", value: "Adobe Illustrator, Adobe Photoshop, Micron pens" }],
     summary:
       "Tarot-inspired perfume packaging exploring the idea that we shape our fate through the scent we choose each morning.",
-    cover: fr("2pTXHg0YfjDib0s40lqb5rtbxPE", "jpg", 1478, 1040, "Tarot perfume packaging"),
+    cover: { src: "/projects/perfume/cover.jpg", w: 2956, h: 2080, alt: "Tarot perfume packaging" },
+    containCover: true,
     blocks: [
       {
         type: "text",
