@@ -8,7 +8,7 @@
 export type Img = { src: string; w: number; h: number; alt: string };
 
 export type Block =
-  | { type: "text"; heading?: string; paragraphs: string[] }
+  | { type: "text"; heading?: string; paragraphs: string[]; tight?: boolean }
   | {
       type: "list";
       heading: string;
@@ -56,6 +56,14 @@ export type Project = {
   cover?: Img;
   /** A different image for the top of the project page (the cover stays for the home page and grid). */
   hero?: Img;
+  /** Max width (px) of the page-top hero image. Defaults to 760. */
+  heroMax?: number;
+  /** Hide the hairline outline on this page's images (corners stay rounded). */
+  noOutline?: boolean;
+  /** Show the hero at full width instead of shrinking it to fit the first screen. */
+  heroFull?: boolean;
+  /** Gap between page blocks: "large" is the roomier rhythm (96–192px) used by dmcg.co. */
+  spacing?: "large";
   /** Slug of a related project, shown in the footer instead of the next project. */
   related?: string;
   /** Show the hero without the rounded frame and outline. */
@@ -121,6 +129,10 @@ const all: Project[] = [
     cover: poster(1, "Matthaei Botanical Gardens and Nichols Arboretum poster"),
     hero: { src: "/projects/mbgna/series.jpg", w: 2138, h: 2063, alt: "All six MBGNA posters in a grid" },
     heroPlain: true,
+    noOutline: true,
+    heroMax: 942,
+    heroFull: true,
+    spacing: "large",
     related: "article-poster",
     spread: [
       poster(2, "2026 Events poster"),
@@ -140,12 +152,12 @@ const all: Project[] = [
       },
       {
         type: "images",
-        maxWidth: 760,
+        fitH: "4000px",
         images: [{ src: "/projects/mbgna/photo-4159.jpg", w: 1500, h: 2000, alt: "A child photographing camellias at the Arboretum" }, { src: "/projects/mbgna/photo-4158.jpg", w: 1500, h: 2000, alt: "A camellia in bloom" }],
       },
       {
         type: "images",
-        maxWidth: 760,
+        fitH: "4000px",
         plain: true,
         tight: true,
         images: [{ src: "/projects/mbgna/detail-peony.jpg", w: 2000, h: 1485, alt: "Close-up of the Peony Garden poster's linework and typography" }],
@@ -159,7 +171,7 @@ const all: Project[] = [
       },
       {
         type: "images",
-        maxWidth: 760,
+        fitH: "4000px",
         images: [{ src: "/projects/mbgna/photo-4167.jpg", w: 2000, h: 1500, alt: "Visitors resting beside the Bonsai Garden pond" }],
       },
       {
@@ -170,7 +182,7 @@ const all: Project[] = [
       },
       {
         type: "images",
-        maxWidth: 760,
+        fitH: "4000px",
         images: [{ src: "/projects/mbgna/photo-4183.jpg", w: 2000, h: 1500, alt: "Visitors in the desert house" }, { src: "/projects/mbgna/photo-4133.jpg", w: 2000, h: 1500, alt: "Visitors walking through the Conservatory" }],
       },
       {
@@ -181,13 +193,12 @@ const all: Project[] = [
       },
       {
         type: "images",
-        maxWidth: 760,
-        fitH: "100svh",
+        fitH: "4000px",
         images: [{ src: "/projects/mbgna/hero.jpg", w: 1716, h: 1696, alt: "MBGNA events poster on a wall as a person walks past" }],
       },
       {
         type: "images",
-        maxWidth: 760,
+        fitH: "4000px",
         images: [{ src: "/projects/mbgna/mockup-3.jpg", w: 1612, h: 1096, alt: "MBGNA posters displayed outdoors" }],
       },
     ],
@@ -195,72 +206,95 @@ const all: Project[] = [
   {
     slug: "soundscape",
     section: "projects",
-    title: "SoundScape: A location-aware music discovery platform",
+    title: "SoundScape",
+    subtitle: "UX Design · Mobile App · Music Discovery",
     short: "SoundScape",
     category: "UX Design",
     client: "Personal project",
-    role: "UX Designer",
-    timeframe: "March – April 2026",
+    role: "",
+    timeframe: "",
     year: "2026",
+    details: [
+      { label: "Year", value: "2026" },
+      { label: "Role", value: "UX Designer" },
+      { label: "Timeframe", value: "March – April 2026" },
+    ],
     summary:
       "A music app that turns physical location into a living playlist, blending your taste with what people nearby are listening to.",
     cover: { src: "/projects/soundscape/cover.png", w: 680, h: 1000, alt: "SoundScape app, globe screen in an iPhone" },
     containCover: true,
+    hero: { src: "/projects/soundscape/hero.jpg", w: 1920, h: 1080, alt: "SoundScape app screens: globe, trending map, now playing and library" },
+    noOutline: true,
+    heroMax: 942,
+    heroFull: true,
+    spacing: "large",
     video: { webm: "/projects/soundscape/hover.webm", mp4: "/projects/soundscape/hover.mp4" },
     blocks: [
       {
         type: "text",
-        heading: "Overview",
         paragraphs: [
-          "SoundScape blends a user’s listening habits with real-time, hyperlocal music trends. Users can see what people nearby are listening to, discover music tied to places they visit, and connect their own taste with local and global sounds.",
-          "Anonymized, crowdsourced listening data keeps the platform updating, and adds a spatial dimension that algorithm- and trend-driven services don’t offer — turning physical location into a dynamic, living playlist.",
+          "SoundScape is a location-aware music discovery platform that connects personal listening habits with the musical identity of places. It allows users to explore what people nearby are listening to, discover music while travelling, and uncover the sounds that define different cities, regions, and cultures.",
+          "While traditional streaming platforms such as Spotify and Apple Music focus primarily on personal listening history and algorithmic recommendations, SoundScape introduces a geographic dimension to music discovery. By drawing on anonymised, opt-in listening activity, the platform makes local music trends part of the listening experience.",
         ],
       },
       {
         type: "text",
-        heading: "Challenge",
         paragraphs: [
-          "Music discovery is largely disconnected from place. Current platforms focus on personal history and global or algorithmically similar songs, so travelers miss authentic, location-specific music.",
-          "Existing map-based apps lean on gamification over passive, real-world listening, leaving a gap for a more organic, data-driven approach.",
+          "Music discovery is largely disconnected from place. Existing streaming platforms are built around individual preferences and global recommendations, offering limited insight into the music being listened to in a particular neighbourhood or city.",
+          "SoundScape explores a different approach: using location as a starting point for discovery. Rather than simply recommending what a user might like next, it invites them to explore questions such as “What are people around me listening to?” and “What defines the sound of this city?”",
+          "The goal is to make discovering music feel more connected to the places people visit and the communities around them.",
         ],
       },
       {
-        type: "list",
-        heading: "Scope",
-        items: [
-          { title: "Location-based recommendations" },
-          { title: "Near real-time listening data" },
-          { title: "Integration with existing streaming platforms", text: "Including playback control." },
-          { title: "Opt-in, anonymous data sharing" },
-          { title: "A map or feed", text: "Songs popular nearby and in selected regions or countries." },
-          { title: "Cultural discovery mode", text: "Filter by country, language, or origin." },
+        type: "images",
+        images: [{ src: "/projects/soundscape/shot-1.jpg", w: 2212, h: 1080, alt: "Interactive globe home screen in light and dark" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "The interactive globe forms the centre of the experience, making geography the primary way users discover music. Country-level markers reveal listening trends across different regions, turning the home screen into an entry point for exploring music around the world.",
         ],
       },
       {
-        type: "list",
-        heading: "Key design decisions",
-        numbered: true,
-        items: [
-          {
-            title: "Interactive globe as the home screen",
-            text: "A rotatable 3D globe with country-level pins makes location the main way to discover music.",
-          },
-          {
-            title: "Three-level zoom",
-            text: "Users move from country to city to street level, keeping geographic context at each step.",
-          },
-          {
-            title: "Dual explore modes",
-            text: "One suggests songs based on what’s currently playing; the other filters by country, language, or origin.",
-          },
-          {
-            title: "Pin tap as playback entry",
-            text: "Tapping a pin opens a listening experience, so going from discovery to listening takes one tap.",
-          },
-          {
-            title: "Familiar patterns",
-            text: "A bottom tab bar and library layout, a profile layout, and map-style pin interaction reduce the learning curve.",
-          },
+        type: "images",
+        images: [{ src: "/projects/soundscape/shot-2.jpg", w: 2212, h: 1080, alt: "Country, city and street-level views" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "A three-level navigation system takes users from country to city to street level. This progressive zoom preserves geographic context while allowing users to move from broad regional trends to more local listening activity.",
+        ],
+      },
+      {
+        type: "images",
+        images: [{ src: "/projects/soundscape/shot-3.jpg", w: 2212, h: 1080, alt: "The two explore modes in light and dark" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "SoundScape offers two complementary approaches to discovery. One surfaces recommendations in relation to the music a user is already playing, creating a more passive and continuous listening experience. The other encourages active exploration, allowing users to browse music by country, language, or origin.",
+          "Together, these modes balance personal discovery with the opportunity to encounter music beyond familiar listening habits.",
+        ],
+      },
+      {
+        type: "images",
+        images: [{ src: "/projects/soundscape/shot-4.jpg", w: 2212, h: 1080, alt: "Map pin interaction and playback screen" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "Location markers act as more than points of information. Selecting a pin reveals the music associated with that place and provides a direct path into listening through Spotify playback integration. This connects the act of discovering a local trend with experiencing the music itself.",
+        ],
+      },
+      {
+        type: "images",
+        images: [{ src: "/projects/soundscape/shot-5.jpg", w: 2212, h: 1080, alt: "Navigation, library and profile screens" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "Although the concept introduces a different way to discover music, the interface builds on familiar interaction patterns. A bottom navigation bar and library structure draw on established music-streaming conventions, while profile and map interactions take cues from widely used social and mapping platforms.",
+          "These familiar patterns help make the experience approachable, allowing the geographic discovery concept to remain the focus.",
         ],
       },
     ],

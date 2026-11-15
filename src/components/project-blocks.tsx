@@ -5,6 +5,8 @@ import type { Block, Img } from "@/data/projects";
 import { cn } from "@/lib/utils";
 
 const gap = "clamp(48px,6.78vw,96px)";
+const gapMedium = gap;
+const gapLarge = "clamp(96px,13.56vw,192px)";
 
 function Section({
   heading,
@@ -124,13 +126,14 @@ function BlockView({ block }: { block: Block }) {
   }
 }
 
-export function ProjectBlocks({ blocks }: { blocks: Block[] }) {
+export function ProjectBlocks({ blocks, spacing }: { blocks: Block[]; spacing?: "large" }) {
+  const gap = spacing === "large" ? gapLarge : gapMedium;
   return (
     <div className="flex flex-col" style={{ gap }}>
       {blocks.map((block, i) => (
         <div
           key={i}
-          style={block.type === "images" && block.tight ? { marginTop: `calc(${gap} * -1 + 20px)` } : undefined}
+          style={(block.type === "images" || block.type === "text") && block.tight ? { marginTop: `calc(${gap} * -1 + 20px)` } : undefined}
         >
           <BlockView block={block} />
         </div>

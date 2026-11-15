@@ -185,3 +185,8 @@ button {
 
 /* Project pages: every image is capped to fit one screen (below the header), width follows its proportions. */
 :root { --fit-h: calc(100svh - 150px); }
+
+/* Pages that opt out of the hairline outline on images. */
+.no-outline .media-round::after {
+  display: none;
+}

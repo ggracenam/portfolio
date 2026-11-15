@@ -28,7 +28,7 @@ export function ProjectDetail({
   ].filter((m) => m.value);
 
   return (
-    <article className="mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24">
+    <article className={`mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24${project.noOutline ? " no-outline" : ""}`}>
       <div className="mx-auto w-[min(541px,100%)]">
       <Link
         href={base === "archive" ? "/archive" : "/"}
@@ -102,8 +102,8 @@ export function ProjectDetail({
             </div>
           ) : (
           <div
-            className={project.video ? "relative mx-auto" : project.reveal || project.fold || project.wind || project.heroPlain ? "mx-auto" : "media-round mx-auto"}
-            style={{ width: `min(${project.video ? "520px" : project.hero ? "760px" : "942px"}, 100%, calc(${project.heroPlain ? "100svh" : project.hero ? "max(300px, 100svh - 390px)" : "var(--fit-h)"} * ${(project.hero ?? project.cover).w / (project.hero ?? project.cover).h}))` }}
+            className={project.video && !project.hero ? "relative mx-auto" : project.reveal || project.fold || project.wind || project.heroPlain ? "mx-auto" : "media-round mx-auto"}
+            style={{ width: `min(${project.video && !project.hero ? "520px" : project.hero ? `${project.heroMax ?? 760}px` : "942px"}, 100%, calc(${project.heroFull ? "4000px" : project.heroPlain ? "var(--fit-h)" : project.hero ? "max(300px, 100svh - 390px)" : "var(--fit-h)"} * ${(project.hero ?? project.cover).w / (project.hero ?? project.cover).h}))` }}
           >
             <Image
               src={(project.hero ?? project.cover).src}
@@ -113,7 +113,7 @@ export function ProjectDetail({
               priority
               sizes="(min-width: 990px) 942px, 100vw"
             />
-            {project.video && (
+            {project.video && !project.hero && (
               <HoverVideo webm={project.video.webm} mp4={project.video.mp4} active autoPlay />
             )}
           </div>
@@ -121,8 +121,8 @@ export function ProjectDetail({
         </Reveal>
       )}
 
-      <div className={project.hideCover ? "mt-10" : "mt-[clamp(48px,6.78vw,96px)]"}>
-        <ProjectBlocks blocks={project.blocks} />
+      <div className={project.hideCover ? "mt-10" : project.spacing === "large" ? "mt-[clamp(96px,13.56vw,192px)]" : "mt-[clamp(48px,6.78vw,96px)]"}>
+        <ProjectBlocks blocks={project.blocks} spacing={project.spacing} />
       </div>
 
       <Reveal className="mt-[clamp(96px,13.56vw,192px)]">
