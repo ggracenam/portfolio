@@ -8,7 +8,7 @@
 export type Img = { src: string; w: number; h: number; alt: string };
 
 export type Block =
-  | { type: "text"; heading: string; paragraphs: string[] }
+  | { type: "text"; heading?: string; paragraphs: string[] }
   | {
       type: "list";
       heading: string;
@@ -20,7 +20,19 @@ export type Block =
       heading: string;
       items: { title: string; year: string; medium: string; size: string; note?: string; image?: Img }[];
     }
-  | { type: "images"; heading?: string; images: Img[] };
+  | {
+      type: "images";
+      heading?: string;
+      images: Img[];
+      /** Cap the width of the whole group (px). */
+      maxWidth?: number;
+      /** Sit close under the block above (a few px apart instead of the full section gap). */
+      tight?: boolean;
+      /** Show the images without the rounded frame and hairline outline. */
+      plain?: boolean;
+      /** Let these images use more of the screen height (CSS length for the height cap). */
+      fitH?: string;
+    };
 
 export type Project = {
   slug: string;
@@ -29,6 +41,8 @@ export type Project = {
   /** Which page it lives on: the Projects scroll or the Studio page. */
   section: "projects" | "studio";
   title: string;
+  /** Optional muted line under the title (disciplines). */
+  subtitle?: string;
   /** Short name used on the home page and cards. */
   short: string;
   category: string;
@@ -40,6 +54,12 @@ export type Project = {
   summary: string;
   /** Leave undefined to show a typographic placeholder until you add one. */
   cover?: Img;
+  /** A different image for the top of the project page (the cover stays for the home page and grid). */
+  hero?: Img;
+  /** Slug of a related project, shown in the footer instead of the next project. */
+  related?: string;
+  /** Show the hero without the rounded frame and outline. */
+  heroPlain?: boolean;
   /**
    * Further pages that open out next to the cover on hover (poster sets): the first is the cover's
    * partner, the rest sit tucked behind it.
@@ -83,16 +103,25 @@ const all: Project[] = [
   {
     slug: "mbgna-posters",
     section: "projects",
-    title: "Poster Set for the Matthaei Botanical Gardens & Nichols Arboretum",
+    title: "MBGNA Poster Series",
+    subtitle: "Visual Identity · Print Design · Art Direction",
     short: "MBGNA Posters",
     category: "Graphic Design",
-    client: "MBGNA",
-    role: "Graphic Designer",
-    timeframe: "March – April 2026",
+    client: "Matthaei Botanical Gardens and Nichols Arboretum (MBGNA)",
+    role: "",
+    timeframe: "",
     year: "2026",
+    details: [
+      { label: "Year", value: "2026" },
+      { label: "Role", value: "Graphic Design, Art Direction" },
+      { label: "Deliverables", value: "Six-poster series · 24 × 36 in." },
+    ],
     summary:
       "A six-poster series that reframes a botanical garden network as a living museum you take part in, not just look at.",
     cover: poster(1, "Matthaei Botanical Gardens and Nichols Arboretum poster"),
+    hero: { src: "/projects/mbgna/series.jpg", w: 2138, h: 2063, alt: "All six MBGNA posters in a grid" },
+    heroPlain: true,
+    related: "article-poster",
     spread: [
       poster(2, "2026 Events poster"),
       poster(3, "Peony Garden poster"),
@@ -103,79 +132,63 @@ const all: Project[] = [
     blocks: [
       {
         type: "text",
-        heading: "Overview",
         paragraphs: [
-          "A six-poster series for the Matthaei Botanical Gardens & Nichols Arboretum (MBGNA), a network of five Ann Arbor sites covering 841 acres.",
-          "The series reframes the organization as a “living museum”, shifting public perception from viewing nature to participating in it.",
+          "Matthaei Botanical Gardens and Nichols Arboretum (MBGNA) is a University of Michigan institution encompassing five distinct sites across 841 acres in Ann Arbor: Matthaei Botanical Gardens, Nichols Arboretum, Campus Farm, Mud Lake Bog, and Horner-McLaughlin Woods.",
+          "Working with MBGNA’s Director, Anthony Kolenic, and Interpretation and Communications Specialist, Katie Seguin, this project explored how the institution could be represented beyond its familiar association with gardens and scenic landscapes. A central idea emerged from our conversations: MBGNA is not simply a place to experience nature, but a living museum shaped by the relationships between people, plants, and place.",
+          "The six-poster series translates this perspective into a visual language that positions human presence as integral to the landscape. Rather than depicting nature as something to observe from a distance, the work highlights the ways people inhabit, experience, and contribute to these spaces. The series includes an institutional overview, a poster for events and seasonal programming, and four posters focused on the Peony Garden, Farm Stand, Bonsai Garden, and Beaver Habitat, each representative of the four seasons.",
         ],
       },
       {
-        type: "list",
-        heading: "Deliverables",
-        items: [
-          { title: "Institutional overview poster" },
-          { title: "Events and seasonal programming poster" },
-          {
-            title: "Four program posters",
-            text: "Peony Garden, Farm Stand, Bonsai Garden, and Beaver Habitat, each tied to a season.",
-          },
+        type: "images",
+        maxWidth: 760,
+        images: [{ src: "/projects/mbgna/photo-4159.jpg", w: 1500, h: 2000, alt: "A child photographing camellias at the Arboretum" }, { src: "/projects/mbgna/photo-4158.jpg", w: 1500, h: 2000, alt: "A camellia in bloom" }],
+      },
+      {
+        type: "images",
+        maxWidth: 760,
+        plain: true,
+        tight: true,
+        images: [{ src: "/projects/mbgna/detail-peony.jpg", w: 2000, h: 1485, alt: "Close-up of the Peony Garden poster's linework and typography" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "Inspired by Japanese graphic design, the visual direction balances simplicity, negative space, and functional clarity with organic forms and expressive linework.",
+          "Hand-drawn elements reference natural growth and ecological systems, while structured layouts and typography provide consistency across the series. Layered shapes and transparency suggest the relationships between people, plants, species, and time. A seasonal colour palette gives each poster its own character while establishing a visual rhythm across the collection.",
         ],
       },
       {
-        type: "list",
-        heading: "Context & insights",
-        items: [
-          { title: "Landscapes are shaped by people", text: "They are not static natural objects." },
-          { title: "A cultural organization", text: "MBGNA operates as more than a botanical one." },
-          {
-            title: "Nature without people feels passive",
-            text: "Many visitors picture these spaces empty, which makes the experience feel like something to watch.",
-          },
-          {
-            title: "Awareness is narrow",
-            text: "Public awareness is mostly limited to two of the five sites.",
-          },
-          {
-            title: "Year-round relevance matters",
-            text: "Programming spans many experience zones across the seasons.",
-          },
+        type: "images",
+        maxWidth: 760,
+        images: [{ src: "/projects/mbgna/photo-4167.jpg", w: 2000, h: 1500, alt: "Visitors resting beside the Bonsai Garden pond" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "The six posters explore MBGNA at different scales - from its broader institutional identity and seasonal programming to individual spaces and programs, including the Peony Garden, Farm Stand, Bonsai Garden, and Beaver Habitat.",
         ],
       },
       {
-        type: "list",
-        heading: "Key design decisions",
-        items: [
-          {
-            title: "Organic linework meets typographic grids",
-            text: "Hand-drawn lines balance structured type, reflecting nature as both designed and lived.",
-          },
-          {
-            title: "Layered, semi-transparent shapes",
-            text: "Overlaps suggest accumulated relationships between people, species, and time.",
-          },
-          {
-            title: "A shared system",
-            text: "Common typography, image treatment, and layout logic let the posters work alone or as a set.",
-          },
-          {
-            title: "People-centered imagery",
-            text: "Self-shot and archival photos show people walking, studying, farming, performing, and resting.",
-          },
-          {
-            title: "Two audiences",
-            text: "The series informs new visitors about the full scope of MBGNA and reinforces familiarity for returning ones.",
-          },
+        type: "images",
+        maxWidth: 760,
+        images: [{ src: "/projects/mbgna/photo-4183.jpg", w: 2000, h: 1500, alt: "Visitors in the desert house" }, { src: "/projects/mbgna/photo-4133.jpg", w: 2000, h: 1500, alt: "Visitors walking through the Conservatory" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "By placing people alongside plants and landscapes, the series challenges the idea of botanical spaces as purely scenic environments. Instead, it presents MBGNA as a shared cultural and ecological space shaped by everyday experiences, stewardship, and connection.",
         ],
       },
       {
-        type: "list",
-        heading: "Seasonal color system",
-        items: [
-          { title: "Spring", text: "Renewal — Peony Garden." },
-          { title: "Summer", text: "Activity — Campus Farm." },
-          { title: "Autumn", text: "Transition and harvest — events." },
-          { title: "Winter", text: "Stillness and research — Bonsai Garden." },
-        ],
+        type: "images",
+        maxWidth: 760,
+        fitH: "100svh",
+        images: [{ src: "/projects/mbgna/hero.jpg", w: 1716, h: 1696, alt: "MBGNA events poster on a wall as a person walks past" }],
+      },
+      {
+        type: "images",
+        maxWidth: 760,
+        images: [{ src: "/projects/mbgna/mockup-3.jpg", w: 1612, h: 1096, alt: "MBGNA posters displayed outdoors" }],
       },
     ],
   },

@@ -12,10 +12,13 @@ export function ProjectDetail({
   project,
   next,
   base,
+  relatedLabel,
 }: {
   project: Project;
   next: Project;
   base: "projects" | "archive";
+  /** Replaces "Next project" in the footer link (set when the page names a related project). */
+  relatedLabel?: string;
 }) {
   const meta = [
     { label: "Client", value: project.client },
@@ -44,6 +47,7 @@ export function ProjectDetail({
         >
           {project.title}
         </TextEffect>
+        {project.subtitle && <p className="-mt-3 text-muted">{project.subtitle}</p>}
 
         <dl className="grid grid-cols-[116px_1fr] gap-x-4 gap-y-1">
           {meta.map((m) =>
@@ -76,8 +80,8 @@ export function ProjectDetail({
       )}
 
       {project.cover && !project.hideCover && (
-        <Reveal className="mt-[clamp(48px,6.78vw,96px)]">
-          {project.spread?.length ? (
+        <Reveal className={project.hero ? "mt-8" : "mt-[clamp(48px,6.78vw,96px)]"}>
+          {!project.hero && project.spread?.length ? (
             // Poster sets: the first two pages side by side, like the opened cover on the home page.
             <div
               className="mx-auto grid grid-cols-2 gap-3"
@@ -98,14 +102,14 @@ export function ProjectDetail({
             </div>
           ) : (
           <div
-            className={project.video ? "relative mx-auto" : project.reveal || project.fold || project.wind ? "mx-auto" : "media-round mx-auto"}
-            style={{ width: `min(${project.video ? "520px" : "942px"}, 100%, calc(var(--fit-h) * ${project.cover.w / project.cover.h}))` }}
+            className={project.video ? "relative mx-auto" : project.reveal || project.fold || project.wind || project.heroPlain ? "mx-auto" : "media-round mx-auto"}
+            style={{ width: `min(${project.video ? "520px" : project.hero ? "760px" : "942px"}, 100%, calc(${project.heroPlain ? "100svh" : project.hero ? "max(300px, 100svh - 390px)" : "var(--fit-h)"} * ${(project.hero ?? project.cover).w / (project.hero ?? project.cover).h}))` }}
           >
             <Image
-              src={project.cover.src}
-              alt={project.cover.alt}
-              width={project.cover.w}
-              height={project.cover.h}
+              src={(project.hero ?? project.cover).src}
+              alt={(project.hero ?? project.cover).alt}
+              width={(project.hero ?? project.cover).w}
+              height={(project.hero ?? project.cover).h}
               priority
               sizes="(min-width: 990px) 942px, 100vw"
             />
@@ -127,7 +131,7 @@ export function ProjectDetail({
           className="group mx-auto flex w-[min(541px,100%)] items-baseline justify-between gap-6 border-t border-line pt-4"
         >
           <span className="flex gap-4">
-            <span className="text-muted">Next project</span>
+            <span className="text-muted">{relatedLabel ?? "Next project"}</span>
             <span>{next.short}</span>
           </span>
           <span

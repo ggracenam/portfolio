@@ -10,23 +10,23 @@ function Section({
   heading,
   children,
 }: {
-  heading: string;
+  heading?: string;
   children: React.ReactNode;
 }) {
   return (
     <Reveal>
       <section className="mx-auto w-[min(541px,100%)] text-pretty">
-        <h2 className="font-semibold">{heading}</h2>
-        <div className="mt-2">{children}</div>
+        {heading && <h2 className="font-semibold">{heading}</h2>}
+        <div className={heading ? "mt-2" : ""}>{children}</div>
       </section>
     </Reveal>
   );
 }
 
-function Photo({ img }: { img: Img }) {
+function Photo({ img, plain = false }: { img: Img; plain?: boolean }) {
   return (
     <div
-      className="media-round mx-auto"
+      className={plain ? "relative mx-auto" : "media-round mx-auto"}
       style={{ width: `min(100%, calc(var(--fit-h) * ${img.w / img.h}))` }}
     >
       <Image
@@ -106,12 +106,15 @@ function BlockView({ block }: { block: Block }) {
           {block.heading && (
             <h2 className="mx-auto w-[min(541px,100%)] font-semibold">{block.heading}</h2>
           )}
-          <div className="mx-auto grid w-[min(942px,100%)] gap-4 md:grid-cols-2">
+          <div
+            className="mx-auto grid gap-4 md:grid-cols-2"
+            style={{ width: `min(${block.maxWidth ?? 942}px, 100%)`, ...(block.fitH ? ({ "--fit-h": block.fitH } as React.CSSProperties) : {}) }}
+          >
             {block.images.map((img) => {
-              const wide = img.w / img.h >= 1.45;
+              const wide = img.w / img.h >= 1.45 || block.images.length === 1;
               return (
                 <Reveal key={img.src} className={cn(wide && "md:col-span-2")}>
-                  <Photo img={img} />
+                  <Photo img={img} plain={block.plain} />
                 </Reveal>
               );
             })}
@@ -125,7 +128,12 @@ export function ProjectBlocks({ blocks }: { blocks: Block[] }) {
   return (
     <div className="flex flex-col" style={{ gap }}>
       {blocks.map((block, i) => (
-        <BlockView key={i} block={block} />
+        <div
+          key={i}
+          style={block.type === "images" && block.tight ? { marginTop: `calc(${gap} * -1 + 20px)` } : undefined}
+        >
+          <BlockView block={block} />
+        </div>
       ))}
     </div>
   );

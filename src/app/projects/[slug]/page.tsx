@@ -28,6 +28,7 @@ export default async function Page(props: PageProps<"/projects/[slug]">) {
   if (!project || !list.includes(project)) notFound();
 
   const index = list.indexOf(project);
-  const next = list[(index + 1) % list.length];
-  return <ProjectDetail project={project} next={next} base="projects" />;
+  const related = project.related ? getProject(project.related) : undefined;
+  const next = related ?? list[(index + 1) % list.length];
+  return <ProjectDetail project={project} next={next} base="projects" relatedLabel={related ? "Related project" : undefined} />;
 }
