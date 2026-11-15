@@ -28,6 +28,8 @@ export type Block =
       maxWidth?: number;
       /** Sit close under the block above (a few px apart instead of the full section gap). */
       tight?: boolean;
+      /** Pull the block up by a further number of px (and blend its white margin into the block above). */
+      pull?: number;
       /** A small muted line under the images (e.g. to credit work that is not mine). */
       caption?: string;
       /** Show the images without the rounded frame and hairline outline. */
@@ -61,7 +63,7 @@ export type Project = {
   category: string;
   client: string;
   role: string;
-  timeframe: string;
+  timeframe?: string;
   year?: string;
   details?: { label: string; value: string }[];
   summary: string;
@@ -129,14 +131,8 @@ const all: Project[] = [
     short: "MBGNA Posters",
     category: "Graphic Design",
     client: "Matthaei Botanical Gardens and Nichols Arboretum (MBGNA)",
-    role: "",
-    timeframe: "",
+    role: "Graphic Design, Art Direction",
     year: "2026",
-    details: [
-      { label: "Year", value: "2026" },
-      { label: "Role", value: "Graphic Design, Art Direction" },
-      { label: "Deliverables", value: "Six-poster series · 24 × 36 in." },
-    ],
     summary:
       "A six-poster series that reframes a botanical garden network as a living museum you take part in, not just look at.",
     cover: poster(1, "Matthaei Botanical Gardens and Nichols Arboretum poster"),
@@ -224,14 +220,8 @@ const all: Project[] = [
     short: "SoundScape",
     category: "UX Design",
     client: "Personal project",
-    role: "",
-    timeframe: "",
+    role: "UX Designer",
     year: "2026",
-    details: [
-      { label: "Year", value: "2026" },
-      { label: "Role", value: "UX Designer" },
-      { label: "Timeframe", value: "2026" },
-    ],
     summary:
       "A music app that turns physical location into a living playlist, blending your taste with what people nearby are listening to.",
     cover: { src: "/projects/soundscape/cover.png", w: 680, h: 1000, alt: "SoundScape app, globe screen in an iPhone" },
@@ -320,14 +310,8 @@ const all: Project[] = [
     short: "U-M GPT",
     category: "UX Design",
     client: "UMSI IT Services",
-    role: "",
-    timeframe: "",
+    role: "UX Designer",
     year: "2025",
-    details: [
-      { label: "Year", value: "2025" },
-      { label: "Role", value: "UX Designer" },
-      { label: "Timeframe", value: "2025" },
-    ],
     summary:
       "A semester-long redesign of the University of Michigan’s generative AI platform, focused on usability, accessibility, and visual coherence.",
     cover: { src: "/projects/umgpt/cover.png", w: 1412, h: 1026, alt: "U-M GPT home page, tilted" },
@@ -422,17 +406,13 @@ const all: Project[] = [
   {
     slug: "brochure",
     section: "projects",
-    title: "Brochure for the poem “Lotus Flower” (Korean)",
+    title: "Lotus Flower Poem Brochure",
+    subtitle: "Graphic Design · Typography · Print Design",
     short: "Lotus Flower Brochure",
     category: "Graphic Design",
     client: "Personal project",
     role: "Graphic Designer",
-    timeframe: "3 weeks",
-    details: [
-      { label: "Tools", value: "Adobe InDesign, Procreate" },
-      { label: "Dimensions", value: "210 mm × 210 mm" },
-      { label: "Medium", value: "Printed brochure" },
-    ],
+    year: "2025",
     summary:
       "A Valentine’s Day brochure for a Korean love poem, exploring the geometry of Korean letterforms.",
     cover: { src: "/projects/brochure/still.jpg", w: 2224, h: 556, alt: "Lotus Flower brochure, laid flat" },
@@ -441,35 +421,51 @@ const all: Project[] = [
       front: ["a", "b", "c", "d"].map((k) => ({ src: `/projects/brochure/front-${k}.jpg`, w: 556, h: 556, alt: "Lotus Flower brochure panel" })),
       back: ["a", "b", "c", "d"].map((k) => ({ src: `/projects/brochure/back-${k}.jpg`, w: 556, h: 556, alt: "Lotus Flower brochure, inside panel" })),
     },
+    hero: { src: "/projects/brochure/hero.jpg", w: 2551, h: 930, alt: "Lotus Flower brochure folded like an accordion, seen from above, with the calligraphy title on the front crease" },
+    noOutline: true,
+    heroMax: 942,
+    heroFull: true,
+    spacing: "large",
     blocks: [
       {
         type: "text",
-        heading: "Overview",
         paragraphs: [
-          "Inspired by Seyoung Oh’s Korean love poem “Lotus Flower” and made for Valentine’s Day, this brochure explores the geometry of Korean typography compared with alphabetic forms.",
-          "It pairs a minimalist sans serif with a traditional brushstroke typeface. The title runs along the gutter, reading as legible but pattern-like, and changes shape when folded.",
-        ],
-      },
-      {
-        type: "list",
-        heading: "Key design decisions",
-        items: [
-          { title: "Title on the gutter", text: "The brush letterforms stay legible when the brochure is folded." },
-          { title: "Korean first", text: "The original Korean poem takes priority over the English translation." },
-          { title: "A pond of lotus flowers", text: "The poem is visualized as a pond." },
-          { title: "Letterforms as ripples", text: "The irregularity of Korean letterforms suggests water ripples." },
-          { title: "One accent color", text: "“Lotus flower” in the poem shares the title’s color." },
+          "Inspired by the Korean love poem Lotus Flower by Seyoung Oh, this brochure was designed for Valentine’s Day as an exploration of Korean typography, poetry, and visual form. The project examines the geometric qualities of Korean letterforms and their contrast with alphabetic typography, bringing together contemporary simplicity and traditional expression.",
+          "A minimalist sans serif is paired with a Korean brushstroke typeface, creating a balance between restraint and movement. The original Korean poem takes visual priority, allowing its language and letterforms to shape the reading experience, while the English translation provides a secondary point of reference.",
         ],
       },
       {
         type: "images",
-        heading: "Final deliverable",
-        images: [
-          fr("RDhgBjq8xlCTJYbuctXiLSIpxDI", "png", 1598, 442, "Lotus Flower brochure spread 1"),
-          fr("MplSfyoiRFGhJFtIy7lVbZhhE", "png", 1598, 442, "Lotus Flower brochure spread 2"),
-          fr("H04HNYh6wD9tWT2xp9GvZPnGbI", "png", 1848, 1344, "Lotus Flower brochure"),
-          fr("Lk4NWTLsP8JFKZZtLNyNcjMCmEQ", "png", 1596, 1109, "Lotus Flower brochure detail 1"),
-          fr("9Jg94l1bolM19HGVZ6YIr0kK6CI", "png", 1593, 1109, "Lotus Flower brochure detail 2"),
+        fitH: "4000px",
+        plain: true,
+        images: [{ src: "/projects/brochure/spread.jpg", w: 2823, h: 766, alt: "Lotus Flower brochure spread" }],
+      },
+      {
+        type: "images",
+        tight: true,
+        pull: 19,
+        fitH: "4000px",
+        plain: true,
+        images: [{ src: "/projects/brochure/poem.jpg", w: 2823, h: 766, alt: "Korean poem and typographic details" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "The title, Lotus Flower, runs along the central gutter, functioning as both a typographic element and a recurring visual motif. Its placement allows the letterforms to shift in appearance when the brochure is folded, creating different compositions while remaining legible in both formats.",
+          "The Korean poem is arranged to evoke a pond filled with lotus flowers. Irregular spacing and the natural variation of the brushstroke letterforms suggest ripples across the water’s surface, translating the poem’s imagery into the structure of the page.",
+        ],
+      },
+      {
+        type: "images",
+        fitH: "4000px",
+        plain: true,
+        maxWidth: 680,
+        images: [{ src: "/projects/brochure/detail.jpg", w: 2300, h: 826, alt: "Highlighted text and colour details" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "A restrained colour palette draws attention to the words “lotus flower” within the poem, echoing the colour of the title. This subtle connection ties the text to the broader composition, reinforcing the relationship between language, imagery, and form.",
         ],
       },
     ],
@@ -483,11 +479,6 @@ const all: Project[] = [
     category: "Graphic Design",
     client: "Audrey G. Bennett",
     role: "Graphic Designer",
-    timeframe: "3 weeks",
-    details: [
-      { label: "Tools", value: "Adobe Illustrator, Procreate" },
-      { label: "Dimensions", value: "A2" },
-    ],
     summary:
       "An article redesigned as a Korean-language poster, building cultural awareness between African and Korean design histories.",
     cover: fr("jU9aCgf5M116WXMMldE4JVd5Vyc", "png", 934, 1491, "African Roots of Swiss Design poster"),
@@ -566,12 +557,6 @@ const all: Project[] = [
     category: "3D Design",
     client: "Personal project",
     role: "3D Designer",
-    timeframe: "5 weeks",
-    details: [
-      { label: "Tools", value: "Rhino (laser cutting)" },
-      { label: "Dimensions", value: "5″ × 5″ × 8″" },
-      { label: "Materials", value: "Taskboard, tissue paper, acrylic paint, fineliner pen" },
-    ],
     summary:
       "A lamp holder inspired by Korean landscape painting and window lattices, like looking out at a calm view.",
     cover: { src: "/projects/lamp/cover.jpg", w: 1500, h: 1875, alt: "Lamp holder with a pine branch painted on rice paper, unlit" },
@@ -634,8 +619,6 @@ const all: Project[] = [
     category: "Branding",
     client: "Personal project",
     role: "Graphic Designer",
-    timeframe: "6 weeks",
-    details: [{ label: "Tools", value: "Adobe Illustrator, Adobe Photoshop, Micron pens" }],
     summary:
       "Tarot-inspired perfume packaging exploring the idea that we shape our fate through the scent we choose each morning.",
     cover: { src: "/projects/perfume/cover.jpg", w: 2956, h: 2080, alt: "Tarot perfume packaging" },
@@ -690,7 +673,7 @@ const all: Project[] = [
     category: "Fine Art",
     client: "Personal",
     role: "",
-    timeframe: "2021 – 2022",
+    year: "2021 – 2022",
     summary: "Selected paintings and mixed-media work from 2021 and 2022.",
     hideCover: true,
     cover: fr("9OoLlBiYqxvnv2ZMQkBjsPdHxQ", "jpg", 1030, 1262, "Portrait painting"),

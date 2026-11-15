@@ -22,9 +22,8 @@ export function ProjectDetail({
 }) {
   const meta = [
     { label: "Client", value: project.client },
+    { label: "Year", value: project.year ?? "" },
     { label: "Role", value: project.role },
-    { label: "Timeframe", value: project.timeframe },
-    ...(project.details ?? []),
   ].filter((m) => m.value);
 
   return (
