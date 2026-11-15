@@ -102,6 +102,29 @@ function BlockView({ block }: { block: Block }) {
         </Section>
       );
 
+    case "video":
+      return (
+        <div className="mx-auto w-[min(942px,100%)]">
+          <Reveal>
+            <div className="media-round" style={{ aspectRatio: `${block.w} / ${block.h}` }}>
+              <video
+                className="block h-full w-full"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                poster={block.poster}
+                aria-label={block.alt}
+              >
+                {block.webm && <source src={block.webm} type="video/webm" />}
+                <source src={block.mp4} type="video/mp4" />
+              </video>
+            </div>
+          </Reveal>
+        </div>
+      );
+
     case "images":
       return (
         <div className="flex flex-col gap-4">
@@ -121,6 +144,9 @@ function BlockView({ block }: { block: Block }) {
               );
             })}
           </div>
+          {block.caption && (
+            <p className="mx-auto w-[min(942px,100%)] text-muted">{block.caption}</p>
+          )}
         </div>
       );
   }
@@ -133,7 +159,7 @@ export function ProjectBlocks({ blocks, spacing }: { blocks: Block[]; spacing?: 
       {blocks.map((block, i) => (
         <div
           key={i}
-          style={(block.type === "images" || block.type === "text") && block.tight ? { marginTop: `calc(${gap} * -1 + 20px)` } : undefined}
+          style={(block.type === "images" || block.type === "text" || block.type === "video") && block.tight ? { marginTop: `calc(${gap} * -1 + 20px)` } : undefined}
         >
           <BlockView block={block} />
         </div>

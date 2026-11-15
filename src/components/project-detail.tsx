@@ -102,7 +102,7 @@ export function ProjectDetail({
             </div>
           ) : (
           <div
-            className={project.video && !project.hero ? "relative mx-auto" : project.reveal || project.fold || project.wind || project.heroPlain ? "mx-auto" : "media-round mx-auto"}
+            className={project.video && !project.hero ? "relative mx-auto" : (project.reveal && !project.hero) || project.fold || project.wind || project.heroPlain ? "mx-auto" : "media-round mx-auto"}
             style={{ width: `min(${project.video && !project.hero ? "520px" : project.hero ? `${project.heroMax ?? 760}px` : "942px"}, 100%, calc(${project.heroFull ? "4000px" : project.heroPlain ? "var(--fit-h)" : project.hero ? "max(300px, 100svh - 390px)" : "var(--fit-h)"} * ${(project.hero ?? project.cover).w / (project.hero ?? project.cover).h}))` }}
           >
             <Image

@@ -28,10 +28,23 @@ export type Block =
       maxWidth?: number;
       /** Sit close under the block above (a few px apart instead of the full section gap). */
       tight?: boolean;
+      /** A small muted line under the images (e.g. to credit work that is not mine). */
+      caption?: string;
       /** Show the images without the rounded frame and hairline outline. */
       plain?: boolean;
       /** Let these images use more of the screen height (CSS length for the height cap). */
       fitH?: string;
+    }
+  | {
+      /** A silent looping clip (e.g. a page scrolling through), shown in the same frame as images. */
+      type: "video";
+      mp4: string;
+      webm?: string;
+      poster: string;
+      w: number;
+      h: number;
+      alt: string;
+      tight?: boolean;
     };
 
 export type Project = {
@@ -217,7 +230,7 @@ const all: Project[] = [
     details: [
       { label: "Year", value: "2026" },
       { label: "Role", value: "UX Designer" },
-      { label: "Timeframe", value: "March – April 2026" },
+      { label: "Timeframe", value: "2026" },
     ],
     summary:
       "A music app that turns physical location into a living playlist, blending your taste with what people nearby are listening to.",
@@ -302,13 +315,19 @@ const all: Project[] = [
   {
     slug: "umgpt",
     section: "projects",
-    title: "U-M GPT: An AI-powered conversational assistant for the University of Michigan",
+    title: "U-M GPT & ITS AI Services",
+    subtitle: "UX Design · Interface Design · Web Design",
     short: "U-M GPT",
     category: "UX Design",
     client: "UMSI IT Services",
-    role: "UX Designer",
-    timeframe: "August – December 2025",
+    role: "",
+    timeframe: "",
     year: "2025",
+    details: [
+      { label: "Year", value: "2025" },
+      { label: "Role", value: "UX Designer" },
+      { label: "Timeframe", value: "2025" },
+    ],
     summary:
       "A semester-long redesign of the University of Michigan’s generative AI platform, focused on usability, accessibility, and visual coherence.",
     cover: { src: "/projects/umgpt/cover.png", w: 1412, h: 1026, alt: "U-M GPT home page, tilted" },
@@ -322,143 +341,80 @@ const all: Project[] = [
         { src: "/projects/umgpt/page-3.jpg", w: 1450, h: 1052, alt: "U-M GPT folders" },
       ],
     },
+    hero: { src: "/projects/umgpt/hero.jpg", w: 1600, h: 1200, alt: "Redesigned U-M GPT interface on desktop and mobile" },
+    heroMax: 800,
+    heroFull: true,
+    noOutline: true,
+    spacing: "large",
     blocks: [
       {
         type: "text",
-        heading: "Overview",
         paragraphs: [
-          "U-M GPT is the University of Michigan’s generative AI platform for students, faculty, and researchers. As a semester-long project, I explored ways to improve its usability and visual appeal to encourage adoption.",
-        ],
-      },
-      {
-        type: "list",
-        heading: "Problems with the previous version",
-        items: [
-          {
-            title: "Cluttered layout & visual incoherence",
-            text: "The layout lacked a clear hierarchy, and extreme color contrast and inconsistent spacing made it feel less modern and professional.",
-          },
-          { title: "Lack of customisable visual options and accessibility features" },
-          { title: "Poor navigation and conversation management tools" },
-        ],
-      },
-      {
-        type: "text",
-        heading: "Challenge",
-        paragraphs: [
-          "How can the U-M GPT interface be redesigned to be visually coherent, accessible, and user-friendly, with efficient navigation and personalization for all users?",
-        ],
-      },
-      {
-        type: "text",
-        heading: "My role",
-        paragraphs: [
-          "Analyzing the core usability and visual problems, defining the redesign vision, ideating through sketching, building task flows, and producing high-fidelity desktop and mobile wireframes with design rationale.",
-        ],
-      },
-      {
-        type: "list",
-        heading: "Process",
-        numbered: true,
-        items: [
-          { title: "Problem identification" },
-          { title: "Ideation & sketching" },
-          { title: "Task flow development" },
-          { title: "Design direction & integration", text: "Prompt organisation was chosen as the foundation." },
-          { title: "High-fidelity wireframes", text: "Desktop and mobile." },
-        ],
-      },
-      {
-        type: "list",
-        heading: "Key design decisions",
-        items: [
-          {
-            title: "Enhanced navigation with search",
-            text: "Search helps users find conversations, prompts, and resources.",
-          },
-          {
-            title: "Folder-based organisation",
-            text: "Folders help users manage chats and prompts.",
-          },
-          {
-            title: "Preview-based prompt identification",
-            text: "Short previews help users pick the right conversation.",
-          },
-          {
-            title: "Preview-based folder drop-downs",
-            text: "Drop-downs with preview information improve access to chats and prompts.",
-          },
-          {
-            title: "Empowering users with customisation",
-            text: "Customisation gives users control over their experience.",
-          },
-          {
-            title: "Flexible viewing modes",
-            text: "List and grid modes let users choose what suits their workflow and device.",
-          },
-          {
-            title: "Custom labels, cover images & color-coding",
-            text: "Users can label, add cover images, and color-code their work, with sensible default modes.",
-          },
-        ],
-      },
-      {
-        type: "list",
-        heading: "Landing page decisions",
-        items: [
-          {
-            title: "Content strategy",
-            text: "Four tools are introduced at the top, each with a visual preview and detailed insights in the body, ending with a “Why GenAI” section.",
-          },
-          {
-            title: "U-M GPT first",
-            text: "Making it the first interactive element lets first-time users try the most familiar tool immediately.",
-          },
-          {
-            title: "Quick launch",
-            text: "A type bar in the hero lets returning users resume work fast.",
-          },
-          {
-            title: "Clear hierarchy",
-            text: "Intro, tools, details, and why-use sections, with side navigation for quick jumps between tools.",
-          },
-        ],
-      },
-      {
-        type: "list",
-        heading: "Outcome",
-        items: [
-          { title: "First-time users understand the tools are free, campus-provided, and open to all." },
-          { title: "Users can compare features and intended audiences." },
-          { title: "Returning users can quickly resume workflows through the hero input and navigation." },
-          {
-            title: "The page supports both scanning and deep reading.",
-            text: "Each tool can open in a new tab for more information.",
-          },
+          "U-M GPT is the University of Michigan’s generative AI platform, providing students, faculty, and researchers with access to a range of AI tools. As part of a semester-long design project, I explored how its interface could be improved to create a more cohesive, accessible, and intuitive experience for the university community.",
+          "The project focused on rethinking the platform’s visual hierarchy, navigation, and conversation management, while introducing more flexible ways for users to organize and personalize their workspace.",
         ],
       },
       {
         type: "images",
-        heading: "Selected visuals",
-        images: [
-          fr("2qgaPORF0QaxzPJHCNI24kdd0", "png", 1938, 922, "U-M GPT interface"),
-          fr("1RNicZ4sPIJltVwufdbmvTXrbsY", "png", 1758, 1196, "U-M GPT design exploration 1"),
-          fr("NpGNkDMXM78sJQXEdIk71Z7yZLY", "png", 1758, 1196, "U-M GPT design exploration 2"),
-          fr("9aCRHAbH2pwnYpRKvtKKCCaB8", "png", 1758, 1196, "U-M GPT design exploration 3"),
-          fr("a33h1rfM6brcUvJ0b4QKaozX3OI", "png", 1758, 1196, "U-M GPT design exploration 4"),
-          fr("7rHsLbGCVHj9TNNEYxyk03K0I", "png", 3648, 1208, "U-M GPT wireframe 1"),
-          fr("r05W8mXW2q7BknI3DWNfV7SQHY", "png", 3648, 1208, "U-M GPT wireframe 2"),
-          fr("QPZvYdyBrxRB7nQxHkwU8lpMk", "png", 3648, 1208, "U-M GPT wireframe 3"),
-          fr("ayVTUGXseVIYlz653jMD59pEX4", "png", 3648, 1208, "U-M GPT wireframe 4"),
-          fr("5Dd5GlXoMWjmfVo7W2WQzAsYjE", "png", 3648, 1208, "U-M GPT wireframe 5"),
-          fr("vCpk8tXyRZNsYuTbNhrxziII", "png", 3648, 1208, "U-M GPT wireframe 6"),
-          fr("ONr2osHe2alVvOkU0WaIMU47KPY", "png", 1782, 564, "U-M GPT landing page 1"),
-          fr("XnFgB44lsQO8QVtMdNYTBAOAU", "png", 1782, 564, "U-M GPT landing page 2"),
-          fr("x4uksNvNXVIWJxMPg7LUXB6CQ", "png", 1782, 564, "U-M GPT landing page 3"),
-          fr("odiJHi0CxXYHAyRaHC6o3fvM54k", "png", 1600, 592, "U-M GPT landing page 4"),
-          fr("iqnOrzoOwWyrZ3o5nnzJzNfOIeM", "png", 1756, 592, "U-M GPT landing page 5"),
-          fr("qf9fpsbyUZOxw9qKtlnz3eXdos", "png", 2212, 750, "U-M GPT landing page 6"),
-          fr("1FRtfWhS9SzpNBKTMAm2N3uiVKU", "png", 1804, 592, "U-M GPT landing page 7"),
+        caption: "*Original U-M GPT visuals",
+        images: [{ src: "/projects/umgpt/old.jpg", w: 1938, h: 922, alt: "The original U-M GPT interface" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "The original U-M GPT experience presented several usability and visual challenges. A cluttered layout, inconsistent spacing, and competing colour treatments made the interface difficult to navigate and lacked a clear visual hierarchy. Conversation management was also limited, making it harder for users to organize and return to their work.",
+          "The redesign focused on creating a more structured and approachable experience, with an emphasis on clarity, flexibility, and efficient access to frequently used content.",
+        ],
+      },
+      {
+        type: "images",
+        fitH: "4000px",
+        images: [{ src: "/projects/umgpt/flow-desktop.jpg", w: 1884, h: 1046, alt: "Desktop screens in the order a user moves through them" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "A central direction of the redesign was to make conversations and prompts easier to manage. Search functionality allows users to locate existing content, while folder-based organization provides a clearer structure for grouping related conversations and resources.",
+          "Preview information was introduced across conversations, prompts, and folders, helping users identify content before opening it. Together, these features create a more organized workspace and reduce the effort required to find and revisit previous work.",
+        ],
+      },      {
+        type: "images",
+        fitH: "4000px",
+        images: [{ src: "/projects/umgpt/flow-mobile.jpg", w: 1884, h: 1626, alt: "Mobile screens in the order a user moves through them" }],
+      },
+
+      {
+        type: "text",
+        paragraphs: [
+          "The redesign also introduces greater flexibility in how users organize and view their workspace. Alternative list and grid layouts accommodate different preferences, while custom labels, cover images, and colour coding help users distinguish between projects and content.",
+          "These options give users more control over their environment while maintaining a consistent underlying interface.",
+        ],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "Alongside the platform redesign, I explored the University of Michigan ITS AI Services landing page as an entry point to the university’s broader collection of generative AI tools.",
+        ],
+      },
+      {
+        type: "images",
+        images: [{ src: "/projects/umgpt/its-landing.jpg", w: 1817, h: 928, alt: "University of Michigan ITS AI Services landing page on desktop and mobile" }],
+      },
+      {
+        type: "video",
+        tight: true,
+        mp4: "/projects/umgpt/its-scroll.mp4",
+        webm: "/projects/umgpt/its-scroll.webm",
+        poster: "/projects/umgpt/its-scroll-poster.jpg",
+        w: 1280,
+        h: 800,
+        alt: "The ITS AI Services landing page scrolling from top to bottom",
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "The page was structured to help visitors understand and access the available services quickly. A prominent U-M GPT entry point encourages immediate engagement, while an overview of all four tools introduces their capabilities and intended audiences. Visual previews and supporting descriptions provide additional context, with side navigation allowing users to move directly between sections.",
+          "The page balances quick access with more detailed information, supporting both first-time visitors exploring the available tools and returning users looking to get started.",
         ],
       },
     ],
