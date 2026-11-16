@@ -580,53 +580,42 @@ const all: Project[] = [
   {
     slug: "perfume",
     section: "projects",
-    title: "Perfume Packaging & Branding: Fate and Fragrance",
+    title: "Tarot Perfumes",
+    subtitle: "Graphic Design · Packaging Design · Illustration",
     short: "Fate & Fragrance",
     category: "Branding",
     client: "Personal project",
+    year: "2022",
     role: "Graphic Designer",
     summary:
       "Tarot-inspired perfume packaging exploring the idea that we shape our fate through the scent we choose each morning.",
     cover: { src: "/projects/perfume/cover.jpg", w: 2956, h: 2080, alt: "Tarot perfume packaging" },
     containCover: true,
+    hero: { src: "/projects/perfume/cover.jpg", w: 2956, h: 2080, alt: "Tarot perfume packaging: La lionne" },
+    heroPlain: true,
+    noOutline: true,
+    spacing: "large",
     blocks: [
       {
         type: "text",
-        heading: "Overview",
         paragraphs: [
-          "The project explores the idea that people might shape their fate through the fragrance they choose each morning. Drawing on tarot symbolism, the packaging visualizes the connection between scent and destiny — perfumes leave impressions, and memories of the people who wear them.",
-        ],
-      },
-      {
-        type: "list",
-        heading: "Process",
-        numbered: true,
-        items: [
-          { title: "Sketch four rough concepts" },
-          { title: "Draw four higher-quality covers" },
-          { title: "Edit in Photoshop", text: "So the artwork can be placed into a product mockup." },
-        ],
-      },
-      {
-        type: "list",
-        heading: "Key design decisions",
-        items: [
-          { title: "Tarot symbolism", text: "The central visual inspiration." },
-          {
-            title: "Packaging as a link between fragrance and fate",
-            text: "Designed to express the mystical connection.",
-          },
+          "Fate and Fragrance explores the idea that the scent we choose each morning might influence the course of our day, shaping the impressions and memories we leave behind. Drawing on the symbolism of tarot, the project imagines fragrance as something more than a personal preference: a small ritual connected to fate and destiny.",
+          "The packaging illustrations take inspiration from the visual language of tarot, using hand-drawn imagery to give the fragrances a sense of mysticism and symbolism. Each illustration began on paper, drawn with Micron pens before being digitised and refined in Photoshop for use across the packaging.",
         ],
       },
       {
         type: "images",
-        heading: "Final deliverable",
         images: [
-          fr("UgUtwwjleECmhpUmWTPhr8IEwo", "png", 1262, 1697, "Tarot perfume cover sketches"),
-          fr("R4GRYynDvAwSraSAdr6QcNQaGQ", "png", 1486, 832, "Tarot perfume process"),
-          fr("5KTUyrw0BTjPXbxa2iSeJmlZ04", "png", 1995, 1420, "Tarot perfume packaging 1"),
-          fr("KJ6IFEgvcxD1ADMTyAKxpvWlE", "png", 1678, 1140, "Tarot perfume packaging 2"),
-          fr("Y8zMHnMvw133RnRksx6mBZc8", "png", 2022, 1440, "Tarot perfume packaging 3"),
+          { src: "/projects/perfume/moon.jpg", w: 1600, h: 1143, alt: "Tarot perfume packaging: The Moon" },
+          { src: "/projects/perfume/sun.jpg", w: 1600, h: 1143, alt: "Tarot perfume packaging: The Sun" },
+          { src: "/projects/perfume/wheel.jpg", w: 1600, h: 1143, alt: "Tarot perfume packaging: The Wheel of Fortune" },
+          { src: "/projects/perfume/lion.jpg", w: 1600, h: 1143, alt: "Tarot perfume packaging: The Lion" },
+        ],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "The combination of traditional drawing and digital composition brings a tactile quality to the packaging, while the tarot-inspired direction gives the fragrances a visual identity rooted in mystery, intuition and the possibility of the unknown.",
         ],
       },
     ],
