@@ -509,7 +509,6 @@ const all: Project[] = [
         paragraphs: [
           "The composition draws inspiration from traditional Korean painting, using its visual qualities as a familiar point of reference for Korean audiences without shifting the subject away from African design history. Vertical Korean letterforms create the structure of the poster, with hierarchy established through placement, rhythm, and spacing rather than scale alone.",
           "The poster brings two cultural references together. Its figures are inspired by African drawing, with expressive, gestural brushwork, while the medium looks to Korean tradition: the warm, fibrous texture of hanji (traditional Korean paper) and the deep black of meok (먹), the ink used in Korean calligraphy and painting. Placed together, they connect the subject of the article with the visual culture of its Korean audience.",
-          "The word “African” is given greater visual prominence than “Swiss,” reflecting the article’s intention to foreground a contribution often underrepresented in accounts of Swiss modernism. Illustrated elements incorporate key themes from the article, connecting the typography and imagery into a unified composition.",
         ],
       },
       {
