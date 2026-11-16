@@ -90,6 +90,8 @@ export type Project = {
   spread?: Img[];
   /** A second picture that fades in over the cover on hover (same framing, so the object does not move). */
   hoverCover?: Img;
+  /** Project-page hero shown on hover (pairs with `hero`). */
+  heroHover?: Img;
   /** Show the whole cover in grid cards instead of cropping it to 4:3. */
   containCover?: boolean;
   /** A short muted clip that plays over the cover on hover (same frame size as the cover). */
@@ -522,61 +524,55 @@ const all: Project[] = [
   {
     slug: "lamp",
     section: "projects",
-    title: "Lamp Holder: Scenery through a window",
+    title: "Lamp Holder",
+    subtitle: "Product Design · Lighting Design · Craft & 3D Design",
     short: "Lamp Holder",
     category: "3D Design",
     client: "Personal project",
+    year: "2023",
     role: "3D Designer",
     summary:
       "A lamp holder inspired by Korean landscape painting and window lattices, like looking out at a calm view.",
     cover: { src: "/projects/lamp/cover.jpg", w: 1500, h: 1875, alt: "Lamp holder with a pine branch painted on rice paper, unlit" },
     hoverCover: { src: "/projects/lamp/hover.jpg", w: 1500, h: 1875, alt: "The same lamp holder lit from inside" },
     containCover: true,
+    hero: { src: "/projects/lamp/hero-cover.jpg", w: 1464, h: 2344, alt: "Lamp holder with a pine branch painted on rice paper, unlit" },
+    heroHover: { src: "/projects/lamp/hero-hover.jpg", w: 1464, h: 2344, alt: "The same lamp holder lit from inside" },
+    heroPlain: true,
+    noOutline: true,
+    spacing: "large",
     blocks: [
       {
         type: "text",
-        heading: "Overview",
         paragraphs: [
-          "The lamp holder draws on Korean traditional paintings and window lattice patterns to evoke looking out at a calm landscape — a quiet moment between inside and outside, like viewing nature through a frame.",
-        ],
-      },
-      {
-        type: "list",
-        heading: "Process",
-        numbered: true,
-        items: [
-          { title: "Plan the key design decisions" },
-          { title: "Sketch the visual idea" },
-          { title: "Laser-cut the taskboard pieces", text: "Designed in Rhino." },
-          { title: "Paint traditional-style trees on tissue paper" },
-          { title: "Paint the taskboard brown", text: "To resemble wooden window lattice." },
-          { title: "Attach the taskboard and tissue paper" },
-          { title: "Assemble all sides into the finished structure" },
-        ],
-      },
-      {
-        type: "list",
-        heading: "Key design decisions",
-        items: [
-          { title: "Painted scenery", text: "Two facing sides carry traditional scenic painting." },
-          { title: "Window lattice", text: "The other two facing sides carry lattice patterns." },
-          { title: "Rice-paper effect", text: "Tissue paper imitates rice paper." },
-          {
-            title: "A different top",
-            text: "The top uses another pattern that leaves the light source uncovered by tissue paper.",
-          },
+          "Inspired by traditional Korean landscape paintings and architectural window lattice patterns, this lamp holder explores the relationship between light, nature, and framing. The design draws on the experience of looking out through a traditional window, capturing a quiet moment between interior and exterior.",
+          "Two opposing panels feature hand-drawn landscape scenes inspired by traditional Korean paintings. Rendered on tissue paper, the illustrations evoke the delicate, translucent quality of traditional rice paper, allowing light to soften the imagery and create a gentle atmosphere.",
         ],
       },
       {
         type: "images",
-        heading: "Final deliverable",
         images: [
-          fr("WQfuwk9XGsMP8hcKQNf1xtqLQ2s", "jpg", 4032, 3024, "Lamp holder, view 1"),
-          fr("KNq64GJJ1CYUUVMv6DOez1zXZ0", "jpg", 4032, 3024, "Lamp holder, view 2"),
-          fr("Bvp2QIq8R4I6gSvCvh6MIGcbHo", "jpg", 4032, 3024, "Lamp holder, view 3"),
-          fr("pUltGKNYxAU7N5LKAFEDhwjEo0", "jpg", 4032, 3024, "Lamp holder, view 4"),
-          fr("wcmXdZQjX6bK9igCB4TxGmT4", "jpg", 3024, 4032, "Lamp holder, view 5"),
-          fr("JkKgGjEoky0aafV0AVEvti8P9v0", "jpg", 3024, 4032, "Lamp holder, view 6"),
+          { src: "/projects/lamp/final-3.jpg", w: 2250, h: 3000, alt: "Lamp holder, view 3" },
+          { src: "/projects/lamp/final-4.jpg", w: 2250, h: 3000, alt: "Lamp holder, view 4" },
+        ],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "The remaining panels reinterpret traditional Korean window latticework. Laser-cut taskboard forms the structure, finished with brown acrylic paint to suggest the warmth and texture of wood. Together, the contrasting panels create a balance between illustrated scenery and architectural pattern.",
+        ],
+      },
+      {
+        type: "images",
+        images: [
+          { src: "/projects/lamp/final-5.jpg", w: 2250, h: 3000, alt: "Lamp holder, view 5" },
+          { src: "/projects/lamp/final-6.jpg", w: 2250, h: 3000, alt: "Lamp holder, view 6" },
+        ],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "The open patterned top allows light to escape more freely, emphasizing the lamp's glow while distinguishing it from the more enclosed sides. Through the combination of layered materials, hand-drawn details, and filtered light, the lamp holder transforms traditional visual references into a contemporary functional object.",
         ],
       },
     ],

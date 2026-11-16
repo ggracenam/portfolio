@@ -6,6 +6,7 @@ import { TextEffect } from "@/components/motion-primitives/text-effect";
 import { HoverVideo } from "@/components/hover-video";
 import { Phone } from "@/components/phone";
 import { WindHero } from "@/components/wind-cover";
+import { HoverHero } from "@/components/hover-hero";
 import type { Project } from "@/data/projects";
 
 /** One project / studio piece, laid out like a dmcg.co case study. */
@@ -80,9 +81,11 @@ export function ProjectDetail({
       )}
 
       {project.cover && !project.hideCover && (
-        <Reveal className={project.hero ? "mt-8" : "mt-[clamp(48px,6.78vw,96px)]"}>
+        <Reveal className={project.hero || project.hoverCover ? "mt-8" : "mt-[clamp(48px,6.78vw,96px)]"}>
           {project.wind && project.hero ? (
             <WindHero project={project} />
+          ) : project.hoverCover && !project.video && !project.wind ? (
+            <HoverHero project={project} />
           ) : !project.hero && project.spread?.length ? (
             // Poster sets: the first two pages side by side, like the opened cover on the home page.
             <div
