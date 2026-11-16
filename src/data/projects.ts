@@ -473,78 +473,49 @@ const all: Project[] = [
   {
     slug: "article-poster",
     section: "projects",
-    title: "Poster for Audrey Bennett’s “The African Roots of Swiss Design”",
+    title: "The African Roots of Swiss Design",
+    subtitle: "Poster Design · Typography · Editorial Design",
     short: "Article Poster",
     wind: true,
     category: "Graphic Design",
     client: "Audrey G. Bennett",
-    role: "Graphic Designer",
+    role: "Graphic Design, Translation",
+    year: "2025",
     summary:
       "An article redesigned as a Korean-language poster, building cultural awareness between African and Korean design histories.",
     cover: fr("jU9aCgf5M116WXMMldE4JVd5Vyc", "png", 934, 1491, "African Roots of Swiss Design poster"),
+    hero: { src: "/projects/article-poster/hero.jpg", w: 1868, h: 2980, alt: "The African Roots of Swiss Design, final poster" },
+    heroPlain: true,
+    heroMax: 942,
+    noOutline: true,
+    spacing: "large",
     blocks: [
       {
         type: "text",
-        heading: "Overview",
         paragraphs: [
-          "At Professor Bennett’s request, her article from The Conversation was redesigned as a poster that reframes her message for a Korean audience. Her writing examines how African design traditions shaped Swiss modernism, a link often overlooked in Western accounts.",
-          "As a Korean designer shaped by both Korean and global cultures, I translated the article into Korean and visualized it to build cultural awareness between African and Korean design histories.",
-        ],
-      },
-      {
-        type: "list",
-        heading: "Process",
-        numbered: true,
-        items: [
-          {
-            title: "Sketching",
-            text: "Initial idea sketches included English-language poster sketches and a Korean-language one.",
-          },
-          {
-            title: "Choosing Korean",
-            text: "The Korean-language version let me test alternative letterforms and attract a Korean audience.",
-          },
-          {
-            title: "Version 1",
-            text: "The original letter spacing reduced legibility, and illustrations between text blocks nearly touched the side margins.",
-          },
-          {
-            title: "Version 2",
-            text: "Wider title letter spacing improved legibility and hierarchy. Key topics moved to the side, and the QR code and credits were right-aligned for balance.",
-          },
-          {
-            title: "Version 3 (final)",
-            text: "Subtopics were integrated into the illustrations, and varied letter heights added dynamism.",
-          },
-        ],
-      },
-      {
-        type: "list",
-        heading: "Key design decisions",
-        items: [
-          { title: "Vertical letterforms" },
-          { title: "Hierarchy through placement", text: "Rather than through text size." },
-          {
-            title: "Korean traditional painting",
-            text: "Used for familiarity, applied to style rather than context so the focus on African influence stays clear.",
-          },
-          {
-            title: "“African” over “Swiss”",
-            text: "Emphasis reflects the article’s focus on an overlooked influence.",
-          },
+          "Created at the request of Professor Audrey G. Bennett, this poster reinterprets her article, The African Roots of Swiss Design, originally published in The Conversation, for a Korean audience. The article explores the often-overlooked influence of African design traditions on Swiss modernism, challenging established narratives of modern graphic design.",
+          "Translating the article into Korean became an opportunity to reconsider how its message could be communicated through a different language and visual context. The poster brings together Korean typography and visual references to introduce the article’s central argument to a new audience.",
         ],
       },
       {
         type: "images",
-        heading: "Final deliverable",
-        images: [
-          fr("oxUUe0sUboHV7fGulcHP49YR7BQ", "jpg", 3072, 4096, "African Roots poster, final 1"),
-          fr("bZ7xaFTlztXYwwY8TNPmLhk1zOY", "jpg", 3072, 4096, "African Roots poster, final 2"),
-          fr("iifRghBmJCcH5T5osUR23w91Js", "jpg", 3072, 4096, "African Roots poster, final 3"),
-          fr("CbqFgCp7kQTtcNMIMDjLH01WkVQ", "png", 712, 1140, "African Roots poster, version 1"),
-          fr("ixndz1E2eUx77m26ddaxYLTiF4", "png", 706, 1136, "African Roots poster, version 2"),
-          fr("HSjxr04e3xt6GZBlRvFEQ0nUQco", "png", 1424, 2272, "African Roots poster, version 3"),
-          fr("Fn98XsUJKHLQjjBGMiurK3bLU", "png", 1876, 1432, "African Roots poster, detail"),
+        plain: true,
+        maxWidth: 760,
+        fitH: "4000px",
+        images: [{ src: "/projects/article-poster/detail.jpg", w: 1170, h: 600, alt: "Close-up of the poster: Korean words placed irregularly above the figures" }],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "The composition draws inspiration from traditional Korean painting, using its visual qualities as a familiar point of reference for Korean audiences without shifting the subject away from African design history. Vertical Korean letterforms create the structure of the poster, with hierarchy established through placement, rhythm, and spacing rather than scale alone.",
+          "The poster brings two cultural references together. Its figures are inspired by African drawing, with expressive, gestural brushwork, while the medium looks to Korean tradition: the warm, fibrous texture of hanji (traditional Korean paper) and the deep black of meok (먹), the ink used in Korean calligraphy and painting. Placed together, they connect the subject of the article with the visual culture of its Korean audience.",
+          "The word “African” is given greater visual prominence than “Swiss,” reflecting the article’s intention to foreground a contribution often underrepresented in accounts of Swiss modernism. Illustrated elements incorporate key themes from the article, connecting the typography and imagery into a unified composition.",
+        ],
+      },
+      {
+        type: "text",
+        paragraphs: [
+          "Through the translation and visual reinterpretation of the article, the poster explores how graphic design can create connections between cultural histories, making overlooked influences more visible to audiences beyond their original context.",
         ],
       },
     ],

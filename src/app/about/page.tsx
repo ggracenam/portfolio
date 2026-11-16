@@ -28,8 +28,16 @@ export default function AboutPage() {
           <p>
             Hi, I’m You Rim, I also go by Grace! I’m a curious designer that started my journey
             from fine art to the digital world of graphic design and also UI/UX. As someone who
-            loves to take photos, does illustrations as a side hobby, and is my family and
-            friends’s personal stylist, I see myself as a creative director.
+            loves to take{" "}
+            <Link href="/archive/gallery" className={link}>
+              photos
+            </Link>
+            , does{" "}
+            <Link href="/archive/notebook" className={link}>
+              illustrations
+            </Link>{" "}
+            as a side hobby, and is my family and friends’s personal stylist, I see myself as a
+            creative director.
           </p>
           <p>
             As someone who lived in England, Korea, and the United States, I have a very

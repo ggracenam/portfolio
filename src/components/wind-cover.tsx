@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { animate, useAnimationFrame, useMotionValue } from "motion/react";
+import { animate, useAnimationFrame, useMotionValue, useReducedMotion } from "motion/react";
 import type { Project } from "@/data/projects";
 
 const H0 = 745; // stage height in px (the poster is drawn at this size, then scaled to fit)
@@ -12,7 +12,7 @@ const M = 16; // strips per side of the centre line
  * thin vertical strips hinged to each other (centre outwards), so it bends smoothly instead of tilting as one piece.
  * The curl grows toward the edges, the right edge (the windward side) lifts most, and a slow ripple runs through it.
  */
-export function WindCover({ project, hovered, reduce }: { project: Project; hovered: boolean; reduce: boolean | null }) {
+export function WindCover({ project, hovered, reduce, width }: { project: Project; hovered: boolean; reduce: boolean | null; width?: string }) {
   const img = project.cover!;
   const W0 = Math.round((img.w / img.h) * H0);
   const sw = W0 / 2 / M;
@@ -105,7 +105,7 @@ export function WindCover({ project, hovered, reduce }: { project: Project; hove
   };
 
   return (
-    <div ref={boxRef} className="relative" style={{ aspectRatio: ratio, width: `min(82vw, clamp(560px, 32vw, 800px), calc(56svh * ${ratio}))` }}>
+    <div ref={boxRef} className="relative" style={{ aspectRatio: ratio, width: width ?? `min(82vw, clamp(560px, 32vw, 800px), calc(56svh * ${ratio}))` }}>
       <div
         className="absolute left-0 top-0"
         style={{ width: W0, height: H0, transform: `scale(${scale})`, transformOrigin: "0 0", filter: "drop-shadow(0 30px 24px rgb(0 0 0 / 0.16))" }}
@@ -117,6 +117,30 @@ export function WindCover({ project, hovered, reduce }: { project: Project; hove
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+/** The same lifting poster, as the hero of a project page: it stirs when the pointer rests on it. */
+export function WindHero({ project }: { project: Project }) {
+  const hero = project.hero!;
+  const reduce = useReducedMotion();
+  const [hovered, setHovered] = useState(false);
+  const ratio = hero.w / hero.h;
+  return (
+    <div
+      className="mx-auto w-fit"
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+    >
+      <WindCover
+        project={{ ...project, cover: hero }}
+        hovered={hovered}
+        reduce={reduce}
+        width={`min(${project.heroMax ?? 942}px, calc(100vw - 48px), calc(var(--fit-h) * ${ratio}))`}
+      />
     </div>
   );
 }
