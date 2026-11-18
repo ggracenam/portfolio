@@ -18,6 +18,7 @@ import { WindCover } from "@/components/wind-cover";
 import { FoldCover } from "@/components/fold-cover";
 import { Reveal } from "@/components/reveal";
 import { useCompact } from "@/lib/use-compact";
+import { RESTORE_FLAG } from "@/components/back-link";
 import type { Project } from "@/data/projects";
 import { site } from "@/data/site";
 
@@ -210,6 +211,7 @@ function ShowcaseItem({
       >
         <Link
           href={`/${base}/${project.slug}`}
+          data-slug={project.slug}
           aria-label={`${project.short} — ${project.category}`}
           className="group relative block"
           onPointerEnter={(e) => {
@@ -317,6 +319,7 @@ function GridCard({
   return (
     <Link
       href={`/${base}/${project.slug}`}
+      data-slug={project.slug}
       aria-label={`${project.short} — ${project.category}`}
       className="group relative block"
       onPointerEnter={(e) => {
@@ -381,10 +384,59 @@ export function Showcase({
   // Phones and tablets only get the scroll view.
   const shown: View = compact || !allowGrid ? "scroll" : view;
 
+  const memKey = `showcase-return:${base}`;
+  const pending = useRef<string | null>(null);
+
   // Remember the view in the address (#grid) so a reload or shared link keeps it.
+  // Coming back from a project (its back link or the browser's back button) restores the
+  // view and the project the visitor left from.
   useEffect(() => {
-    if (allowGrid && window.location.hash === "#grid") setView("grid");
+    let restore = false;
+    let mem: { view?: View; slug?: string } = {};
+    try {
+      restore = sessionStorage.getItem(RESTORE_FLAG) === "1";
+      sessionStorage.removeItem(RESTORE_FLAG);
+      mem = JSON.parse(sessionStorage.getItem(memKey) ?? "{}");
+    } catch {}
+    if (restore && mem.slug) {
+      pending.current = mem.slug;
+      if (allowGrid && mem.view === "grid") setView("grid");
+      else if (allowGrid && window.location.hash === "#grid") setView("grid");
+      // Settle after the view has rendered.
+      requestAnimationFrame(() => requestAnimationFrame(() => placeBack()));
+    } else if (allowGrid && window.location.hash === "#grid") {
+      setView("grid");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allowGrid]);
+
+  function placeBack() {
+    const slug = pending.current;
+    if (!slug) return;
+    const el = document.querySelector<HTMLElement>(`[data-slug="${slug}"]`);
+    if (!el) return;
+    const root = document.documentElement;
+    const snap = root.style.scrollSnapType;
+    root.style.scrollSnapType = "none";
+    el.scrollIntoView({ block: "center", behavior: "instant" as ScrollBehavior });
+    root.style.scrollSnapType = snap;
+    pending.current = null;
+  }
+
+  // The grid (or scroll) view appears one render after the choice, so place again then.
+  useEffect(() => {
+    if (!pending.current) return;
+    requestAnimationFrame(() => requestAnimationFrame(() => placeBack()));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shown]);
+
+  function remember(e: React.MouseEvent<HTMLElement>) {
+    const a = (e.target as HTMLElement).closest<HTMLElement>("a[data-slug]");
+    if (!a) return;
+    try {
+      sessionStorage.setItem(memKey, JSON.stringify({ view: shown, slug: a.dataset.slug }));
+    } catch {}
+  }
 
   // Clicking the name (or the Projects tab) while already here returns to the Scroll view.
   useEffect(() => {
@@ -416,7 +468,7 @@ export function Showcase({
   }, [shown, compact]);
 
   return (
-    <div>
+    <div onClickCapture={remember}>
       {shown === "scroll" ? (
         projects.map((project) => (
           <ShowcaseItem key={project.slug} project={project} compact={compact} base={base} />

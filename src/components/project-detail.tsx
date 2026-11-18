@@ -7,6 +7,7 @@ import { HoverVideo } from "@/components/hover-video";
 import { Phone } from "@/components/phone";
 import { WindHero } from "@/components/wind-cover";
 import { HoverHero } from "@/components/hover-hero";
+import { BackLink } from "@/components/back-link";
 import type { Project } from "@/data/projects";
 
 /** One project / studio piece, laid out like a dmcg.co case study. */
@@ -31,12 +32,12 @@ export function ProjectDetail({
   return (
     <article className={`mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24${project.noOutline ? " no-outline" : ""}`}>
       <div className="mx-auto w-[min(541px,100%)]">
-      <Link
+      <BackLink
         href={base === "archive" ? "/archive" : "/"}
         className="inline-block text-muted transition-colors hover:text-fg"
       >
         {base === "archive" ? "← Studio" : "← All projects"}
-      </Link>
+      </BackLink>
 
       <header className={project.hideCover ? "mt-6 flex flex-col gap-4" : "mt-10 flex flex-col gap-6"}>
         <TextEffect
