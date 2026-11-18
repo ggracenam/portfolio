@@ -27,7 +27,7 @@ export function ArchiveBar() {
   return (
     <nav
       aria-label="Archive sections"
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-1 items-end justify-items-center bg-gradient-to-t from-bg via-bg/70 to-transparent px-[var(--edge)] pb-5 pt-12 text-[length:var(--fs)] leading-[var(--lh)] min-[901px]:grid-cols-[1fr_auto_1fr]"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-1 items-end justify-items-center veil-bottom px-[var(--edge)] pb-5 pt-12 text-[length:var(--fs)] leading-[var(--lh)] min-[901px]:grid-cols-[1fr_auto_1fr]"
     >
       <span className="hidden justify-self-start min-[901px]:block">{site.footerRight}</span>
       <div className="pointer-events-auto flex items-center gap-9">

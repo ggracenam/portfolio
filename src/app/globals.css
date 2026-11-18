@@ -25,10 +25,12 @@
   }
 }
 
+/* Same breakpoint as dmcg.co: at 900px and below the nav becomes the menu and the text gets smaller (14/22 -> 12/18). */
 @media (max-width: 900px) {
   :root {
-    --fs: 13px;
-    --lh: 20px;
+    --fs: 12px;
+    --lh: 18px;
+    --fs-cap: 11.2px;
   }
 }
 
@@ -144,11 +146,11 @@ button {
     inset 0 0 10px rgb(var(--accent) / 0.35);
 }
 
-/* Project images (measured from dmcg.co case studies): 12px corners with a hairline inner outline. */
+/* Project images (measured from dmcg.co case studies): 24px corners (12px on mobile) with a hairline inner outline. */
 .media-round {
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 24px;
   background: color-mix(in srgb, var(--fg) 4%, transparent);
 }
 .media-round::after {
@@ -158,6 +160,11 @@ button {
   border-radius: inherit;
   box-shadow: inset 0 0 0 1px var(--line);
   pointer-events: none;
+}
+@media (max-width: 900px) {
+  .media-round {
+    border-radius: 12px;
+  }
 }
 .media-round > img {
   display: block;
@@ -339,4 +346,44 @@ button {
 .about-close:focus-visible::after {
   opacity: 1;
   border-color: currentColor;
+}
+
+/* Mobile menu: the row for the page you are on gets a faint rounded outline around its word (as on dmcg.co). */
+.menu-label {
+  position: relative;
+  display: block;
+}
+.menu-label::after {
+  content: "";
+  position: absolute;
+  inset: -6px -10px;
+  border: 1px solid rgb(0 0 0 / 0.1);
+  border-radius: calc(8px * var(--sq));
+  corner-shape: superellipse(2);
+  opacity: 0;
+  pointer-events: none;
+}
+.menu-label[data-current]::after {
+  opacity: 1;
+}
+
+/* Soft white veils behind the fixed top bar and bottom bars: fully white at the edge (where the text sits),
+   easing out to nothing so content still slides under them. */
+.veil-top {
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    var(--bg) 42%,
+    color-mix(in srgb, var(--bg) 72%, transparent) 66%,
+    transparent 100%
+  );
+}
+.veil-bottom {
+  background: linear-gradient(
+    to top,
+    var(--bg) 0%,
+    var(--bg) 45%,
+    color-mix(in srgb, var(--bg) 72%, transparent) 70%,
+    transparent 100%
+  );
 }

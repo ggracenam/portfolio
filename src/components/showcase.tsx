@@ -17,7 +17,8 @@ import { RevealCover } from "@/components/reveal-cover";
 import { WindCover } from "@/components/wind-cover";
 import { FoldCover } from "@/components/fold-cover";
 import { Reveal } from "@/components/reveal";
-import { useCompact } from "@/lib/use-compact";
+import { useCompact, useMobile } from "@/lib/use-compact";
+import { useLabelCursor } from "@/components/halo-cursor";
 import { RESTORE_FLAG } from "@/components/back-link";
 import type { Project } from "@/data/projects";
 import { site } from "@/data/site";
@@ -43,13 +44,17 @@ function fanImages(project: Project) {
 const FRONT = -18;
 const STEP = 12;
 const FAN = [0, 1, 2].map((i) => ({ r: FRONT + STEP * (i + 1), x: 0 }));
+// On phones the held-open fan is closer: less of each card peeks out from behind the one in front.
+const FRONT_M = -8;
+const STEP_M = 5.4;
+const FAN_M = [0, 1, 2].map((i) => ({ r: FRONT_M + STEP_M * (i + 1), x: 0 }));
 
 /** Cards tucked behind the cover; they fan out like a hand of cards while hovered. */
-function CoverFan({ images, open, reduce }: { images: { src: string; alt: string }[]; open: boolean; reduce: boolean | null }) {
+function CoverFan({ images, open, reduce, tight = false }: { images: { src: string; alt: string }[]; open: boolean; reduce: boolean | null; tight?: boolean }) {
   return (
     <>
       {images.map((img, i) => {
-        const f = FAN[i];
+        const f = (tight ? FAN_M : FAN)[i];
         return (
           <motion.div
             key={img.src}
@@ -184,6 +189,13 @@ function CyclingWord({ words, active }: { words: string[]; active: boolean }) {
   );
 }
 
+/** Share of each cover picture's height that is empty margin at the top and bottom [top, bottom]. */
+const COVER_AIR: Record<string, [number, number]> = {
+  umgpt: [0.045, 0.036],
+  lamp: [0.073, 0.062],
+  perfume: [0.113, 0.027],
+};
+
 function ShowcaseItem({
   project,
   compact,
@@ -194,9 +206,61 @@ function ShowcaseItem({
   base: string;
 }) {
   const ref = useRef<HTMLElement>(null);
+  const linkRef = useRef<HTMLAnchorElement>(null);
   const reduce = useReducedMotion();
-  const [hovered, setHovered] = useState(false);
+  const mobile = useMobile();
+  // Phones and tablets: covers stay still (no fan, spread, video, reveal or scale), as on dmcg.co. A real mouse gets the hover look at any width.
+  const [hoveredRaw, setHovered] = useState(false);
   const fan = fanImages(project);
+  // The one exception: the portrait paintings' fan rests open on phones and narrow windows.
+  const heldOpen = mobile && fan.length > 0;
+  const hovered = hoveredRaw; // drives the label and cursor
+  const lively = (hoveredRaw && !mobile) || heldOpen; // drives the cover itself
+  useLabelCursor(hovered);
+
+  // Phones and tablets: every cover is scaled to fill about the same square (as on dmcg.co), so tall
+  // posters, wide strips and phones all read as similarly sized. Uses CSS zoom so the layout follows.
+  useLayoutEffect(() => {
+    const el = linkRef.current;
+    if (!el) return;
+    if (!mobile) {
+      el.style.zoom = "";
+      el.style.removeProperty("--z");
+      return;
+    }
+    const apply = () => {
+      el.style.zoom = "1";
+      const w = el.offsetWidth;
+      const h = el.offsetHeight;
+      const vw = window.innerWidth;
+      const box = 0.9 * Math.min(vw - 32, 0.565 * vw + 131);
+      if (w > 0 && h > 0) {
+        let f = Math.min(box / w, box / h);
+        // A held-open fan swings its cards out to about ±8°: keep that whole spread on screen.
+        if (heldOpen) f = Math.min(f, (vw - 32) / (0.99 * w + 0.28 * h));
+        el.style.zoom = String(f);
+        el.style.setProperty("--z", String(f));
+        // Some covers have empty margin built into the picture: pull the spacing in by that much so the
+        // visible gap between neighbouring covers is the same for every project.
+        const [t, b] = COVER_AIR[project.slug] ?? [0, 0];
+        const sec = ref.current;
+        if (sec) {
+          // The open fan reaches a little above and (at its swung-out corners) below the cover: make room.
+          // Sitting first on the page, the open fan would reach up into the top bar's veil: start it lower.
+          sec.style.setProperty("--first-extra", heldOpen ? "44px" : "0px");
+          sec.style.setProperty("--air-t", `${(heldOpen ? -0.035 : t) * h * f}px`);
+          sec.style.setProperty("--air-b", `${(heldOpen ? -0.06 : b) * h * f}px`);
+        }
+      }
+    };
+    apply();
+    window.addEventListener("resize", apply);
+    const t = window.setTimeout(apply, 400);
+    return () => {
+      window.removeEventListener("resize", apply);
+      window.clearTimeout(t);
+    };
+  }, [mobile, project.slug, heldOpen]);
   const spread = project.spread ?? [];
 
   // Cursor-following label (mouse only).
@@ -248,13 +312,14 @@ function ShowcaseItem({
     <section
       ref={ref}
       aria-label={project.title}
-      className="relative flex items-center justify-center px-[var(--edge)] py-9 first:pt-24 last-of-type:pb-32 lg:h-svh lg:snap-center lg:py-0 lg:first:pt-0 lg:last-of-type:pb-0"
+      className="relative flex items-center justify-center px-[var(--edge)] py-9 first:pt-24 last-of-type:pb-32 max-[900px]:pb-[calc(60px-var(--air-b,0px))] max-[900px]:pt-[calc(60px-var(--air-t,0px))] max-[900px]:first:pt-[calc(96px+var(--first-extra,0px))] max-[900px]:last-of-type:pb-32 lg:h-svh lg:snap-center lg:py-0 lg:first:pt-0 lg:last-of-type:pb-0"
     >
       <motion.div
         style={reduce ? undefined : { opacity, filter, scale }}
         className="relative"
       >
         <Link
+          ref={linkRef}
           href={`/${base}/${project.slug}`}
           data-slug={project.slug}
           aria-label={`${project.short} — ${project.category}`}
@@ -270,13 +335,13 @@ function ShowcaseItem({
           onBlur={() => setHovered(false)}
         >
           <div className="relative isolate">
-            {fan.length > 0 && <CoverFan images={fan} open={hovered} reduce={reduce} />}
-            {spread.length > 0 && <PosterSpread pages={spread} open={hovered} reduce={reduce} />}
+            {fan.length > 0 && <CoverFan images={fan} open={lively} reduce={reduce} tight={mobile} />}
+            {spread.length > 0 && <PosterSpread pages={spread} open={lively} reduce={reduce} />}
             <motion.div
               initial={false}
               animate={{
-                rotate: fan.length > 0 && hovered ? FRONT : 0,
-                x: spread.length > 0 && hovered ? `-${SPREAD_GAP}%` : "0%",
+                rotate: fan.length > 0 && lively ? (mobile ? FRONT_M : FRONT) : 0,
+                x: spread.length > 0 && lively ? `-${SPREAD_GAP}%` : "0%",
               }}
               transition={
                 reduce ? { duration: 0 } : { type: "spring", stiffness: 190, damping: 20, mass: 0.8 }
@@ -284,16 +349,16 @@ function ShowcaseItem({
               style={{ transformOrigin: "50% 100%" }}
             >
               <div className={`${project.phone || project.containCover || project.reveal || project.fold || project.wind ? "" : "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"} ${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} transition-transform duration-500 ease-out ${
-                  fan.length > 0 || spread.length > 0 || project.video || project.hoverCover || project.reveal || project.fold || project.wind ? "" : "group-hover:scale-[1.018]"
+                  fan.length > 0 || spread.length > 0 || project.video || project.hoverCover || project.reveal || project.fold || project.wind ? "" : "min-[901px]:group-hover:scale-[1.018]"
                 }`}>
                 {project.wind && project.cover ? (
-                  <WindCover project={project} hovered={hovered} reduce={reduce} />
+                  <WindCover project={project} hovered={lively} reduce={reduce} />
                 ) : project.fold && project.cover ? (
-                  <FoldCover project={project} hovered={hovered} reduce={reduce} />
+                  <FoldCover project={project} hovered={lively} reduce={reduce} />
                 ) : project.reveal && project.cover ? (
-                  <RevealCover project={project} hovered={hovered} reduce={reduce} />
+                  <RevealCover project={project} hovered={lively} reduce={reduce} />
                 ) : (
-                  <Cover project={project} mode="showcase" playing={hovered} />
+                  <Cover project={project} mode="showcase" playing={hoveredRaw && !mobile} />
                 )}
               </div>
             </motion.div>
@@ -302,7 +367,7 @@ function ShowcaseItem({
           {/* Mouse: title + category follow the cursor while hovering. */}
           <motion.span
             aria-hidden
-            style={{ x: sx, y: sy }}
+            style={{ x: sx, y: sy, zoom: "calc(1 / var(--z, 1))" }}
             animate={{ opacity: hovered ? 1 : 0 }}
             transition={{ duration: 0.18 }}
             className="label-hover glass-label pointer-events-none absolute left-0 top-0 z-10 h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
@@ -339,6 +404,7 @@ function GridCard({
   setPlaying: (slug: string | null) => void;
 }) {
   const [hovered, setHovered] = useState(false);
+  useLabelCursor(hovered);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, { stiffness: 420, damping: 38, mass: 0.6 });
@@ -423,7 +489,8 @@ export function Showcase({
   const [view, setView] = useState<View>("scroll");
   const compact = useCompact();
   // Phones and tablets only get the scroll view.
-  const shown: View = compact || !allowGrid ? "scroll" : view;
+  const mobile = useMobile();
+  const shown: View = mobile || !allowGrid ? "scroll" : view;
 
   const memKey = `showcase-return:${base}`;
   const pending = useRef<string | null>(null);
@@ -518,8 +585,8 @@ export function Showcase({
         <ProjectGrid projects={projects} base={base} />
       )}
 
-      <div
-        className={`pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 items-end bg-gradient-to-t from-bg via-bg/70 to-transparent px-[var(--edge)] pb-5 pt-12 lg:grid-cols-[1fr_auto_1fr] ${small}`}
+      {showBar && <div
+        className={`pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 items-end veil-bottom px-[var(--edge)] pb-5 pt-12 min-[901px]:grid-cols-[1fr_auto_1fr] ${small}`}
       >
         <span>
           {site.footerRight}
@@ -528,7 +595,7 @@ export function Showcase({
           <div
             role="group"
             aria-label="View"
-            className="pointer-events-auto hidden justify-center gap-9 lg:flex"
+            className="pointer-events-auto hidden justify-center gap-9 min-[901px]:flex"
           >
             {(["scroll", "grid"] as const).map((v) => (
               <button
@@ -551,7 +618,7 @@ export function Showcase({
           <span className="now-pill-dot" aria-hidden="true" />
           <span>Available</span>
         </span>
-      </div>
+      </div>}
     </div>
   );
 }
