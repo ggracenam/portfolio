@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProjectBlocks } from "@/components/project-blocks";
+import { ScrollTop } from "@/components/scroll-top";
 import { Reveal } from "@/components/reveal";
 import { TextEffect } from "@/components/motion-primitives/text-effect";
 import { HoverVideo } from "@/components/hover-video";
@@ -32,6 +33,7 @@ export function ProjectDetail({
 
   return (
     <>
+    <ScrollTop />
     <ProjectTheme theme={project.theme} />
     <article className={`mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24${project.noOutline ? " no-outline" : ""}`}>
       <div className="mx-auto w-[min(541px,100%)]">

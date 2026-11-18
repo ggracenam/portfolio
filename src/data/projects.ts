@@ -133,7 +133,7 @@ const poster = (n: number, alt: string): Img => ({
 const all: Project[] = [
   {
     slug: "mbgna-posters",
-    theme: { bg: "#F7F9F0", fg: "#404040" },
+    theme: { bg: "#FEFEFC", fg: "#404040" },
     section: "projects",
     title: "MBGNA Poster Series",
     subtitle: "Visual Identity · Print Design · Art Direction",
@@ -223,7 +223,7 @@ const all: Project[] = [
   },
   {
     slug: "soundscape",
-    theme: { bg: "#FDF5F8", fg: "#404040" },
+    theme: { bg: "#FEFCFD", fg: "#404040" },
     section: "projects",
     title: "SoundScape",
     subtitle: "UX Design · Mobile App · Music Discovery",
@@ -318,7 +318,7 @@ const all: Project[] = [
   },
   {
     slug: "umgpt",
-    theme: { bg: "#F5F7FB", fg: "#404040" },
+    theme: { bg: "#FDFDFE", fg: "#404040" },
     section: "projects",
     title: "U-M GPT & ITS AI Services",
     subtitle: "UX Design · Interface Design · Web Design",
@@ -421,7 +421,7 @@ const all: Project[] = [
   },
   {
     slug: "brochure",
-    theme: { bg: "#FAF6F8", fg: "#404040" },
+    theme: { bg: "#FEFEFE", fg: "#404040" },
     section: "projects",
     title: "Lotus Flower Poem Brochure",
     subtitle: "Graphic Design · Typography · Print Design",
@@ -490,7 +490,7 @@ const all: Project[] = [
   },
   {
     slug: "article-poster",
-    theme: { bg: "#F7F5EF", fg: "#404040" },
+    theme: { bg: "#FEFEFE", fg: "#404040" },
     section: "projects",
     title: "The African Roots of Swiss Design",
     subtitle: "Poster Design · Typography · Editorial Design",
@@ -541,7 +541,7 @@ const all: Project[] = [
   },
   {
     slug: "lamp",
-    theme: { bg: "#FAF6EF", fg: "#404040" },
+    theme: { bg: "#FEFCFA", fg: "#404040" },
     section: "projects",
     title: "Lamp Holder",
     subtitle: "Product Design · Lighting Design · Craft & 3D Design",
@@ -599,7 +599,7 @@ const all: Project[] = [
   },
   {
     slug: "perfume",
-    theme: { bg: "#F6F6F7", fg: "#404040" },
+    theme: { bg: "#FCFCFD", fg: "#404040" },
     section: "projects",
     title: "Tarot Perfumes",
     subtitle: "Graphic Design · Packaging Design · Illustration",

@@ -70,7 +70,7 @@ export function AboutOverlay() {
             aria-hidden
             className="absolute inset-0"
             initial={{ backdropFilter: "blur(0px)" }}
-            animate={{ backdropFilter: "blur(81px)" }}
+            animate={{ backdropFilter: "blur(48px)" }}
             exit={{
               backdropFilter: "blur(0px)",
               transition: { duration: 0.45, ease: "easeOut" },
@@ -79,7 +79,7 @@ export function AboutOverlay() {
           />
           <motion.div
             aria-hidden
-            className="absolute inset-0 bg-[rgb(128_128_128/0.1)]"
+            className="absolute inset-0 bg-[rgb(255_255_255/0.6)]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.45, ease: "easeOut" } }}
