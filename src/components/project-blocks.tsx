@@ -159,7 +159,7 @@ export function ProjectBlocks({ blocks, spacing }: { blocks: Block[]; spacing?: 
       {blocks.map((block, i) => (
         <div
           key={i}
-          className={block.type === "images" && block.pull ? "mix-blend-multiply" : undefined}
+          className={block.type === "images" && block.blend ? "mix-blend-darken" : undefined}
           style={(block.type === "images" || block.type === "text" || block.type === "video") && block.tight ? { marginTop: `calc(${gap} * -1 + 20px - ${block.type === "images" ? block.pull ?? 0 : 0}px)` } : undefined}
         >
           <BlockView block={block} />

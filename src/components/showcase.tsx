@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   motion,
   useMotionTemplate,
@@ -113,7 +113,13 @@ function PosterSpread({
   );
 }
 
-/** Swaps through a list of words while active, like the category text in the dmcg.co archive. */
+/** The words shown beside the title while hovering: the project's own disciplines (the line under its title). */
+function projectWords(project: Project): string[] {
+  const parts = (project.subtitle ?? "").split("·").map((w) => w.trim()).filter(Boolean);
+  return parts.length ? parts : [project.category];
+}
+
+/** Swaps through a list of words every couple of seconds while active, like the discipline text in the dmcg.co hover label. */
 function CyclingWord({ words, active }: { words: string[]; active: boolean }) {
   const [i, setI] = useState(0);
   useEffect(() => {
@@ -121,17 +127,56 @@ function CyclingWord({ words, active }: { words: string[]; active: boolean }) {
       setI(0);
       return;
     }
-    const t = setInterval(() => setI((n) => (n + 1) % words.length), 750);
+    if (words.length < 2) return;
+    const t = setInterval(() => setI((n) => (n + 1) % words.length), 2000);
     return () => clearInterval(t);
   }, [active, words.length]);
+  const ref = useRef<HTMLSpanElement>(null);
+  const [w, setW] = useState<number | null>(null);
+  const [animate, setAnimate] = useState(false);
+  // Measure the word whenever it changes and whenever the label becomes visible (it is display:none until hovered,
+  // so the first measurement can be 0). The first real width is applied instantly; later ones slide.
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => {
+      const width = el.offsetWidth; // layout width: unaffected by scale transforms (e.g. a card still animating in)
+      if (width > 0) setW((prev) => (prev === width ? prev : width));
+    };
+    measure();
+    if (!active) return;
+    // While hovered, keep checking each frame: right after switching views the label can be laid out a beat late.
+    let raf = requestAnimationFrame(function tick() {
+      measure();
+      raf = requestAnimationFrame(tick);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [i, words, active]);
+  useEffect(() => {
+    if (w !== null && w > 0) {
+      const t = setTimeout(() => setAnimate(true), 50);
+      return () => clearTimeout(t);
+    }
+  }, [w]);
+  useEffect(() => {
+    if (!active) setAnimate(false);
+  }, [active]);
   return (
-    <span className="relative inline-block min-w-[4.2em] opacity-40">
+    <span
+      className="relative inline-block opacity-40"
+      style={{
+        height: "1.2em",
+        width: w === null ? undefined : w,
+        transition: animate ? "width 0.3s cubic-bezier(0.22,1,0.36,1)" : "none",
+      }}
+    >
       <motion.span
+        ref={ref}
         key={i}
-        initial={{ opacity: 0, y: 5, filter: "blur(3px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        transition={{ duration: 0.25 }}
-        className="inline-block"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="absolute left-0 top-1/2 -mt-[0.6em] whitespace-nowrap leading-[1.2em]"
       >
         {words[i]}
       </motion.span>
@@ -262,12 +307,8 @@ function ShowcaseItem({
             transition={{ duration: 0.18 }}
             className="label-hover glass-label pointer-events-none absolute left-0 top-0 z-10 h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
           >
-            <span>{project.short}</span>
-            {project.phone?.words ? (
-              <CyclingWord words={project.phone.words} active={hovered} />
-            ) : (
-              <span className="opacity-40">{project.category}</span>
-            )}
+            <span>{project.title}</span>
+            <CyclingWord words={projectWords(project)} active={hovered} />
           </motion.span>
         </Link>
 
@@ -343,8 +384,8 @@ function GridCard({
         transition={{ duration: 0.18 }}
         className="glass-label pointer-events-none absolute left-0 top-0 z-10 inline-flex h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
       >
-        <span>{project.short}</span>
-        <span className="opacity-40">{project.category}</span>
+        <span>{project.title}</span>
+        <CyclingWord words={projectWords(project)} active={hovered} />
       </motion.span>
     </Link>
   );

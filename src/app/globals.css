@@ -32,6 +32,21 @@
   }
 }
 
+/* Registered so a project's colours fade in and out instead of snapping. */
+@property --bg { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
+@property --fg { syntax: "<color>"; inherits: true; initial-value: #000000; }
+@property --muted { syntax: "<color>"; inherits: true; initial-value: #8b8b8b; }
+@property --line { syntax: "<color>"; inherits: true; initial-value: rgb(0 0 0 / 0.1); }
+@property --pill { syntax: "<color>"; inherits: true; initial-value: rgb(255 255 255 / 0.82); }
+:root {
+  transition:
+    --bg 0.7s cubic-bezier(0.45, 0, 0.2, 1),
+    --fg 0.7s cubic-bezier(0.45, 0, 0.2, 1),
+    --muted 0.7s cubic-bezier(0.45, 0, 0.2, 1),
+    --line 0.7s cubic-bezier(0.45, 0, 0.2, 1),
+    --pill 0.7s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-fg: var(--fg);
@@ -247,7 +262,7 @@ button {
   z-index: -1;
   /* Frosted glass, as dmcg's selected/hovered buttons: pale solid hairline, a faint white veil
      that lets the page blur through, and the softest drop of shadow. */
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--line);
   border-radius: calc(8px * var(--sq));
   corner-shape: superellipse(2);
   background: rgb(255 255 255 / 0.2);

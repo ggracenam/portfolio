@@ -7,6 +7,7 @@ import { HoverVideo } from "@/components/hover-video";
 import { Phone } from "@/components/phone";
 import { WindHero } from "@/components/wind-cover";
 import { HoverHero } from "@/components/hover-hero";
+import { ProjectTheme } from "@/components/project-theme";
 import { BackLink } from "@/components/back-link";
 import type { Project } from "@/data/projects";
 
@@ -30,6 +31,8 @@ export function ProjectDetail({
   ].filter((m) => m.value);
 
   return (
+    <>
+    <ProjectTheme theme={project.theme} />
     <article className={`mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24${project.noOutline ? " no-outline" : ""}`}>
       <div className="mx-auto w-[min(541px,100%)]">
       <BackLink
@@ -82,6 +85,7 @@ export function ProjectDetail({
       )}
 
       {project.cover && !project.hideCover && (
+        <div className={project.heroBlend ? "mix-blend-darken" : undefined}>
         <Reveal className={project.hero || project.hoverCover ? "mt-8" : "mt-[clamp(48px,6.78vw,96px)]"}>
           {project.wind && project.hero ? (
             <WindHero project={project} />
@@ -125,6 +129,7 @@ export function ProjectDetail({
           </div>
           )}
         </Reveal>
+        </div>
       )}
 
       <div className={project.hideCover ? "mt-10" : project.spacing === "large" ? "mt-[clamp(96px,13.56vw,192px)]" : "mt-[clamp(48px,6.78vw,96px)]"}>
@@ -149,5 +154,6 @@ export function ProjectDetail({
         </Link>
       </Reveal>
     </article>
+    </>
   );
 }

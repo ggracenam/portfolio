@@ -30,6 +30,8 @@ export type Block =
       tight?: boolean;
       /** Pull the block up by a further number of px (and blend its white margin into the block above). */
       pull?: number;
+      /** Blend a white-backed picture into the page colour (white takes on the background, everything darker is left alone). */
+      blend?: boolean;
       /** A small muted line under the images (e.g. to credit work that is not mine). */
       caption?: string;
       /** Show the images without the rounded frame and hairline outline. */
@@ -51,6 +53,8 @@ export type Block =
 
 export type Project = {
   slug: string;
+  /** Page colours for this project: a pale tint of its colour behind a deeper shade of it for text. */
+  theme?: { bg: string; fg: string };
   /** Skip the big cover image at the top of the page (used when the works carry their own images). */
   hideCover?: boolean;
   /** Which page it lives on: the Projects scroll or the Studio page. */
@@ -83,6 +87,8 @@ export type Project = {
   related?: string;
   /** Show the hero without the rounded frame and outline. */
   heroPlain?: boolean;
+  /** Blend the hero into the page colour (white backing takes on the background). */
+  heroBlend?: boolean;
   /**
    * Further pages that open out next to the cover on hover (poster sets): the first is the cover's
    * partner, the rest sit tucked behind it.
@@ -127,6 +133,7 @@ const poster = (n: number, alt: string): Img => ({
 const all: Project[] = [
   {
     slug: "mbgna-posters",
+    theme: { bg: "#F7F9F0", fg: "#404040" },
     section: "projects",
     title: "MBGNA Poster Series",
     subtitle: "Visual Identity · Print Design · Art Direction",
@@ -216,6 +223,7 @@ const all: Project[] = [
   },
   {
     slug: "soundscape",
+    theme: { bg: "#FDF5F8", fg: "#404040" },
     section: "projects",
     title: "SoundScape",
     subtitle: "UX Design · Mobile App · Music Discovery",
@@ -263,7 +271,8 @@ const all: Project[] = [
       },
       {
         type: "images",
-        images: [{ src: "/projects/soundscape/shot-2.jpg", w: 2212, h: 1080, alt: "Country, city and street-level views" }],
+        plain: true,
+        images: [{ src: "/projects/soundscape/shot-2-t.webp", w: 2212, h: 1080, alt: "Country, city and street-level views" }],
       },
       {
         type: "text",
@@ -284,7 +293,8 @@ const all: Project[] = [
       },
       {
         type: "images",
-        images: [{ src: "/projects/soundscape/shot-4.jpg", w: 2212, h: 1080, alt: "Map pin interaction and playback screen" }],
+        plain: true,
+        images: [{ src: "/projects/soundscape/shot-4-t.webp", w: 2212, h: 1080, alt: "Map pin interaction and playback screen" }],
       },
       {
         type: "text",
@@ -294,7 +304,8 @@ const all: Project[] = [
       },
       {
         type: "images",
-        images: [{ src: "/projects/soundscape/shot-5.jpg", w: 2212, h: 1080, alt: "Navigation, library and profile screens" }],
+        plain: true,
+        images: [{ src: "/projects/soundscape/shot-5-t.webp", w: 2212, h: 1080, alt: "Navigation, library and profile screens" }],
       },
       {
         type: "text",
@@ -307,6 +318,7 @@ const all: Project[] = [
   },
   {
     slug: "umgpt",
+    theme: { bg: "#F5F7FB", fg: "#404040" },
     section: "projects",
     title: "U-M GPT & ITS AI Services",
     subtitle: "UX Design · Interface Design · Web Design",
@@ -409,6 +421,7 @@ const all: Project[] = [
   },
   {
     slug: "brochure",
+    theme: { bg: "#FAF6F8", fg: "#404040" },
     section: "projects",
     title: "Lotus Flower Poem Brochure",
     subtitle: "Graphic Design · Typography · Print Design",
@@ -477,6 +490,7 @@ const all: Project[] = [
   },
   {
     slug: "article-poster",
+    theme: { bg: "#F7F5EF", fg: "#404040" },
     section: "projects",
     title: "The African Roots of Swiss Design",
     subtitle: "Poster Design · Typography · Editorial Design",
@@ -527,6 +541,7 @@ const all: Project[] = [
   },
   {
     slug: "lamp",
+    theme: { bg: "#FAF6EF", fg: "#404040" },
     section: "projects",
     title: "Lamp Holder",
     subtitle: "Product Design · Lighting Design · Craft & 3D Design",
@@ -584,6 +599,7 @@ const all: Project[] = [
   },
   {
     slug: "perfume",
+    theme: { bg: "#F6F6F7", fg: "#404040" },
     section: "projects",
     title: "Tarot Perfumes",
     subtitle: "Graphic Design · Packaging Design · Illustration",
@@ -597,7 +613,7 @@ const all: Project[] = [
       "Tarot-inspired perfume packaging exploring the idea that we shape our fate through the scent we choose each morning.",
     cover: { src: "/projects/perfume/cover.jpg", w: 2956, h: 2080, alt: "Tarot perfume packaging" },
     containCover: true,
-    hero: { src: "/projects/perfume/cover.jpg", w: 2956, h: 2080, alt: "Tarot perfume packaging: La lionne" },
+    hero: { src: "/projects/perfume/hero-t.webp", w: 2956, h: 2080, alt: "Tarot perfume packaging: La lionne" },
     heroPlain: true,
     noOutline: true,
     spacing: "large",
