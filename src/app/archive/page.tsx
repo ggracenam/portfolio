@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Showcase } from "@/components/showcase";
-import { studio } from "@/data/projects";
+import NotebookPage from "./notebook/page";
 
+// The Archive opens on the Notebook.
 export const metadata: Metadata = { title: "Archive" };
 
-export default function ArchivePage() {
-  return <Showcase projects={studio} base="archive" allowGrid={false} showBar={false} />;
-}
+export default NotebookPage;

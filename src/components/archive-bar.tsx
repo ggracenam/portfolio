@@ -3,10 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { site } from "@/data/site";
-import { cn } from "@/lib/utils";
 
 const tabs = [
-  { href: "/archive", label: "Studio" },
+  { href: "/archive/studio", label: "Studio" },
   { href: "/archive/gallery", label: "Gallery" },
   { href: "/archive/notebook", label: "Notebook" },
   { href: "/archive/misc", label: "Misc" },
@@ -20,7 +19,9 @@ const tabs = [
 export function ArchiveBar() {
   const pathname = usePathname();
   const current = pathname.replace(/\/$/, "") || "/";
-  const onSection = tabs.some((t) => t.href === current);
+  // /archive itself is the Notebook.
+  const here = current === "/archive" ? "/archive/notebook" : current;
+  const onSection = tabs.some((t) => t.href === here);
   if (!onSection) return null;
 
   return (
@@ -28,26 +29,26 @@ export function ArchiveBar() {
       aria-label="Archive sections"
       className="pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-1 items-end justify-items-center bg-gradient-to-t from-bg via-bg/70 to-transparent px-[var(--edge)] pb-5 pt-12 text-[length:var(--fs)] leading-[var(--lh)] min-[901px]:grid-cols-[1fr_auto_1fr]"
     >
-      <span className="hidden justify-self-start min-[901px]:block">{site.footerLeft}</span>
-      <div className="pointer-events-auto flex items-center gap-1">
+      <span className="hidden justify-self-start min-[901px]:block">{site.footerRight}</span>
+      <div className="pointer-events-auto flex items-center gap-9">
         {tabs.map((t) => {
-          const active = current === t.href;
+          const active = here === t.href;
           return (
             <Link
               key={t.href}
               href={t.href}
               aria-current={active ? "page" : undefined}
-              className={cn(
-                "rounded-md border px-2.5 py-1 transition-colors hover:border-line",
-                active ? "border-line bg-pill" : "border-transparent",
-              )}
+              className="nav-btn py-1 [--nb-inset:-2.5px_-10px]"
             >
               {t.label}
             </Link>
           );
         })}
       </div>
-      <span className="hidden justify-self-end min-[901px]:block">{site.footerRight}</span>
+      <span className="now-pill hidden justify-self-end min-[901px]:flex">
+        <span className="now-pill-dot" aria-hidden="true" />
+        <span>Available</span>
+      </span>
     </nav>
   );
 }

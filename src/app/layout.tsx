@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { HaloCursor } from "@/components/halo-cursor";
+import { AboutOverlay } from "@/components/about-overlay";
 import { BackWatcher } from "@/components/back-link";
 import { site } from "@/data/site";
 
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        <AboutOverlay />
         <HaloCursor />
         <BackWatcher />
       </body>

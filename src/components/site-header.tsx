@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ContactPill, MobileContact } from "@/components/contact-pill";
+import { openAbout } from "@/components/about-overlay";
 import { site } from "@/data/site";
 import { cn } from "@/lib/utils";
 
@@ -39,16 +40,17 @@ function NavLink({
   return (
     <Link
       href={href}
-      onClick={() => {
+      onClick={(e) => {
+        if (href === "/about") {
+          // About opens over the current page instead of replacing it.
+          e.preventDefault();
+          openAbout();
+        }
         if (href === "/") showScrollView();
         onClick?.();
       }}
       aria-current={active ? "page" : undefined}
-      className={cn(
-        "rounded-md border px-2.5 py-1.5 transition-colors hover:border-line",
-        active ? "border-line bg-pill" : "border-transparent",
-        className,
-      )}
+      className={cn("nav-btn block py-1.5", className)}
     >
       {label}
     </Link>
@@ -80,7 +82,7 @@ export function SiteHeader() {
           className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-bg via-bg/70 to-transparent"
         />
         <div className="pointer-events-auto relative grid grid-cols-[1fr_auto_1fr] items-start px-[var(--edge)] py-5">
-          <nav aria-label="Primary" className="-ml-2.5 hidden items-center gap-1 min-[901px]:flex">
+          <nav aria-label="Primary" className="hidden items-center gap-7 min-[901px]:flex">
             <NavLink href="/about" label="About" />
             <ContactPill email={site.email} />
           </nav>
@@ -119,8 +121,8 @@ export function SiteHeader() {
             {site.name}
           </Link>
 
-          <div className="-mr-2 flex items-center justify-end gap-1">
-            <nav aria-label="Secondary" className="hidden items-center gap-1 min-[901px]:flex">
+          <div className="flex items-center justify-end gap-7">
+            <nav aria-label="Secondary" className="hidden items-center gap-7 min-[901px]:flex">
               {right.map((l) => (
                 <NavLink key={l.href} {...l} />
               ))}
@@ -149,7 +151,7 @@ export function SiteHeader() {
                 <NavLink
                   {...l}
                   onClick={() => setOpen(false)}
-                  className="-ml-3 inline-block text-[22px] leading-none"
+                  className="inline-block text-[22px] leading-none [--nb-inset:-6px_-10px]"
                 />
               </motion.div>
             ))}

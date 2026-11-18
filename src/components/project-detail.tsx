@@ -33,7 +33,7 @@ export function ProjectDetail({
     <article className={`mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24${project.noOutline ? " no-outline" : ""}`}>
       <div className="mx-auto w-[min(541px,100%)]">
       <BackLink
-        href={base === "archive" ? "/archive" : "/"}
+        href={base === "archive" ? "/archive/studio" : "/"}
         className="inline-block text-muted transition-colors hover:text-fg"
       >
         {base === "archive" ? "← Studio" : "← All projects"}

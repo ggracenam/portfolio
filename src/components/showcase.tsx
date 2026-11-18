@@ -24,7 +24,7 @@ import { site } from "@/data/site";
 
 const small = "text-[length:var(--fs)] leading-[var(--lh)]";
 const pill =
-  "items-baseline gap-2 whitespace-nowrap rounded-xl border border-line bg-pill px-3 py-1.5 text-[length:var(--fs-cap)] leading-[16px] backdrop-blur-md";
+  "items-baseline gap-2 whitespace-nowrap sq rounded-[16.8px] border border-line bg-pill px-3 py-1.5 text-[length:var(--fs-cap)] leading-[16px] backdrop-blur-md";
 
 /** Other paintings from the project, for the hover fan (the cover itself is left out). */
 function fanImages(project: Project) {
@@ -260,7 +260,7 @@ function ShowcaseItem({
             style={{ x: sx, y: sy }}
             animate={{ opacity: hovered ? 1 : 0 }}
             transition={{ duration: 0.18 }}
-            className="label-hover pointer-events-none absolute left-0 top-0 z-10 h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
+            className="label-hover glass-label pointer-events-none absolute left-0 top-0 z-10 h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
           >
             <span>{project.short}</span>
             {project.phone?.words ? (
@@ -341,7 +341,7 @@ function GridCard({
         style={{ x: sx, y: sy }}
         animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: 0.18 }}
-        className="pointer-events-none absolute left-0 top-0 z-10 inline-flex h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
+        className="glass-label pointer-events-none absolute left-0 top-0 z-10 inline-flex h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
       >
         <span>{project.short}</span>
         <span className="opacity-40">{project.category}</span>
@@ -353,8 +353,8 @@ function GridCard({
 function ProjectGrid({ projects, base }: { projects: Project[]; base: string }) {
   const [playing, setPlaying] = useState<string | null>(null);
   return (
-    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-24 pt-24">
-      <div className="grid gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="mx-auto max-w-[1280px] px-[clamp(24px,4.8vw,64px)] pb-24 pt-24">
+      <div className="grid gap-x-4 gap-y-6 sm:gap-x-7 sm:gap-y-[30px] sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, i) => (
           <Reveal key={project.slug} delay={(i % 3) * 0.08} className="relative hover:z-20">
             <GridCard project={project} base={base} playing={playing} setPlaying={setPlaying} />
@@ -481,13 +481,13 @@ export function Showcase({
         className={`pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 items-end bg-gradient-to-t from-bg via-bg/70 to-transparent px-[var(--edge)] pb-5 pt-12 lg:grid-cols-[1fr_auto_1fr] ${small}`}
       >
         <span>
-          {site.footerLeft}
+          {site.footerRight}
         </span>
         {allowGrid ? (
           <div
             role="group"
             aria-label="View"
-            className="pointer-events-auto hidden justify-center gap-1 lg:flex"
+            className="pointer-events-auto hidden justify-center gap-9 lg:flex"
           >
             {(["scroll", "grid"] as const).map((v) => (
               <button
@@ -495,8 +495,8 @@ export function Showcase({
                 type="button"
                 onClick={() => choose(v)}
                 aria-pressed={shown === v}
-                className={`rounded-md border px-2.5 py-1 capitalize transition-colors ${
-                  shown === v ? "border-line bg-pill" : "border-transparent text-muted hover:text-fg"
+                className={`nav-btn py-1 capitalize transition-colors [--nb-inset:-2.5px_-10px] ${
+                  shown === v ? "" : "text-muted hover:text-fg"
                 }`}
               >
                 {v}
@@ -506,8 +506,9 @@ export function Showcase({
         ) : (
           <span aria-hidden />
         )}
-        <span className="justify-self-end">
-          {site.footerRight}
+        <span className="now-pill justify-self-end">
+          <span className="now-pill-dot" aria-hidden="true" />
+          <span>Available</span>
         </span>
       </div>
     </div>

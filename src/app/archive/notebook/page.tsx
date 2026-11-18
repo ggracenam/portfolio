@@ -11,6 +11,13 @@ const story = [
   "Since then, my illustrations have reached an audience I never expected, with one of my most widely viewed reels reaching 1.47M views and 198K likes. More recently, I’ve shifted towards sharing individual illustrations as posts, choosing a closer-knit community and more meaningful conversations over numbers.",
 ];
 
+/** Bolds the reach numbers in a paragraph. */
+function withItalics(text: string) {
+  return text.split(/(1\.47M|198K)/).map((part, i) =>
+    part === "1.47M" || part === "198K" ? <strong key={i} className="font-semibold">{part}</strong> : part,
+  );
+}
+
 export default function NotebookPage() {
   return (
     <MediaPage title="Notebook" items={notebook} layout="pages">
@@ -28,7 +35,7 @@ export default function NotebookPage() {
         <h2 className="font-semibold">The Story</h2>
         <div className="mt-2 space-y-[22px]">
           {story.map((para) => (
-            <p key={para}>{para}</p>
+            <p key={para}>{withItalics(para)}</p>
           ))}
         </div>
       </Reveal>

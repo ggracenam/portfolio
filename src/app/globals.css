@@ -7,6 +7,8 @@
   --muted: #8b8b8b;
   --line: rgb(0 0 0 / 0.1);
   --pill: rgb(255 255 255 / 0.82);
+  /* Light source colour: warm yellow by day, blue by night (toggle outline + cursor). */
+  --accent: 255 196 0;
   color-scheme: light;
 
   /* Type + spacing scale (measured from dmcg.co: 14px / 22px, 0.04em, weight 500). */
@@ -14,6 +16,13 @@
   --fs: 14px;
   --lh: 22px;
   --fs-cap: 12px;
+  /* Squircle corners (as dmcg.co): rounder, continuous curves where the browser supports them. */
+  --sq: 1;
+}
+@supports (corner-shape: superellipse(2)) {
+  :root {
+    --sq: 1.841;
+  }
 }
 
 @media (max-width: 900px) {
@@ -48,9 +57,6 @@ body {
   letter-spacing: 0.04em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  transition:
-    background-color 0.35s ease,
-    color 0.35s ease;
 }
 
 ::selection {
@@ -89,26 +95,38 @@ button {
   .label-static { display: none; }
 }
 
-/* About: faint glow behind the centered column. */
-.about-veil {
-  background: radial-gradient(ellipse 55% 45% at 50% 40%, color-mix(in srgb, var(--fg) 5%, transparent), transparent 75%);
-}
-
 /* Halo cursor: a soft ring of warm light (replaces the arrow on mouse devices). */
 .has-halo,
 .has-halo * {
   cursor: none !important;
 }
 .halo {
-  /* Soft warm light, paler: creamy white core */
+  /* Light mode: a soft yellow light. */
   background: radial-gradient(
     closest-side,
-    rgb(255 246 222 / 1) 0%,
-    rgb(255 238 195 / 0.95) 22%,
-    rgb(255 226 160 / 0.6) 42%,
-    rgb(255 218 150 / 0.22) 64%,
+    rgb(255 247 210 / 1) 0%,
+    rgb(255 226 120 / 0.95) 22%,
+    rgb(255 205 60 / 0.6) 42%,
+    rgb(255 190 40 / 0.22) 64%,
     transparent 100%
   );
+}
+/* Theme switch: the outline glows like a light source (yellow by day, blue by night). */
+.theme-switch {
+  border-color: rgb(var(--accent) / 0.9);
+  box-shadow:
+    0 0 0 1px rgb(var(--accent) / 0.25),
+    0 0 14px 1px rgb(var(--accent) / 0.55),
+    inset 0 0 8px rgb(var(--accent) / 0.25);
+  transition:
+    border-color 0.6s ease,
+    box-shadow 0.6s ease;
+}
+.theme-switch:hover {
+  box-shadow:
+    0 0 0 1px rgb(var(--accent) / 0.35),
+    0 0 20px 3px rgb(var(--accent) / 0.7),
+    inset 0 0 10px rgb(var(--accent) / 0.35);
 }
 
 /* Project images (measured from dmcg.co case studies): 12px corners with a hairline inner outline. */
@@ -189,4 +207,121 @@ button {
 /* Pages that opt out of the hairline outline on images. */
 .no-outline .media-round::after {
   display: none;
+}
+
+/* "Available" indicator (About): a green dot with a soft ring that swells on hover. */
+@layer components {
+  .now-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 13px;
+  }
+}
+.now-pill-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgb(47 179 106);
+  box-shadow: 0 0 0 3px rgb(47 179 106 / 0.18);
+  transition: box-shadow 0.3s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .now-pill:hover .now-pill-dot {
+    box-shadow: 0 0 0 4px rgb(47 179 106 / 0.24);
+  }
+}
+
+/* ---------- Header buttons: hairline outline that fades in on hover / current ---------- */
+@layer components {
+  .nav-btn {
+    position: relative;
+    isolation: isolate;
+    --nb-inset: -0.5px -10px;
+  }
+}
+.nav-btn::after {
+  content: "";
+  position: absolute;
+  inset: var(--nb-inset);
+  z-index: -1;
+  /* Frosted glass, as dmcg's selected/hovered buttons: pale solid hairline, a faint white veil
+     that lets the page blur through, and the softest drop of shadow. */
+  border: 1px solid #e5e5e5;
+  border-radius: calc(8px * var(--sq));
+  corner-shape: superellipse(2);
+  background: rgb(255 255 255 / 0.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  backdrop-filter: blur(10px) saturate(1.1);
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.02);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s;
+}
+@media (hover: hover) {
+  .nav-btn:hover::after {
+    opacity: 1;
+  }
+}
+.nav-btn[aria-current="page"]::after,
+.nav-btn[aria-pressed="true"]::after,
+.nav-btn[data-open]::after,
+.nav-btn:focus-visible::after {
+  opacity: 1;
+}
+.nav-btn:focus-visible {
+  outline: none;
+}
+.nav-btn:focus-visible::after {
+  border-color: currentColor;
+}
+
+/* Squircle surfaces (pills, panels). */
+.sq {
+  corner-shape: superellipse(2);
+}
+
+/* ---------- About overlay ---------- */
+.about-close {
+  position: fixed;
+  z-index: 55;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: var(--fg);
+  cursor: pointer;
+  transition: color 0.16s;
+}
+.about-close::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 35px;
+  height: 35px;
+  border: 1px solid color-mix(in srgb, currentColor 10%, transparent 90%);
+  border-radius: calc(8px * var(--sq));
+  corner-shape: superellipse(2);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s;
+}
+@media (hover: hover) {
+  .about-close:hover::after {
+    opacity: 1;
+  }
+}
+.about-close:focus-visible {
+  outline: none;
+}
+.about-close:focus-visible::after {
+  opacity: 1;
+  border-color: currentColor;
 }
