@@ -31,7 +31,12 @@ function useEqualAreaHeights(items: Artwork[]) {
 
   // Space available for one picture (matches the layout rules in globals.css).
   const H = vp.w >= 1024 ? vp.h - 14 * 16 : vp.h * 0.68;
-  const W = vp.w >= 1440 ? 584 : vp.w >= 1024 ? Math.min(vp.w - 48 - 412, 948) : vp.w - 48;
+  const W =
+    vp.w >= 1440
+      ? 584
+      : vp.w >= 1024
+        ? Math.min(vp.w - 48 - 412, 948)
+        : vp.w - 48;
 
   const ratios = items.map((a) => (a.image ? a.image.w / a.image.h : 1));
   // Largest common area every painting can reach without exceeding H tall or W wide.
@@ -43,35 +48,69 @@ function Slide({
   art,
   compact,
   height,
+  first,
 }: {
   art: Artwork;
   compact: boolean;
   height: number | null;
+  first: boolean;
 }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
 
   // Same blur-and-fade as the home page scroll.
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const stops = compact ? [0, 0.12, 0.3, 0.7, 0.88, 1] : [0.1, 0.36, 0.36, 0.64, 0.64, 0.9];
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  // The first painting sits right under the project info, so it starts fully clear and only softens as it leaves.
+  const stops = first
+    ? compact
+      ? [0, 0.7, 0.88, 1]
+      : [0, 0.64, 0.64, 0.9]
+    : compact
+      ? [0, 0.12, 0.3, 0.7, 0.88, 1]
+      : [0.1, 0.36, 0.36, 0.64, 0.64, 0.9];
   const opacity = useTransform(
     scrollYProgress,
     stops,
-    compact ? [0.15, 0.7, 1, 1, 0.7, 0.15] : [0, 1, 1, 1, 1, 0],
+    first
+      ? compact
+        ? [1, 1, 0.7, 0.15]
+        : [1, 1, 1, 0]
+      : compact
+        ? [0.15, 0.7, 1, 1, 0.7, 0.15]
+        : [0, 1, 1, 1, 1, 0],
   );
-  const blur = useTransform(scrollYProgress, stops, compact ? [10, 3, 0, 0, 3, 10] : [26, 0, 0, 0, 0, 26]);
+  const blur = useTransform(
+    scrollYProgress,
+    stops,
+    first
+      ? compact
+        ? [0, 0, 3, 10]
+        : [0, 0, 0, 26]
+      : compact
+        ? [10, 3, 0, 0, 3, 10]
+        : [26, 0, 0, 0, 0, 26],
+  );
   const filter = useMotionTemplate`blur(${blur}px)`;
   const scale = useTransform(
     scrollYProgress,
     stops,
-    compact ? [0.95, 0.98, 1, 1, 0.98, 0.95] : [0.92, 1, 1, 1, 1, 0.92],
+    first
+      ? compact
+        ? [1, 1, 0.98, 0.95]
+        : [1, 1, 1, 0.92]
+      : compact
+        ? [0.95, 0.98, 1, 1, 0.98, 0.95]
+        : [0.92, 1, 1, 1, 1, 0.92],
   );
 
   return (
     <section
       ref={ref}
       aria-label={art.title}
-      className="flex items-center justify-center py-10 lg:h-svh lg:snap-center lg:py-0"
+      className={`flex items-center justify-center ${first ? "pb-10 lg:h-auto lg:items-start lg:pb-16" : "py-10 lg:h-svh lg:snap-center lg:py-0"}`}
     >
       <motion.figure
         style={reduce ? undefined : { opacity, filter, scale }}
@@ -109,7 +148,9 @@ function Slide({
                   ["--ratio" as string]: art.image.w / art.image.h,
                   // stacked layout: as wide as the picture
                   ...(height
-                    ? { ["--cap-w" as string]: `${height * (art.image.w / art.image.h)}px` }
+                    ? {
+                        ["--cap-w" as string]: `${height * (art.image.w / art.image.h)}px`,
+                      }
                     : {}),
                 }
               : undefined
@@ -154,7 +195,13 @@ export function PaintingSlides({ items }: { items: Artwork[] }) {
   return (
     <div>
       {items.map((art, i) => (
-        <Slide key={art.title} art={art} compact={compact} height={heights ? heights[i] : null} />
+        <Slide
+          key={art.title}
+          art={art}
+          compact={compact}
+          height={heights ? heights[i] : null}
+          first={i === 0}
+        />
       ))}
     </div>
   );
