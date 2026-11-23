@@ -671,17 +671,27 @@ const all: Project[] = [
       {
         type: "images",
         fitH: "4000px",
-        images: [{ src: "/projects/skis/photo-1.jpg", w: 2000, h: 1333, alt: "The pair of painted skis seen from above, with blue paintings on the wall behind" }],
+        images: [{ src: "/projects/skis/photo-1.jpg", w: 2000, h: 1333, alt: "The painted ski set laid out on stools in the studio, below three blue magnolia paintings" }],
+      },
+      {
+        type: "images",
+        images: [{ src: "/projects/skis/photo-2.jpg", w: 1457, h: 2000, alt: "A person in a white jacket carrying the ski set on one shoulder against a white backdrop" }],
+        maxWidth: 560,
       },
       {
         type: "images",
         fitH: "4000px",
-        images: [{ src: "/projects/skis/photo-3.jpg", w: 2000, h: 1333, alt: "Close-up of the bindings and the tigers drawn on the skis" }],
+        images: [{ src: "/projects/skis/photo-3.jpg", w: 2000, h: 1333, alt: "The tips of the skis, drawn with tigers, pines and clouds in blue ink" }],
       },
       {
         type: "images",
-        images: [{ src: "/projects/skis/photo-2.jpg", w: 1333, h: 2000, alt: "A white ski with blue ink drawing beside a ski painted ultramarine underneath" }],
+        images: [{ src: "/projects/skis/photo-4.jpg", w: 1333, h: 2000, alt: "A person in a white jacket holding the ski set across their shoulders, seen from above" }],
         maxWidth: 560,
+      },
+      {
+        type: "images",
+        fitH: "4000px",
+        images: [{ src: "/projects/skis/photo-5.jpg", w: 2000, h: 1333, alt: "Close-up of the bindings and the tigers drawn along the skis" }],
       },
     ],
   },
