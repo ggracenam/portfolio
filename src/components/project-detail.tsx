@@ -36,7 +36,7 @@ export function ProjectDetail({
       <ScrollTop />
       <ProjectTheme theme={project.theme} />
       <article
-        className={`[container-type:inline-size] mx-auto max-w-[1280px] px-9 pb-8 pt-24 min-[901px]:px-[var(--edge)] ${project.noOutline ? "no-outline" : ""}`}
+        className={`[container-type:inline-size] mx-auto max-w-[1280px] px-9 ${base === "archive" ? "pb-48" : "pb-8"} pt-24 min-[901px]:px-[var(--edge)] ${project.noOutline ? "no-outline" : ""}`}
       >
         <div className="mx-auto w-[min(541px,100%)] max-[900.99px]:w-[calc(100%-40px)]">
           <BackLink

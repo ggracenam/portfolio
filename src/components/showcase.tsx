@@ -277,11 +277,50 @@ function ShowcaseItem({
   // Phones and tablets: covers stay still (no fan, spread, video, reveal or scale), as on dmcg.co. A real mouse gets the hover look at any width.
   const [hoveredRaw, setHovered] = useState(false);
   const fan = fanImages(project);
-  // The one exception: the portrait paintings' fan rests open on phones and narrow windows.
-  const heldOpen = mobile && fan.length > 0;
+  // The one exception: the portrait paintings' fan rests open, looking the same at every width.
+  const heldOpen = fan.length > 0;
   const hovered = hoveredRaw; // drives the label and cursor
   const lively = (hoveredRaw && !mobile) || heldOpen; // drives the cover itself
   useLabelCursor(hovered);
+
+  // From 901px to 1023px: every project gets the same gap above and below its cover, whatever the cover's height.
+  useLayoutEffect(() => {
+    const el = linkRef.current;
+    const sec = ref.current;
+    if (!el || !sec) return;
+    const set = () => {
+      sec.style.setProperty("--cover-h", `${el.offsetHeight}px`);
+      // Some covers spill past their box (a fanned stack of cards, a soft shadow): count that as part of the
+      // cover so the visible gap between neighbours stays the same.
+      const box = el.getBoundingClientRect();
+      const k = el.offsetHeight > 0 ? box.height / el.offsetHeight : 1;
+      let top = box.top;
+      let bottom = box.bottom;
+      el.querySelectorAll("img").forEach((img) => {
+        const r = img.getBoundingClientRect();
+        top = Math.min(top, r.top);
+        bottom = Math.max(bottom, r.bottom);
+      });
+      // A fanned stack also throws a soft shadow beyond its cards.
+      const shade = fan.length > 0 ? [6, 18] : [0, 0];
+      sec.style.setProperty(
+        "--ov-t",
+        `${Math.max(0, (box.top - top) / k) + shade[0]}px`,
+      );
+      sec.style.setProperty(
+        "--ov-b",
+        `${Math.max(0, (bottom - box.bottom) / k) + shade[1]}px`,
+      );
+    };
+    set();
+    const late = window.setTimeout(set, 700);
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => {
+      window.clearTimeout(late);
+      ro.disconnect();
+    };
+  }, []);
 
   // Phones and tablets: every cover is scaled to fill about the same square (as on dmcg.co), so tall
   // posters, wide strips and phones all read as similarly sized. Uses CSS zoom so the layout follows.
@@ -301,8 +340,12 @@ function ShowcaseItem({
       const box = 0.9 * Math.min(vw - 32, 0.565 * vw + 131);
       if (w > 0 && h > 0) {
         let f = Math.min(box / w, box / h);
+        // A fan of cards spreads wider than its front card: size it down so it reads as wide as its neighbours.
+        if (fan.length > 0) f *= 0.88;
+        // The upright skis are a narrow shape: let them stand 20% larger than the square the other covers fit.
+        if (project.flip) f *= 1.32;
         // A held-open fan swings its cards out to about ±8°: keep that whole spread on screen.
-        if (heldOpen) f = Math.min(f, (vw - 32) / (0.99 * w + 0.28 * h));
+        if (heldOpen) f = Math.min(f, (vw - 32) / (0.951 * w + 0.618 * h));
         el.style.zoom = String(f);
         el.style.setProperty("--z", String(f));
         // Some covers have empty margin built into the picture: pull the spacing in by that much so the
@@ -312,14 +355,14 @@ function ShowcaseItem({
         if (sec) {
           // The open fan reaches a little above and (at its swung-out corners) below the cover: make room.
           // Sitting first on the page, the open fan would reach up into the top bar's veil: start it lower.
-          sec.style.setProperty("--first-extra", heldOpen ? "44px" : "0px");
+          sec.style.setProperty("--first-extra", heldOpen ? "70px" : "0px");
           sec.style.setProperty(
             "--air-t",
-            `${(heldOpen ? -0.035 : t) * h * f}px`,
+            `${(heldOpen ? -0.07 : t) * h * f}px`,
           );
           sec.style.setProperty(
             "--air-b",
-            `${(heldOpen ? -0.06 : b) * h * f}px`,
+            `${(heldOpen ? -0.12 : b) * h * f}px`,
           );
         }
       }
@@ -398,11 +441,11 @@ function ShowcaseItem({
     <section
       ref={ref}
       aria-label={project.title}
-      className="relative flex items-center justify-center px-[var(--edge)] py-9 first:pt-24 last-of-type:pb-32 max-[900.99px]:pb-[calc(60px-var(--air-b,0px))] max-[900.99px]:pt-[calc(60px-var(--air-t,0px))] max-[900.99px]:first:pt-[calc(96px+var(--first-extra,0px))] min-[901px]:max-[1023px]:first:pt-[calc(96px+var(--first-extra,0px))] max-[900.99px]:last-of-type:pb-32 lg:h-svh lg:snap-center lg:py-0 lg:first:pt-0 lg:last-of-type:pb-0"
+      className={`relative flex items-center justify-center px-[var(--edge)] py-9 first:pt-24 last-of-type:pb-32 max-[900.99px]:pb-[calc(60px-var(--air-b,0px))] max-[900.99px]:pt-[calc(60px-var(--air-t,0px))] max-[900.99px]:first:pt-[calc(96px+var(--first-extra,0px))] max-[900.99px]:last-of-type:pb-32 [--gap:clamp(100px,calc(50svh-var(--cover-h,400px)/2-80px),260px)] min-[901px]:max-[1023.99px]:pb-[calc(var(--gap)/2+var(--ov-b,0px))] min-[901px]:max-[1023.99px]:pt-[calc(var(--gap)/2+var(--ov-t,0px))] min-[901px]:max-[1023.99px]:first:pt-[max(0px,calc(50svh-var(--cover-h,400px)/2))] min-[901px]:max-[1023.99px]:last-of-type:pb-[max(0px,calc(50svh-var(--cover-h,400px)/2))] lg:h-svh lg:snap-center lg:py-0 lg:first:pt-0 lg:last-of-type:pb-0`}
     >
       <motion.div
         style={reduce ? undefined : { opacity, filter, scale }}
-        className="relative"
+        className="relative min-[901px]:max-[1023.99px]:snap-center"
       >
         <Link
           ref={linkRef}
@@ -442,12 +485,7 @@ function ShowcaseItem({
         >
           <div className="relative isolate">
             {fan.length > 0 && (
-              <CoverFan
-                images={fan}
-                open={lively}
-                reduce={reduce}
-                tight={mobile}
-              />
+              <CoverFan images={fan} open={lively} reduce={reduce} />
             )}
             {spread.length > 0 && (
               <PosterSpread pages={spread} open={lively} reduce={reduce} />
@@ -455,8 +493,7 @@ function ShowcaseItem({
             <motion.div
               initial={false}
               animate={{
-                rotate:
-                  fan.length > 0 && lively ? (mobile ? FRONT_M : FRONT) : 0,
+                rotate: fan.length > 0 && lively ? FRONT : 0,
                 x: spread.length > 0 && lively ? `-${SPREAD_GAP}%` : "0%",
               }}
               transition={

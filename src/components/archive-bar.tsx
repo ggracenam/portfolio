@@ -6,8 +6,8 @@ import { site } from "@/data/site";
 
 const tabs = [
   { href: "/archive/studio", label: "Studio" },
-  { href: "/archive/gallery", label: "Gallery" },
   { href: "/archive/notebook", label: "Notebook" },
+  { href: "/archive/gallery", label: "Gallery" },
   { href: "/archive/misc", label: "Misc" },
 ];
 
@@ -19,8 +19,8 @@ const tabs = [
 export function ArchiveBar() {
   const pathname = usePathname();
   const current = pathname.replace(/\/$/, "") || "/";
-  // /archive itself is the Notebook.
-  const here = current === "/archive" ? "/archive/notebook" : current;
+  // /archive itself is the Studio.
+  const here = current === "/archive" ? "/archive/studio" : current;
   const onSection = tabs.some((t) => t.href === here);
   if (!onSection) return null;
 

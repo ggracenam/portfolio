@@ -31,7 +31,7 @@ function useEqualAreaHeights(items: Artwork[]) {
 
   // Space available for one picture (matches the layout rules in globals.css).
   const H = vp.w >= 1024 ? vp.h - 14 * 16 : vp.h * 0.68;
-  const W = vp.w >= 1440 ? 584 : vp.w >= 1024 ? Math.min(vp.w - 48 - 252, 948) : vp.w - 48;
+  const W = vp.w >= 1440 ? 584 : vp.w >= 1024 ? Math.min(vp.w - 48 - 412, 948) : vp.w - 48;
 
   const ratios = items.map((a) => (a.image ? a.image.w / a.image.h : 1));
   // Largest common area every painting can reach without exceeding H tall or W wide.

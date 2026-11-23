@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import NotebookPage from "./notebook/page";
+import StudioPage from "./studio/page";
 
-// The Archive opens on the Notebook.
+// The Archive opens on the Studio.
 export const metadata: Metadata = { title: "Archive" };
 
-export default NotebookPage;
+export default StudioPage;

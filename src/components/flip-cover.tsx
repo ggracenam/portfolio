@@ -5,7 +5,6 @@ import { motion } from "motion/react";
 import type { Project } from "@/data/projects";
 
 const TILT = -19; // degrees the skis lie across the frame
-const RATIO = 2.3; // frame width : height
 
 /** Alpha silhouette of the skis, read once, so the hover only reacts to the skis themselves. */
 let mask: { w: number; h: number; a: Uint8ClampedArray } | null = null;
@@ -48,7 +47,9 @@ export function overSkis(
   const cy = r.top + r.height / 2;
   const w = el.offsetWidth;
   const h = el.offsetHeight;
-  const rad = (-TILT * Math.PI) / 180;
+  const tilt =
+    parseFloat(getComputedStyle(el).getPropertyValue("--tilt")) || TILT;
+  const rad = (-tilt * Math.PI) / 180;
   const dx = e.clientX - cx;
   const dy = e.clientY - cy;
   const lx = dx * Math.cos(rad) - dy * Math.sin(rad);
@@ -89,26 +90,20 @@ export function FlipCover({
 }) {
   const flip = project.flip!;
   const ratio = flip.front.w / flip.front.h;
-  const sizes = "(min-width: 768px) 1300px, 94vw";
+  const sizes = "(min-width: 768px) 1000px, 90vw";
   const t = reduce
     ? { duration: 0 }
     : { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const };
 
   return (
-    <div
-      className="relative"
-      style={{
-        aspectRatio: RATIO,
-        width: `min(94vw, clamp(760px, 72vw, 1300px), calc(64svh * ${RATIO}))`,
-      }}
-    >
+    <div className="relative aspect-[var(--fr)] w-[var(--fw)] [--fr:2.7] [--fw:min(90vw,calc(1.4*clamp(560px,32vw,800px)),calc(56svh*2.7))] [--tilt:-19deg] max-[900.99px]:[--fr:0.6] max-[900.99px]:[--fw:min(60vw,calc(56svh*0.6))] max-[900.99px]:[--tilt:74deg]">
       <div
-        className="absolute left-1/2 top-1/2"
+        className="absolute left-1/2 top-1/2 [--sw:98%] max-[900.99px]:[--sw:calc(var(--fw)/0.6)]"
         data-skis={flip.front.src}
         style={{
-          width: "98%",
+          width: "var(--sw)",
           aspectRatio: ratio,
-          transform: `translate(-50%, -50%) rotate(${TILT}deg)`,
+          transform: "translate(-50%, -50%) rotate(var(--tilt))",
         }}
       >
         <motion.div

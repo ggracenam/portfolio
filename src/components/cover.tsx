@@ -10,10 +10,10 @@ const CARD_HOVER =
 function Placeholder({ project }: { project: Project }) {
   return (
     <div className="flex h-full w-full flex-col justify-between border border-line bg-white p-4 text-left">
-      <span className="text-[length:var(--fs-cap)] text-muted">{project.category}</span>
-      <span className="font-semibold">
-        {project.short}
+      <span className="text-[length:var(--fs-cap)] text-muted">
+        {project.category}
       </span>
+      <span className="font-semibold">{project.short}</span>
     </div>
   );
 }
@@ -37,8 +37,14 @@ export function Cover({
   if (project.phone) {
     if (mode === "card") {
       return (
-        <div className={`flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md bg-white ${CARD_HOVER}`}>
-          <Phone src={project.phone.src} title={project.short} className="h-[88%]" />
+        <div
+          className={`flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md bg-white ${CARD_HOVER}`}
+        >
+          <Phone
+            src={project.phone.src}
+            title={project.short}
+            className="h-[88%]"
+          />
         </div>
       );
     }
@@ -55,7 +61,9 @@ export function Cover({
   if (mode === "card" && img && project.spread?.length) {
     const pair = [img, project.spread[0]];
     return (
-      <div className={`grid aspect-[4/3] grid-cols-2 gap-px overflow-hidden rounded-[2px] bg-white ${CARD_HOVER}`}>
+      <div
+        className={`grid aspect-[4/3] grid-cols-2 gap-px overflow-hidden rounded-[2px] bg-white ${CARD_HOVER}`}
+      >
         {pair.map((p, i) => (
           <div key={p.src} className="relative">
             <Image
@@ -90,7 +98,12 @@ export function Cover({
           <Placeholder project={project} />
         )}
         {img && project.video && (
-          <HoverVideo webm={project.video.webm} mp4={project.video.mp4} active={playing} fit={fit} />
+          <HoverVideo
+            webm={project.video.webm}
+            mp4={project.video.mp4}
+            active={playing}
+            fit={fit}
+          />
         )}
         {project.hoverCover && (
           <Image
@@ -108,12 +121,14 @@ export function Cover({
   const ratio = img ? img.w / img.h : 4 / 3;
   return (
     <div
-      className={`relative overflow-hidden ${project.spread?.length || project.wind ? "rounded-[2px]" : "rounded-md"}`}
+      className={`relative overflow-hidden ${project.sharpCover ? "" : project.spread?.length || project.wind ? "rounded-[2px]" : "rounded-md"}`}
       style={{
         aspectRatio: ratio,
-        width: project.video
-          ? `min(82vw, calc(min(40vw, 64svh) * ${ratio}))`
-          : `min(82vw, clamp(560px, 32vw, 800px), calc(56svh * ${ratio}))`,
+        width: project.coverSvh
+          ? `calc(0.9 * min(82vw, calc(${project.coverSvh}svh * ${ratio})))`
+          : project.video
+            ? `min(82vw, calc(min(40vw, 64svh) * ${ratio}))`
+            : `min(82vw, clamp(560px, 32vw, 800px), calc(56svh * ${ratio}))`,
       }}
     >
       {img ? (
@@ -129,7 +144,11 @@ export function Cover({
         <Placeholder project={project} />
       )}
       {img && project.video && (
-        <HoverVideo webm={project.video.webm} mp4={project.video.mp4} active={playing} />
+        <HoverVideo
+          webm={project.video.webm}
+          mp4={project.video.mp4}
+          active={playing}
+        />
       )}
       {project.hoverCover && (
         <Image

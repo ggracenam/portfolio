@@ -62,6 +62,8 @@
 /* ---------- Base ---------- */
 html {
   background: var(--bg);
+  /* Nothing may push the page wider than the window (e.g. a long hover label near the right edge). */
+  overflow-x: clip;
 }
 
 body {
@@ -212,11 +214,15 @@ button {
   .media-round--slide,
   .slide-caption {
     --slide-h: calc(100svh - 14rem);
-    /* picture + 32px gap + 220px details must fit beside each other */
-    --avail-w: min(calc(100vw - 48px - 252px), 948px);
+    /* picture + 32px gap + the details (kept on single lines, about 380px) must fit beside each other */
+    --avail-w: min(calc(100vw - 48px - 412px), 948px);
   }
   .slide-caption {
-    width: 220px;
+    width: max-content;
+    max-width: 380px;
+  }
+  .slide-caption dd {
+    white-space: nowrap;
   }
 }
 @media (min-width: 1440px) {

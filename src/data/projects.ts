@@ -108,6 +108,10 @@ export type Project = {
    * Skis (or any long object) lying diagonally with a soft wash of the underside colour spreading out
    * beneath; on hover they turn over to show the underside. `glow` is a flat-colour silhouette.
    */
+  /** Showcase cover height as a share of the viewport height (svh), so covers of different shapes can stand equally tall. */
+  coverSvh?: number;
+  /** No rounded corners on the cover picture (for pictures that already sit on white). */
+  sharpCover?: boolean;
   flip?: { front: Img; glow: Img };
   /** A short muted clip that plays over the cover on hover (same frame size as the cover). */
   video?: { webm: string; mp4: string };
@@ -717,11 +721,39 @@ const all: Project[] = [
     ],
   },
   {
+    slug: "moonlit-magnolias",
+    theme: { bg: "#FDFDFE", fg: "#404040" },
+    section: "studio",
+    title: "Moonlit Magnolias",
+    subtitle: "Fine Art · Painting · Landscape",
+    short: "Moonlit Magnolias",
+    category: "Fine Art",
+    client: "Personal project",
+    role: "",
+    year: "2026",
+    summary:
+      "Three large paintings of white magnolias against vivid blue, evoking trees at night where the flowers glow like stars.",
+    hideCover: true,
+    containCover: true,
+    coverSvh: 56,
+    sharpCover: true,
+    cover: { src: "/projects/magnolias/cover.webp", w: 2200, h: 1079, alt: "Three blue paintings of white magnolia flowers and dark branches, side by side" },
+    blocks: [
+      {
+        type: "text",
+        paragraphs: [
+          "Drawing inspiration from Korean and broader Asian cultural traditions, Moonlit Magnolias depicts white magnolia flowers against vivid blue backgrounds, evoking the experience of looking at magnolia trees at night, where the flowers appear almost like stars against the darkness.",
+          "Through large-scale compositions, simplified forms, and contrasting colors, the work aims to create a sense of stillness and contemplation. The arrangement of the three paintings also draws from the visual rhythm of traditional Korean folding screens.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "portrait-paintings",
     theme: { bg: "#FEFEFE", fg: "#404040" },
     section: "studio",
     title: "Portrait Paintings",
-    subtitle: "Painting · Mixed Media · Portraiture",
+    subtitle: "Fine Art · Painting · Portraiture",
     short: "Portrait Paintings",
     category: "Fine Art",
     client: "Personal project",
