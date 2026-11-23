@@ -424,6 +424,7 @@ button {
   opacity: 0.8;
 }
 .intro-input {
+  -webkit-text-security: disc;
   width: min(260px, 70vw);
   padding: 6px 0;
   text-align: center;

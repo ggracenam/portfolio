@@ -14,18 +14,25 @@ import { useCallback, useEffect, useRef, useState } from "react";
  */
 
 const SEEN = "intro-seen";
-const PASS_HASH = "3b5b1e672af92ae2d9fbfb9cf00eae796152ce9824fe43eb930a9102e161ab2e"; // sha256 of the lower-case password
+const PASS_HASH =
+  "3b5b1e672af92ae2d9fbfb9cf00eae796152ce9824fe43eb930a9102e161ab2e"; // sha256 of the lower-case password
 const MELT_MS = 1700;
 
 async function sha256(s: string) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
-  return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
+  const buf = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(s),
+  );
+  return Array.from(new Uint8Array(buf), (b) =>
+    b.toString(16).padStart(2, "0"),
+  ).join("");
 }
 
 export function IntroCard() {
   const [on, setOn] = useState(true);
   const [melting, setMelting] = useState(false);
   const [wrong, setWrong] = useState(false);
+  const [ready, setReady] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const done = useRef(false);
   const inerted = useRef<Element[]>([]);
@@ -46,6 +53,16 @@ export function IntroCard() {
 
   // Show the lock on every page, once per session unless "?intro".
   useEffect(() => {
+    // The form only exists once the page script is running, so it can never submit natively
+    // (which would put the typed password into the address bar). Scrub any such leftover too.
+    setReady(true);
+    try {
+      const u = new URL(window.location.href);
+      if (u.searchParams.has("site-access-code")) {
+        u.searchParams.delete("site-access-code");
+        window.history.replaceState(null, "", u.pathname + u.search + u.hash);
+      }
+    } catch {}
     let force = false;
     try {
       force = /[?&]intro\b/.test(window.location.search);
@@ -59,19 +76,42 @@ export function IntroCard() {
       setOn(false);
       return;
     }
-    reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    reduce.current = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     document.documentElement.classList.remove("intro-seen");
     document.documentElement.style.overflow = "hidden";
     // Keep the page behind the lock out of reach of the keyboard and screen readers.
     const root = document.querySelector(".intro-root");
     const els = Array.from(document.body.children).filter(
-      (el) => el !== root && !["SCRIPT", "STYLE"].includes(el.tagName) && !el.hasAttribute("inert"),
+      (el) =>
+        el !== root &&
+        !["SCRIPT", "STYLE"].includes(el.tagName) &&
+        !el.hasAttribute("inert"),
     );
     els.forEach((el) => el.setAttribute("inert", ""));
     inerted.current = els;
-    const t = window.setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 400);
+    // Never start with anything typed in: wipe it on load, on back/forward restores, and just
+    // after load (when browsers apply autofill).
+    const wipe = () => {
+      if (inputRef.current) inputRef.current.value = "";
+    };
+    wipe();
+    const w1 = window.setTimeout(wipe, 150);
+    const w2 = window.setTimeout(wipe, 700);
+    window.addEventListener("pageshow", wipe);
+    // Masked like a password, but as a text field so browsers don't offer to save or fill it.
+    if (!CSS.supports("-webkit-text-security", "disc") && inputRef.current)
+      inputRef.current.type = "password";
+    const t = window.setTimeout(
+      () => inputRef.current?.focus({ preventScroll: true }),
+      400,
+    );
     return () => {
       window.clearTimeout(t);
+      window.clearTimeout(w1);
+      window.clearTimeout(w2);
+      window.removeEventListener("pageshow", wipe);
       document.documentElement.style.overflow = "";
       els.forEach((el) => el.removeAttribute("inert"));
     };
@@ -87,47 +127,62 @@ export function IntroCard() {
   if (!on) return null;
 
   return (
-    <div className="intro-root fixed inset-0 z-[2000]" role="dialog" aria-modal="true" aria-label="Enter password">
-      <div className={`intro-film absolute inset-0${melting ? " intro-melt" : ""}`} />
-      <form
-        className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center"
-        style={{
-          opacity: melting ? 0 : 1,
-          transition: "opacity 0.5s",
-          pointerEvents: melting ? "none" : "auto",
-        }}
-        onSubmit={async (e) => {
-          e.preventDefault();
-          if (melting) return;
-          const v = (inputRef.current?.value ?? "").trim().toLowerCase();
-          let ok = false;
-          try {
-            ok = (await sha256(v)) === PASS_HASH;
-          } catch {}
-          if (ok) {
-            if (reduce.current) finish();
-            else setMelting(true);
-          } else {
-            setWrong(true);
-            if (inputRef.current) inputRef.current.value = "";
-            window.setTimeout(() => setWrong(false), 1600);
-          }
-        }}
-      >
-        <p className="intro-ink">Welcome to my portfolio</p>
-        <input
-          ref={inputRef}
-          type="password"
-          name="intro-pass"
+    <div
+      className="intro-root fixed inset-0 z-[2000]"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Enter password"
+    >
+      <div
+        className={`intro-film absolute inset-0${melting ? " intro-melt" : ""}`}
+      />
+      {ready && (
+        <form
           autoComplete="off"
-          aria-label="Password"
-          placeholder="input password"
-          className={`intro-input${wrong ? " intro-shake" : ""}`}
-        />
-        <p className="intro-ink intro-ink--soft" aria-live="polite">
-          {wrong ? "try again" : "press enter"}
-        </p>
-      </form>
+          className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center"
+          style={{
+            opacity: melting ? 0 : 1,
+            transition: "opacity 0.5s",
+            pointerEvents: melting ? "none" : "auto",
+          }}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            if (melting) return;
+            const v = (inputRef.current?.value ?? "").trim().toLowerCase();
+            let ok = false;
+            try {
+              ok = (await sha256(v)) === PASS_HASH;
+            } catch {}
+            if (ok) {
+              if (reduce.current) finish();
+              else setMelting(true);
+            } else {
+              setWrong(true);
+              if (inputRef.current) inputRef.current.value = "";
+              window.setTimeout(() => setWrong(false), 1600);
+            }
+          }}
+        >
+          <p className="intro-ink">Welcome to my portfolio</p>
+          <input
+            ref={inputRef}
+            type="text"
+            autoComplete="off"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            data-1p-ignore
+            data-lpignore="true"
+            data-form-type="other"
+            aria-label="Password"
+            placeholder="input password"
+            className={`intro-input${wrong ? " intro-shake" : ""}`}
+          />
+          <p className="intro-ink intro-ink--soft" aria-live="polite">
+            {wrong ? "try again" : "press enter"}
+          </p>
+        </form>
+      )}
     </div>
   );
 }
