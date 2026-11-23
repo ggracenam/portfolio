@@ -126,7 +126,7 @@ const AnimationComponent: React.FC<{
       <motion.span
         aria-hidden='true'
         variants={variants}
-        className='inline-block whitespace-pre'
+        className={`inline-block whitespace-pre${/[\u3131-\u318E\uAC00-\uD7A3]/.test(segment) ? ' italic' : ''}`}
       >
         {segment}
       </motion.span>

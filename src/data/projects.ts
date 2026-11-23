@@ -100,6 +100,11 @@ export type Project = {
   heroHover?: Img;
   /** Show the whole cover in grid cards instead of cropping it to 4:3. */
   containCover?: boolean;
+  /**
+   * Skis (or any long object) lying diagonally with a soft wash of the underside colour spreading out
+   * beneath; on hover they turn over to show the underside. `glow` is a flat-colour silhouette.
+   */
+  flip?: { front: Img; glow: Img };
   /** A short muted clip that plays over the cover on hover (same frame size as the cover). */
   video?: { webm: string; mp4: string };
   /** On hover the cover zooms into `main`, then `sides` slide out next to it (Infinite Machine style). */
@@ -644,12 +649,50 @@ const all: Project[] = [
     ],
   },
   {
+    slug: "skis",
+    section: "studio",
+    title: "The Tiger Comes Down 범 내려온다 Ski Set",
+    subtitle: "Custom Design · Gear Art · Product Design",
+    short: "The Tiger Comes Down Ski Set",
+    category: "Fine Art",
+    client: "Personal project",
+    role: "",
+    year: "2026",
+    summary:
+      "A pair of skis painted white and drawn over in blue ink with tigers, pines, mountains and clouds. The undersides are painted ultramarine.",
+    hideCover: true,
+    containCover: true,
+    cover: { src: "/projects/skis/front.webp", w: 2000, h: 234, alt: "A pair of white skis drawn over in blue ink with tigers, pines and clouds" },
+    flip: {
+      front: { src: "/projects/skis/front.webp", w: 2000, h: 234, alt: "A pair of white skis drawn over in blue ink with tigers, pines and clouds" },
+      glow: { src: "/projects/skis/glow.png", w: 800, h: 94, alt: "" },
+    },
+    blocks: [
+      {
+        type: "images",
+        fitH: "4000px",
+        images: [{ src: "/projects/skis/photo-1.jpg", w: 2000, h: 1333, alt: "The pair of painted skis seen from above, with blue paintings on the wall behind" }],
+      },
+      {
+        type: "images",
+        fitH: "4000px",
+        images: [{ src: "/projects/skis/photo-3.jpg", w: 2000, h: 1333, alt: "Close-up of the bindings and the tigers drawn on the skis" }],
+      },
+      {
+        type: "images",
+        images: [{ src: "/projects/skis/photo-2.jpg", w: 1333, h: 2000, alt: "A white ski with blue ink drawing beside a ski painted ultramarine underneath" }],
+        maxWidth: 560,
+      },
+    ],
+  },
+  {
     slug: "portrait-paintings",
     section: "studio",
     title: "Portrait Paintings",
+    subtitle: "Painting · Mixed Media · Portraiture",
     short: "Portrait Paintings",
     category: "Fine Art",
-    client: "Personal",
+    client: "Personal project",
     role: "",
     year: "2021 – 2022",
     summary: "Selected paintings and mixed-media work from 2021 and 2022.",

@@ -8,24 +8,29 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * and tint melt away and the site shows through.
  *
  * The unlock lasts for the browser session ("?intro" shows the lock again).
- * NOTE: this is a front-end gate. The password is checked in the browser against a SHA-256 hash,
+ * NOTE: this is a front-end gate. The password is checked in the browser against a salted, slow hash,
  * and the pages are still static files, so it keeps casual visitors out but is not real security;
  * use the host's password protection for that.
  */
 
 const SEEN = "intro-seen";
-const PASS_HASH =
-  "3b5b1e672af92ae2d9fbfb9cf00eae796152ce9824fe43eb930a9102e161ab2e"; // sha256 of the lower-case password
+const PASS_SALT = "d72992c1514d157c04ddab98b4b16ae2";
+const PASS_KEY = "8d217c17c47f2655452aaf58e954d843fab42af370c959c038d91ec3b864d0cf"; // PBKDF2-SHA256 of the lower-case password
+const PASS_ROUNDS = 310000;
 const MELT_MS = 1700;
 
-async function sha256(s: string) {
-  const buf = await crypto.subtle.digest(
-    "SHA-256",
-    new TextEncoder().encode(s),
+const hex = (b: Uint8Array) => Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
+const unhex = (s: string) => new Uint8Array(s.match(/../g)!.map((h) => parseInt(h, 16)));
+
+/** Slow on purpose: each guess costs a fraction of a second, so guessing in bulk is expensive. */
+async function derive(pw: string) {
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", hash: "SHA-256", salt: unhex(PASS_SALT), iterations: PASS_ROUNDS },
+    key,
+    256,
   );
-  return Array.from(new Uint8Array(buf), (b) =>
-    b.toString(16).padStart(2, "0"),
-  ).join("");
+  return hex(new Uint8Array(bits));
 }
 
 export function IntroCard() {
@@ -151,7 +156,7 @@ export function IntroCard() {
             const v = (inputRef.current?.value ?? "").trim().toLowerCase();
             let ok = false;
             try {
-              ok = (await sha256(v)) === PASS_HASH;
+              ok = (await derive(v)) === PASS_KEY;
             } catch {}
             if (ok) {
               if (reduce.current) finish();

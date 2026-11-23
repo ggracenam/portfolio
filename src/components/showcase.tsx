@@ -16,6 +16,7 @@ import { Cover } from "@/components/cover";
 import { RevealCover } from "@/components/reveal-cover";
 import { WindCover } from "@/components/wind-cover";
 import { FoldCover } from "@/components/fold-cover";
+import { FlipCover, overSkis } from "@/components/flip-cover";
 import { Reveal } from "@/components/reveal";
 import { useCompact, useMobile } from "@/lib/use-compact";
 import { useLabelCursor } from "@/components/halo-cursor";
@@ -50,7 +51,17 @@ const STEP_M = 5.4;
 const FAN_M = [0, 1, 2].map((i) => ({ r: FRONT_M + STEP_M * (i + 1), x: 0 }));
 
 /** Cards tucked behind the cover; they fan out like a hand of cards while hovered. */
-function CoverFan({ images, open, reduce, tight = false }: { images: { src: string; alt: string }[]; open: boolean; reduce: boolean | null; tight?: boolean }) {
+function CoverFan({
+  images,
+  open,
+  reduce,
+  tight = false,
+}: {
+  images: { src: string; alt: string }[];
+  open: boolean;
+  reduce: boolean | null;
+  tight?: boolean;
+}) {
   return (
     <>
       {images.map((img, i) => {
@@ -60,16 +71,32 @@ function CoverFan({ images, open, reduce, tight = false }: { images: { src: stri
             key={img.src}
             aria-hidden
             initial={false}
-            animate={open ? { rotate: f.r, x: f.x, y: 0, opacity: 1 } : { rotate: 0, x: 0, y: 0, opacity: 0 }}
+            animate={
+              open
+                ? { rotate: f.r, x: f.x, y: 0, opacity: 1 }
+                : { rotate: 0, x: 0, y: 0, opacity: 0 }
+            }
             transition={
               reduce
                 ? { duration: 0 }
-                : { type: "spring", stiffness: 190, damping: 20, mass: 0.8, delay: open ? i * 0.04 : 0 }
+                : {
+                    type: "spring",
+                    stiffness: 190,
+                    damping: 20,
+                    mass: 0.8,
+                    delay: open ? i * 0.04 : 0,
+                  }
             }
             style={{ transformOrigin: "50% 100%", zIndex: -1 - i }}
             className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl bg-bg shadow-[0_0_0_1px_var(--line),0_18px_40px_-24px_rgb(0_0_0/0.5)] "
           >
-            <Image src={img.src} alt="" fill sizes="400px" className="object-cover" />
+            <Image
+              src={img.src}
+              alt=""
+              fill
+              sizes="400px"
+              className="object-cover"
+            />
           </motion.div>
         );
       })}
@@ -102,7 +129,15 @@ function PosterSpread({
             opacity: open ? 1 : 0,
           }}
           transition={
-            reduce ? { duration: 0 } : { type: "spring", stiffness: 190, damping: 22, mass: 0.8, delay: open ? i * 0.03 : 0 }
+            reduce
+              ? { duration: 0 }
+              : {
+                  type: "spring",
+                  stiffness: 190,
+                  damping: 22,
+                  mass: 0.8,
+                  delay: open ? i * 0.03 : 0,
+                }
           }
           style={{ zIndex: -1 - i }}
           className={`pointer-events-none absolute inset-0 overflow-hidden rounded-[2px] ${
@@ -111,21 +146,51 @@ function PosterSpread({
               : "shadow-[0_14px_30px_-26px_rgb(0_0_0/0.35)]"
           }`}
         >
-          <Image src={img.src} alt={i === 0 ? img.alt : ""} fill sizes="400px" className="object-cover" />
+          <Image
+            src={img.src}
+            alt={i === 0 ? img.alt : ""}
+            fill
+            sizes="400px"
+            className="object-cover"
+          />
         </motion.div>
       ))}
     </>
   );
 }
 
+/** The project title for the hover label; Korean words are set in italic, as on the project page. */
+function LabelTitle({ title }: { title: string }) {
+  return (
+    <span>
+      {title
+        .split(/(\s+)/)
+        .map((w, i) =>
+          /[\u3131-\u318E\uAC00-\uD7A3]/.test(w) ? <i key={i}>{w}</i> : w,
+        )}
+    </span>
+  );
+}
+
 /** The words shown beside the title while hovering: the project's own disciplines (the line under its title). */
 function projectWords(project: Project): string[] {
-  const parts = (project.subtitle ?? "").split("·").map((w) => w.trim()).filter(Boolean);
+  const parts = (project.subtitle ?? "")
+    .split("·")
+    .map((w) => w.trim())
+    .filter(Boolean);
   return parts.length ? parts : [project.category];
 }
 
 /** Swaps through a list of words every couple of seconds while active, like the discipline text in the dmcg.co hover label. */
-function CyclingWord({ words, active }: { words: string[]; active: boolean }) {
+function CyclingWord({
+  words,
+  active,
+  solid,
+}: {
+  words: string[];
+  active: boolean;
+  solid?: boolean;
+}) {
   const [i, setI] = useState(0);
   useEffect(() => {
     if (!active) {
@@ -168,7 +233,7 @@ function CyclingWord({ words, active }: { words: string[]; active: boolean }) {
   }, [active]);
   return (
     <span
-      className="relative inline-block opacity-40"
+      className={`relative inline-block ${solid ? "" : "opacity-40"}`}
       style={{
         height: "1.2em",
         width: w === null ? undefined : w,
@@ -248,8 +313,14 @@ function ShowcaseItem({
           // The open fan reaches a little above and (at its swung-out corners) below the cover: make room.
           // Sitting first on the page, the open fan would reach up into the top bar's veil: start it lower.
           sec.style.setProperty("--first-extra", heldOpen ? "44px" : "0px");
-          sec.style.setProperty("--air-t", `${(heldOpen ? -0.035 : t) * h * f}px`);
-          sec.style.setProperty("--air-b", `${(heldOpen ? -0.06 : b) * h * f}px`);
+          sec.style.setProperty(
+            "--air-t",
+            `${(heldOpen ? -0.035 : t) * h * f}px`,
+          );
+          sec.style.setProperty(
+            "--air-b",
+            `${(heldOpen ? -0.06 : b) * h * f}px`,
+          );
         }
       }
     };
@@ -267,7 +338,10 @@ function ShowcaseItem({
   // sits first on the page starts lower so its hover fan isn't swallowed by the bar's white veil.
   useLayoutEffect(() => {
     if (mobile) return;
-    ref.current?.style.setProperty("--first-extra", compact && fan.length > 0 ? "56px" : "0px");
+    ref.current?.style.setProperty(
+      "--first-extra",
+      compact && fan.length > 0 ? "56px" : "0px",
+    );
     return () => {
       ref.current?.style.removeProperty("--first-extra");
     };
@@ -300,7 +374,9 @@ function ShowcaseItem({
   });
   // Phones/tablets use short sections, so the next project is already half on screen:
   // the fade has to be gentler there or it would still be invisible.
-  const stops = compact ? [0, 0.12, 0.3, 0.7, 0.88, 1] : [0.1, 0.36, 0.36, 0.64, 0.64, 0.9];
+  const stops = compact
+    ? [0, 0.12, 0.3, 0.7, 0.88, 1]
+    : [0.1, 0.36, 0.36, 0.64, 0.64, 0.9];
   const opacity = useTransform(
     scrollYProgress,
     stops,
@@ -336,39 +412,104 @@ function ShowcaseItem({
           className="group relative block"
           onPointerEnter={(e) => {
             if (e.pointerType !== "mouse") return;
+            // The skis only count as hovered when the pointer is on the skis, not the white around them.
+            if (project.flip && !overSkis(e, e.currentTarget)) return;
             track(e, true);
             setHovered(true);
           }}
-          onPointerMove={(e) => track(e)}
+          onPointerMove={(e) => {
+            if (project.flip && e.pointerType === "mouse") {
+              const on = overSkis(e, e.currentTarget);
+              if (on !== hoveredRaw) {
+                if (on) track(e, true);
+                setHovered(on);
+              }
+              if (!on) return;
+            }
+            track(e);
+          }}
           onPointerLeave={() => setHovered(false)}
-          onFocus={() => (fan.length > 0 || spread.length > 0 || !!project.reveal || !!project.fold || !!project.wind) && setHovered(true)}
+          onFocus={() =>
+            (fan.length > 0 ||
+              spread.length > 0 ||
+              !!project.reveal ||
+              !!project.fold ||
+              !!project.wind ||
+              !!project.flip) &&
+            setHovered(true)
+          }
           onBlur={() => setHovered(false)}
         >
           <div className="relative isolate">
-            {fan.length > 0 && <CoverFan images={fan} open={lively} reduce={reduce} tight={mobile} />}
-            {spread.length > 0 && <PosterSpread pages={spread} open={lively} reduce={reduce} />}
+            {fan.length > 0 && (
+              <CoverFan
+                images={fan}
+                open={lively}
+                reduce={reduce}
+                tight={mobile}
+              />
+            )}
+            {spread.length > 0 && (
+              <PosterSpread pages={spread} open={lively} reduce={reduce} />
+            )}
             <motion.div
               initial={false}
               animate={{
-                rotate: fan.length > 0 && lively ? (mobile ? FRONT_M : FRONT) : 0,
+                rotate:
+                  fan.length > 0 && lively ? (mobile ? FRONT_M : FRONT) : 0,
                 x: spread.length > 0 && lively ? `-${SPREAD_GAP}%` : "0%",
               }}
               transition={
-                reduce ? { duration: 0 } : { type: "spring", stiffness: 190, damping: 20, mass: 0.8 }
+                reduce
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 190, damping: 20, mass: 0.8 }
               }
               style={{ transformOrigin: "50% 100%" }}
             >
-              <div className={`${project.phone || project.containCover || project.reveal || project.fold || project.wind ? "" : "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"} ${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} transition-transform duration-500 ease-out ${
-                  fan.length > 0 || spread.length > 0 || project.video || project.hoverCover || project.reveal || project.fold || project.wind ? "" : "min-[901px]:group-hover:scale-[1.018]"
-                }`}>
-                {project.wind && project.cover ? (
-                  <WindCover project={project} hovered={lively} reduce={reduce} />
+              <div
+                className={`${project.phone || project.containCover || project.reveal || project.fold || project.wind || project.flip ? "" : "shadow-[0_30px_70px_-34px_rgb(0_0_0/0.45)]"} ${spread.length > 0 ? "rounded-[2px]" : "rounded-md"} transition-transform duration-500 ease-out ${
+                  fan.length > 0 ||
+                  spread.length > 0 ||
+                  project.video ||
+                  project.hoverCover ||
+                  project.reveal ||
+                  project.fold ||
+                  project.wind ||
+                  project.flip
+                    ? ""
+                    : "min-[901px]:group-hover:scale-[1.018]"
+                }`}
+              >
+                {project.flip ? (
+                  <FlipCover
+                    project={project}
+                    hovered={lively}
+                    reduce={reduce}
+                  />
+                ) : project.wind && project.cover ? (
+                  <WindCover
+                    project={project}
+                    hovered={lively}
+                    reduce={reduce}
+                  />
                 ) : project.fold && project.cover ? (
-                  <FoldCover project={project} hovered={lively} reduce={reduce} />
+                  <FoldCover
+                    project={project}
+                    hovered={lively}
+                    reduce={reduce}
+                  />
                 ) : project.reveal && project.cover ? (
-                  <RevealCover project={project} hovered={lively} reduce={reduce} />
+                  <RevealCover
+                    project={project}
+                    hovered={lively}
+                    reduce={reduce}
+                  />
                 ) : (
-                  <Cover project={project} mode="showcase" playing={hoveredRaw && !mobile} />
+                  <Cover
+                    project={project}
+                    mode="showcase"
+                    playing={hoveredRaw && !mobile}
+                  />
                 )}
               </div>
             </motion.div>
@@ -382,7 +523,7 @@ function ShowcaseItem({
             transition={{ duration: 0.18 }}
             className="label-hover glass-label pointer-events-none absolute left-0 top-0 z-10 h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
           >
-            <span>{project.title}</span>
+            <LabelTitle title={project.title} />
             <CyclingWord words={projectWords(project)} active={hovered} />
           </motion.span>
         </Link>
@@ -460,21 +601,36 @@ function GridCard({
         transition={{ duration: 0.18 }}
         className="glass-label pointer-events-none absolute left-0 top-0 z-10 inline-flex h-[27px] items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgb(243_243_243/0.3)] px-3 text-[length:var(--fs)] font-medium leading-none tracking-[0.02em] shadow-[inset_0_0_0_0.7px_rgb(0_0_0/0.06)] backdrop-blur-[10px]"
       >
-        <span>{project.title}</span>
+        <LabelTitle title={project.title} />
         <CyclingWord words={projectWords(project)} active={hovered} />
       </motion.span>
     </Link>
   );
 }
 
-function ProjectGrid({ projects, base }: { projects: Project[]; base: string }) {
+function ProjectGrid({
+  projects,
+  base,
+}: {
+  projects: Project[];
+  base: string;
+}) {
   const [playing, setPlaying] = useState<string | null>(null);
   return (
     <div className="mx-auto max-w-[1280px] px-[clamp(24px,4.8vw,64px)] pb-24 pt-24">
       <div className="grid gap-x-4 gap-y-6 sm:gap-x-7 sm:gap-y-[30px] sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, i) => (
-          <Reveal key={project.slug} delay={(i % 3) * 0.08} className="relative hover:z-20">
-            <GridCard project={project} base={base} playing={playing} setPlaying={setPlaying} />
+          <Reveal
+            key={project.slug}
+            delay={(i % 3) * 0.08}
+            className="relative hover:z-20"
+          >
+            <GridCard
+              project={project}
+              base={base}
+              playing={playing}
+              setPlaying={setPlaying}
+            />
           </Reveal>
         ))}
       </div>
@@ -536,7 +692,10 @@ export function Showcase({
     const root = document.documentElement;
     const snap = root.style.scrollSnapType;
     root.style.scrollSnapType = "none";
-    el.scrollIntoView({ block: "center", behavior: "instant" as ScrollBehavior });
+    el.scrollIntoView({
+      block: "center",
+      behavior: "instant" as ScrollBehavior,
+    });
     root.style.scrollSnapType = snap;
     pending.current = null;
   }
@@ -552,7 +711,10 @@ export function Showcase({
     const a = (e.target as HTMLElement).closest<HTMLElement>("a[data-slug]");
     if (!a) return;
     try {
-      sessionStorage.setItem(memKey, JSON.stringify({ view: shown, slug: a.dataset.slug }));
+      sessionStorage.setItem(
+        memKey,
+        JSON.stringify({ view: shown, slug: a.dataset.slug }),
+      );
     } catch {}
   }
 
@@ -561,7 +723,11 @@ export function Showcase({
     const reset = () => {
       setView("scroll");
       window.scrollTo({ top: 0 });
-      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
     };
     window.addEventListener("show-scroll-view", reset);
     return () => window.removeEventListener("show-scroll-view", reset);
@@ -571,7 +737,10 @@ export function Showcase({
     if (next === view) return;
     setView(next);
     window.scrollTo({ top: 0 });
-    const url = window.location.pathname + window.location.search + (next === "grid" ? "#grid" : "");
+    const url =
+      window.location.pathname +
+      window.location.search +
+      (next === "grid" ? "#grid" : "");
     window.history.replaceState(null, "", url);
   }
 
@@ -589,46 +758,51 @@ export function Showcase({
     <div onClickCapture={remember}>
       {shown === "scroll" ? (
         projects.map((project) => (
-          <ShowcaseItem key={project.slug} project={project} compact={compact} base={base} />
+          <ShowcaseItem
+            key={project.slug}
+            project={project}
+            compact={compact}
+            base={base}
+          />
         ))
       ) : (
         <ProjectGrid projects={projects} base={base} />
       )}
 
-      {showBar && <div
-        className={`pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 items-end veil-bottom px-[var(--edge)] pb-5 pt-12 min-[901px]:grid-cols-[1fr_auto_1fr] ${small}`}
-      >
-        <span>
-          {site.footerRight}
-        </span>
-        {allowGrid ? (
-          <div
-            role="group"
-            aria-label="View"
-            className="pointer-events-auto hidden justify-center gap-9 min-[901px]:flex"
-          >
-            {(["scroll", "grid"] as const).map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => choose(v)}
-                aria-pressed={shown === v}
-                className={`nav-btn py-1 capitalize transition-colors [--nb-inset:-2.5px_-10px] ${
-                  shown === v ? "" : "text-muted hover:text-fg"
-                }`}
-              >
-                {v}
-              </button>
-            ))}
-          </div>
-        ) : (
-          <span aria-hidden />
-        )}
-        <span className="now-pill justify-self-end">
-          <span className="now-pill-dot" aria-hidden="true" />
-          <span>Available</span>
-        </span>
-      </div>}
+      {showBar && (
+        <div
+          className={`pointer-events-none fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 items-end veil-bottom px-[var(--edge)] pb-5 pt-12 min-[901px]:grid-cols-[1fr_auto_1fr] ${small}`}
+        >
+          <span>{site.footerRight}</span>
+          {allowGrid ? (
+            <div
+              role="group"
+              aria-label="View"
+              className="pointer-events-auto hidden justify-center gap-9 min-[901px]:flex"
+            >
+              {(["scroll", "grid"] as const).map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => choose(v)}
+                  aria-pressed={shown === v}
+                  className={`nav-btn py-1 capitalize transition-colors [--nb-inset:-2.5px_-10px] ${
+                    shown === v ? "" : "text-muted hover:text-fg"
+                  }`}
+                >
+                  {v}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <span aria-hidden />
+          )}
+          <span className="now-pill justify-self-end">
+            <span className="now-pill-dot" aria-hidden="true" />
+            <span>Available</span>
+          </span>
+        </div>
+      )}
     </div>
   );
 }
