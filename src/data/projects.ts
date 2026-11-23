@@ -26,6 +26,10 @@ export type Block =
       images: Img[];
       /** Cap the width of the whole group (px). */
       maxWidth?: number;
+      /** Single-image blocks sized to one shared height (px at full width), so a set of pictures all stand the same height. */
+      sameHeight?: number;
+      /** With sameHeight: shrink this block's height by this factor (wide pictures set a little smaller than tall ones). */
+      heightScale?: number;
       /** Sit close under the block above (a few px apart instead of the full section gap). */
       tight?: boolean;
       /** Pull the block up by a further number of px (and blend its white margin into the block above). */
@@ -650,6 +654,7 @@ const all: Project[] = [
   },
   {
     slug: "skis",
+    theme: { bg: "#FDFDFE", fg: "#404040" },
     section: "studio",
     title: "The Tiger Comes Down 범 내려온다 Ski Set",
     subtitle: "Custom Design · Gear Art · Product Design",
@@ -659,7 +664,7 @@ const all: Project[] = [
     role: "",
     year: "2026",
     summary:
-      "A pair of skis painted white and drawn over in blue ink with tigers, pines, mountains and clouds. The undersides are painted ultramarine.",
+      "A pair of skis drawn over with minhwa-inspired tigers, imagining how people might have escaped them in the snowy mountains.",
     hideCover: true,
     containCover: true,
     cover: { src: "/projects/skis/front.webp", w: 2000, h: 234, alt: "A pair of white skis drawn over in blue ink with tigers, pines and clouds" },
@@ -670,33 +675,50 @@ const all: Project[] = [
     blocks: [
       {
         type: "images",
-        fitH: "4000px",
+        sameHeight: 902,
+        heightScale: 0.8,
         images: [{ src: "/projects/skis/photo-1.jpg", w: 2000, h: 1333, alt: "The painted ski set laid out on stools in the studio, below three blue magnolia paintings" }],
       },
       {
-        type: "images",
-        images: [{ src: "/projects/skis/photo-2.jpg", w: 1457, h: 2000, alt: "A person in a white jacket carrying the ski set on one shoulder against a white backdrop" }],
-        maxWidth: 560,
-      },
-      {
-        type: "images",
-        fitH: "4000px",
-        images: [{ src: "/projects/skis/photo-3.jpg", w: 2000, h: 1333, alt: "The tips of the skis, drawn with tigers, pines and clouds in blue ink" }],
+        type: "text",
+        paragraphs: [
+          "Inspired by minhwa, the traditional folk painting of the Joseon dynasty, and the song Beom Naeryeonda (범 내려온다), this ski set reimagines Korean tiger folklore through an imagined encounter between people and tigers in the snowy mountains. It asks what might have happened if people could have escaped them on skis.",
+          "Drawing on the magpie-and-tiger motif (까치호랑이), a traditional cultural figure is brought onto a contemporary sporting object. The tigers, both powerful and comical, are drawn in blue ink across the white skis among pines, mountains and clouds, while the undersides are painted ultramarine.",
+          "Pairing a folk subject with a modern object sets the sacred against the functional and the familiar against the unexpected. Together, they reinterpret Korean folk imagery beyond its original context, creating new relationships between cultural history, nature and contemporary life.",
+        ],
       },
       {
         type: "images",
         images: [{ src: "/projects/skis/photo-4.jpg", w: 1333, h: 2000, alt: "A person in a white jacket holding the ski set across their shoulders, seen from above" }],
-        maxWidth: 560,
+        sameHeight: 902,
       },
       {
         type: "images",
-        fitH: "4000px",
+        sameHeight: 902,
+        heightScale: 0.8,
+        images: [{ src: "/projects/skis/photo-3.jpg", w: 2000, h: 1333, alt: "The tips of the skis, drawn with tigers, pines and clouds in blue ink" }],
+      },
+      {
+        type: "images",
+        images: [{ src: "/projects/skis/photo-2.jpg", w: 1457, h: 2000, alt: "A person in a white jacket carrying the ski set on one shoulder against a white backdrop" }],
+        sameHeight: 902,
+      },
+      {
+        type: "images",
+        sameHeight: 902,
+        heightScale: 0.8,
         images: [{ src: "/projects/skis/photo-5.jpg", w: 2000, h: 1333, alt: "Close-up of the bindings and the tigers drawn along the skis" }],
+      },
+      {
+        type: "images",
+        images: [{ src: "/projects/skis/photo-6.jpg", w: 1333, h: 2000, alt: "A white ski drawn in blue ink beside a ski with its underside painted ultramarine" }],
+        sameHeight: 902,
       },
     ],
   },
   {
     slug: "portrait-paintings",
+    theme: { bg: "#FEFEFE", fg: "#404040" },
     section: "studio",
     title: "Portrait Paintings",
     subtitle: "Painting · Mixed Media · Portraiture",

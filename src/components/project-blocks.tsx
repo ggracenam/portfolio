@@ -49,9 +49,7 @@ function BlockView({ block }: { block: Block }) {
         <Section heading={block.heading}>
           <div className="flex flex-col gap-[var(--lh)]">
             {block.paragraphs.map((p, i) => (
-              <p key={i}>
-                {p}
-              </p>
+              <p key={i}>{p}</p>
             ))}
           </div>
         </Section>
@@ -87,7 +85,10 @@ function BlockView({ block }: { block: Block }) {
         <Section heading={block.heading}>
           <ul className="flex flex-col divide-y divide-line border-y border-line">
             {block.items.map((a) => (
-              <li key={a.title} className="grid gap-1 py-3 sm:grid-cols-[1fr_auto] sm:gap-6">
+              <li
+                key={a.title}
+                className="grid gap-1 py-3 sm:grid-cols-[1fr_auto] sm:gap-6"
+              >
                 <div className="flex flex-col gap-1">
                   <span>{a.title}</span>
                   <span className="text-muted">
@@ -106,7 +107,10 @@ function BlockView({ block }: { block: Block }) {
       return (
         <div className="mx-auto w-[min(942px,100%)]">
           <Reveal>
-            <div className="media-round" style={{ aspectRatio: `${block.w} / ${block.h}` }}>
+            <div
+              className="media-round"
+              style={{ aspectRatio: `${block.w} / ${block.h}` }}
+            >
               <video
                 className="block h-full w-full"
                 autoPlay
@@ -129,38 +133,74 @@ function BlockView({ block }: { block: Block }) {
       return (
         <div className="flex flex-col gap-4">
           {block.heading && (
-            <h2 className="mx-auto w-[min(541px,100%)] font-semibold max-[900.99px]:w-[calc(100%-40px)]">{block.heading}</h2>
+            <h2 className="mx-auto w-[min(541px,100%)] font-semibold max-[900.99px]:w-[calc(100%-40px)]">
+              {block.heading}
+            </h2>
           )}
           <div
-            className="mx-auto grid gap-4 max-[900.99px]:gap-6 min-[901px]:grid-cols-2"
-            style={{ width: `min(${block.maxWidth ?? 942}px, 100%)`, ...(block.fitH ? ({ "--fit-h": block.fitH } as React.CSSProperties) : {}) }}
+            className={cn(
+              "mx-auto grid gap-4 max-[900.99px]:gap-6 min-[901px]:grid-cols-2",
+              block.sameHeight && "max-[900.99px]:!w-full",
+            )}
+            style={{
+              width: block.sameHeight
+                ? `min(100%, calc(min(${block.sameHeight}px, 100cqw, 100svh - 90px) * ${block.heightScale ?? 1} * ${block.images[0].w / block.images[0].h}))`
+                : `min(${block.maxWidth ?? 942}px, 100%)`,
+              ...(block.fitH || block.sameHeight
+                ? ({ "--fit-h": block.fitH ?? "4000px" } as React.CSSProperties)
+                : {}),
+            }}
           >
             {block.images.map((img) => {
               const wide = img.w / img.h >= 1.45 || block.images.length === 1;
               return (
-                <Reveal key={img.src} className={cn(wide && "min-[901px]:col-span-2")}>
+                <Reveal
+                  key={img.src}
+                  className={cn(wide && "min-[901px]:col-span-2")}
+                >
                   <Photo img={img} plain={block.plain} />
                 </Reveal>
               );
             })}
           </div>
           {block.caption && (
-            <p className="mx-auto w-[min(942px,100%)] text-muted">{block.caption}</p>
+            <p className="mx-auto w-[min(942px,100%)] text-muted">
+              {block.caption}
+            </p>
           )}
         </div>
       );
   }
 }
 
-export function ProjectBlocks({ blocks, spacing }: { blocks: Block[]; spacing?: "large" }) {
+export function ProjectBlocks({
+  blocks,
+  spacing,
+}: {
+  blocks: Block[];
+  spacing?: "large";
+}) {
   const gap = spacing === "large" ? gapLarge : gapMedium;
   return (
     <div className="flex flex-col" style={{ gap }}>
       {blocks.map((block, i) => (
         <div
           key={i}
-          className={block.type === "images" && block.blend ? "mix-blend-darken" : undefined}
-          style={(block.type === "images" || block.type === "text" || block.type === "video") && block.tight ? { marginTop: `calc(${gap} * -1 + 20px - ${block.type === "images" ? block.pull ?? 0 : 0}px)` } : undefined}
+          className={
+            block.type === "images" && block.blend
+              ? "mix-blend-darken"
+              : undefined
+          }
+          style={
+            (block.type === "images" ||
+              block.type === "text" ||
+              block.type === "video") &&
+            block.tight
+              ? {
+                  marginTop: `calc(${gap} * -1 + 20px - ${block.type === "images" ? (block.pull ?? 0) : 0}px)`,
+                }
+              : undefined
+          }
         >
           <BlockView block={block} />
         </div>
