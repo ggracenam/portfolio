@@ -6,7 +6,6 @@ import { SiteFooter } from "@/components/site-footer";
 import { HaloCursor } from "@/components/halo-cursor";
 import { AboutOverlay } from "@/components/about-overlay";
 import { BackWatcher } from "@/components/back-link";
-import { IntroName } from "@/components/intro-name";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -47,7 +46,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <AboutOverlay />
         <HaloCursor />
         <BackWatcher />
-        <IntroName />
       </body>
     </html>
   );
