@@ -740,11 +740,39 @@ const all: Project[] = [
     cover: { src: "/projects/magnolias/cover.webp", w: 2200, h: 1079, alt: "Three blue paintings of white magnolia flowers and dark branches, side by side" },
     blocks: [
       {
+        type: "images",
+        sameHeight: 902,
+        heightScale: 0.8,
+        images: [{ src: "/projects/magnolias/photo-1.jpg", w: 2000, h: 1500, alt: "The three blue magnolia paintings standing side by side in the photo studio" }],
+      },
+      {
         type: "text",
         paragraphs: [
           "Drawing inspiration from Korean and broader Asian cultural traditions, Moonlit Magnolias depicts white magnolia flowers against vivid blue backgrounds, evoking the experience of looking at magnolia trees at night, where the flowers appear almost like stars against the darkness.",
           "Through large-scale compositions, simplified forms, and contrasting colors, the work aims to create a sense of stillness and contemplation. The arrangement of the three paintings also draws from the visual rhythm of traditional Korean folding screens.",
         ],
+      },
+      {
+        type: "images",
+        sameHeight: 902,
+        heightScale: 0.8,
+        images: [{ src: "/projects/magnolias/photo-2.jpg", w: 2000, h: 1333, alt: "A person in a white jacket standing behind the three magnolia paintings in the studio" }],
+      },
+      {
+        type: "images",
+        sameHeight: 902,
+        heightScale: 0.8,
+        images: [{ src: "/projects/magnolias/photo-3.jpg", w: 2000, h: 1333, alt: "The three magnolia paintings on the studio wall while the last details are painted" }],
+      },
+      {
+        type: "images",
+        sameHeight: 902,
+        images: [{ src: "/projects/magnolias/photo-4.jpg", w: 1333, h: 2000, alt: "A person in a white jacket peeking over the three magnolia paintings" }],
+      },
+      {
+        type: "images",
+        sameHeight: 902,
+        images: [{ src: "/projects/magnolias/photo-5.jpg", w: 1333, h: 2000, alt: "A person in a white jacket looking down behind the three magnolia paintings" }],
       },
     ],
   },
