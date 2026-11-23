@@ -17,7 +17,7 @@ function Section({
 }) {
   return (
     <Reveal>
-      <section className="mx-auto w-[min(541px,100%)] text-pretty max-[900px]:w-[calc(100%-40px)]">
+      <section className="mx-auto w-[min(541px,100%)] text-pretty max-[900.99px]:w-[calc(100%-40px)]">
         {heading && <h2 className="font-semibold">{heading}</h2>}
         <div className={heading ? "mt-2" : ""}>{children}</div>
       </section>
@@ -129,10 +129,10 @@ function BlockView({ block }: { block: Block }) {
       return (
         <div className="flex flex-col gap-4">
           {block.heading && (
-            <h2 className="mx-auto w-[min(541px,100%)] font-semibold max-[900px]:w-[calc(100%-40px)]">{block.heading}</h2>
+            <h2 className="mx-auto w-[min(541px,100%)] font-semibold max-[900.99px]:w-[calc(100%-40px)]">{block.heading}</h2>
           )}
           <div
-            className="mx-auto grid gap-4 max-[900px]:gap-6 min-[901px]:grid-cols-2"
+            className="mx-auto grid gap-4 max-[900.99px]:gap-6 min-[901px]:grid-cols-2"
             style={{ width: `min(${block.maxWidth ?? 942}px, 100%)`, ...(block.fitH ? ({ "--fit-h": block.fitH } as React.CSSProperties) : {}) }}
           >
             {block.images.map((img) => {

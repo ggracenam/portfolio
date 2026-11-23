@@ -263,6 +263,16 @@ function ShowcaseItem({
   }, [mobile, project.slug, heldOpen]);
   const spread = project.spread ?? [];
 
+  // Between phone and desktop widths the page still scrolls under the top bar: a fanned cover that
+  // sits first on the page starts lower so its hover fan isn't swallowed by the bar's white veil.
+  useLayoutEffect(() => {
+    if (mobile) return;
+    ref.current?.style.setProperty("--first-extra", compact && fan.length > 0 ? "56px" : "0px");
+    return () => {
+      ref.current?.style.removeProperty("--first-extra");
+    };
+  }, [mobile, compact, fan.length]);
+
   // Cursor-following label (mouse only).
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -312,7 +322,7 @@ function ShowcaseItem({
     <section
       ref={ref}
       aria-label={project.title}
-      className="relative flex items-center justify-center px-[var(--edge)] py-9 first:pt-24 last-of-type:pb-32 max-[900px]:pb-[calc(60px-var(--air-b,0px))] max-[900px]:pt-[calc(60px-var(--air-t,0px))] max-[900px]:first:pt-[calc(96px+var(--first-extra,0px))] max-[900px]:last-of-type:pb-32 lg:h-svh lg:snap-center lg:py-0 lg:first:pt-0 lg:last-of-type:pb-0"
+      className="relative flex items-center justify-center px-[var(--edge)] py-9 first:pt-24 last-of-type:pb-32 max-[900.99px]:pb-[calc(60px-var(--air-b,0px))] max-[900.99px]:pt-[calc(60px-var(--air-t,0px))] max-[900.99px]:first:pt-[calc(96px+var(--first-extra,0px))] min-[901px]:max-[1023px]:first:pt-[calc(96px+var(--first-extra,0px))] max-[900.99px]:last-of-type:pb-32 lg:h-svh lg:snap-center lg:py-0 lg:first:pt-0 lg:last-of-type:pb-0"
     >
       <motion.div
         style={reduce ? undefined : { opacity, filter, scale }}

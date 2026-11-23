@@ -35,8 +35,8 @@ export function ProjectDetail({
     <>
     <ScrollTop />
     <ProjectTheme theme={project.theme} />
-    <article className={`mx-auto max-w-[1280px] px-9 pb-8 pt-24 min-[901px]:px-[var(--edge)]${project.noOutline ? " no-outline" : ""}`}>
-      <div className="mx-auto w-[min(541px,100%)] max-[900px]:w-[calc(100%-40px)]">
+    <article className={`mx-auto max-w-[1280px] px-9 pb-8 pt-24 min-[901px]:px-[var(--edge)] ${project.noOutline ? "no-outline" : ""}`}>
+      <div className="mx-auto w-[min(541px,100%)] max-[900.99px]:w-[calc(100%-40px)]">
       <BackLink
         href={base === "archive" ? "/archive/studio" : "/"}
         className="inline-block text-muted transition-colors hover:text-fg"
@@ -141,7 +141,7 @@ export function ProjectDetail({
       <Reveal className="mt-[clamp(96px,13.56vw,192px)]">
         <Link
           href={`/${base}/${next.slug}`}
-          className="group mx-auto flex w-[min(541px,100%)] max-[900px]:w-[calc(100%-40px)] items-baseline justify-between gap-6 border-t border-line pt-4"
+          className="group mx-auto flex w-[min(541px,100%)] max-[900.99px]:w-[calc(100%-40px)] items-baseline justify-between gap-6 border-t border-line pt-4"
         >
           <span className="flex gap-4">
             <span className="text-muted">{relatedLabel ?? "Next project"}</span>

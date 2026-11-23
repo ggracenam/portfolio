@@ -93,13 +93,13 @@ export function AboutOverlay() {
             }}
           >
             <div
-              className="mx-auto flex min-h-full w-[min(490px,100%)] max-[900px]:w-[min(522px,100%)] items-start px-0 pb-16 pt-[98px] max-[900px]:pt-[104px]"
+              className="mx-auto flex min-h-full w-[min(490px,100%)] max-[900.99px]:w-[min(522px,100%)] items-start px-0 pb-16 pt-[98px] max-[900.99px]:pt-[104px]"
               onMouseDown={(e) => {
                 if (e.target === e.currentTarget) close();
               }}
             >
               <motion.div
-                className="w-full px-[max(24px,46px)] max-[900px]:px-10"
+                className="w-full px-[max(24px,46px)] max-[900.99px]:px-10"
                 initial={{ opacity: 0, scale: 0.99, y: 14 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, transition: { duration: 0.25, ease: "easeOut" } }}
@@ -114,7 +114,7 @@ export function AboutOverlay() {
             type="button"
             aria-label="Close"
             onClick={close}
-            className="about-close max-[900px]:!hidden min-[901px]:left-[calc(50%+252px)] min-[901px]:right-auto min-[901px]:top-[92px]"
+            className="about-close max-[900.99px]:!hidden min-[901px]:left-[calc(50%+252px)] min-[901px]:right-auto min-[901px]:top-[92px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.2 } }}

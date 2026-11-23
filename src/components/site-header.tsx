@@ -78,7 +78,7 @@ export function SiteHeader() {
         {/* soft fade so content slides under the bar */}
         <div
           aria-hidden
-          className={cn("absolute inset-x-0 top-0 h-28 veil-top transition-opacity duration-300", open && "max-[900px]:opacity-0")}
+          className={cn("absolute inset-x-0 top-0 h-28 veil-top transition-opacity duration-300", open && "max-[900.99px]:opacity-0")}
         />
         <div className="pointer-events-auto relative grid grid-cols-[1fr_auto_1fr] items-start px-[var(--edge)] py-5">
           <nav aria-label="Primary" className="hidden items-center gap-7 min-[901px]:flex">
@@ -120,11 +120,12 @@ export function SiteHeader() {
 
           <Link
             href="/"
+            data-site-name
             onClick={() => {
               showScrollView();
               setOpen(false);
             }}
-            className="py-1.5 text-center max-[900px]:mt-[9px] max-[900px]:py-0"
+            className="py-1.5 text-center max-[900.99px]:mt-[9px] max-[900.99px]:py-0"
           >
             {site.name}
           </Link>

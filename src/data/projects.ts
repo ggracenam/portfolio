@@ -369,6 +369,7 @@ const all: Project[] = [
       {
         type: "images",
         fitH: "4000px",
+        maxWidth: 1232,
         images: [{ src: "/projects/umgpt/flow-desktop.jpg", w: 1884, h: 1046, alt: "Desktop screens in the order a user moves through them" }],
       },
       {

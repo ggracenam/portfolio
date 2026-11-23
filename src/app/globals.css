@@ -84,6 +84,24 @@ body {
 a,
 button {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Keyboard-only "skip to content": hidden until focused. */
+.skip-link {
+  position: fixed;
+  left: 24px;
+  top: 12px;
+  z-index: 1000;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--fg);
+  box-shadow: 0 0 0 1px var(--line);
+  transform: translateY(-200%);
+}
+.skip-link:focus-visible {
+  transform: none;
 }
 
 :focus-visible {
