@@ -669,6 +669,7 @@ const all: Project[] = [
     year: "2026",
     summary:
       "A pair of skis drawn over with minhwa-inspired tigers, imagining how people might have escaped them in the snowy mountains.",
+    noOutline: true,
     hideCover: true,
     containCover: true,
     cover: { src: "/projects/skis/front.webp", w: 2000, h: 234, alt: "A pair of white skis drawn over in blue ink with tigers, pines and clouds" },
@@ -733,6 +734,7 @@ const all: Project[] = [
     year: "2026",
     summary:
       "Three large paintings of white magnolias against vivid blue, evoking trees at night where the flowers glow like stars.",
+    noOutline: true,
     hideCover: true,
     containCover: true,
     coverSvh: 56,
