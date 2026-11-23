@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { HaloCursor } from "@/components/halo-cursor";
 import { AboutOverlay } from "@/components/about-overlay";
 import { BackWatcher } from "@/components/back-link";
+import { IntroCard } from "@/components/intro-card";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -34,6 +35,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(sessionStorage.getItem('intro-seen')&&!/[?&]intro\\b/.test(location.search))document.documentElement.classList.add('intro-seen')}catch(e){}",
+          }}
+        />
+      </head>
       <body className="flex min-h-dvh flex-col">
         <a href="#main" className="skip-link">
           Skip to content
@@ -46,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <AboutOverlay />
         <HaloCursor />
         <BackWatcher />
+        <IntroCard />
       </body>
     </html>
   );
