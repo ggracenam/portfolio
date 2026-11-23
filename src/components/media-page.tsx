@@ -25,9 +25,15 @@ export function MediaPage({
   layout: "grid" | "pages";
 }) {
   return (
-    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-28 pt-24">
+    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-[max(16rem,32svh)] pt-24">
       <div className="mx-auto w-[min(541px,100%)]">
-        <TextEffect as="h1" per="word" preset="fade-in-blur" speedReveal={1.4} className="font-semibold">
+        <TextEffect
+          as="h1"
+          per="word"
+          preset="fade-in-blur"
+          speedReveal={1.4}
+          className="font-semibold"
+        >
           {title}
         </TextEffect>
         {intro && (

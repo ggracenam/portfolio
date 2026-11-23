@@ -96,7 +96,7 @@ export function FlipCover({
     : { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const };
 
   return (
-    <div className="relative aspect-[var(--fr)] w-[var(--fw)] [--fr:2.7] [--fw:min(90vw,calc(1.4*clamp(560px,32vw,800px)),calc(56svh*2.7))] [--tilt:-19deg] max-[900.99px]:[--fr:0.6] max-[900.99px]:[--fw:min(60vw,calc(56svh*0.6))] max-[900.99px]:[--tilt:74deg]">
+    <div className="relative aspect-[var(--fr)] w-[var(--fw)] [--fr:2.7] [--fw:min(90vw,calc(1.54*clamp(560px,32vw,800px)),calc(61.6svh*2.7))] [--tilt:-19deg] max-[900.99px]:[--fr:0.6] max-[900.99px]:[--fw:min(60vw,calc(56svh*0.6))] max-[900.99px]:[--tilt:74deg]">
       <div
         className="absolute left-1/2 top-1/2 [--sw:98%] max-[900.99px]:[--sw:calc(var(--fw)/0.6)]"
         data-skis={flip.front.src}

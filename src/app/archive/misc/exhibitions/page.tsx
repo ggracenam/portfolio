@@ -20,7 +20,7 @@ export default function ExhibitionsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-8 pt-24">
+    <div className="mx-auto max-w-[1280px] px-[var(--edge)] pb-[max(16rem,32svh)] pt-24">
       <div className="mx-auto w-[min(541px,100%)]">
       <Link href="/archive/misc" className="inline-block text-muted transition-colors hover:text-fg">
         ← Misc

@@ -277,8 +277,9 @@ function ShowcaseItem({
   // Phones and tablets: covers stay still (no fan, spread, video, reveal or scale), as on dmcg.co. A real mouse gets the hover look at any width.
   const [hoveredRaw, setHovered] = useState(false);
   const fan = fanImages(project);
-  // The one exception: the portrait paintings' fan rests open, looking the same at every width.
-  const heldOpen = fan.length > 0;
+  // The one exception: below laptop width the portrait paintings' fan rests open, looking like the desktop hover.
+  // On desktop it stays closed and opens on hover.
+  const heldOpen = fan.length > 0 && compact;
   const hovered = hoveredRaw; // drives the label and cursor
   const lively = (hoveredRaw && !mobile) || heldOpen; // drives the cover itself
   useLabelCursor(hovered);
@@ -341,7 +342,7 @@ function ShowcaseItem({
       if (w > 0 && h > 0) {
         let f = Math.min(box / w, box / h);
         // A fan of cards spreads wider than its front card: size it down so it reads as wide as its neighbours.
-        if (fan.length > 0) f *= 0.88;
+        if (fan.length > 0) f = box / (0.951 * w + 0.618 * h); // about as tall as the wide magnolia triptych beside it
         // The upright skis are a narrow shape: let them stand 20% larger than the square the other covers fit.
         if (project.flip) f *= 1.32;
         // A held-open fan swings its cards out to about ±8°: keep that whole spread on screen.
@@ -441,7 +442,7 @@ function ShowcaseItem({
     <section
       ref={ref}
       aria-label={project.title}
-      className={`relative flex items-center justify-center px-[var(--edge)] py-9 first:pt-24 last-of-type:pb-32 max-[900.99px]:pb-[calc(60px-var(--air-b,0px))] max-[900.99px]:pt-[calc(60px-var(--air-t,0px))] max-[900.99px]:first:pt-[calc(96px+var(--first-extra,0px))] max-[900.99px]:last-of-type:pb-32 [--gap:clamp(100px,calc(50svh-var(--cover-h,400px)/2-80px),260px)] min-[901px]:max-[1023.99px]:pb-[calc(var(--gap)/2+var(--ov-b,0px))] min-[901px]:max-[1023.99px]:pt-[calc(var(--gap)/2+var(--ov-t,0px))] min-[901px]:max-[1023.99px]:first:pt-[max(0px,calc(50svh-var(--cover-h,400px)/2))] min-[901px]:max-[1023.99px]:last-of-type:pb-[max(0px,calc(50svh-var(--cover-h,400px)/2))] lg:h-svh lg:snap-center lg:py-0 lg:first:pt-0 lg:last-of-type:pb-0`}
+      className={`relative flex items-center justify-center px-[var(--edge)] py-9 first:pt-24 last-of-type:pb-32 max-[900.99px]:pb-[calc(96px-var(--air-b,0px))] max-[900.99px]:pt-[calc(96px-var(--air-t,0px))] max-[900.99px]:first:pt-[calc(96px+var(--first-extra,0px))] ${base === "archive" ? "max-[900.99px]:last-of-type:pb-64" : "max-[900.99px]:last-of-type:pb-32"} [--gap:clamp(100px,calc(50svh-var(--cover-h,400px)/2-80px),260px)] min-[901px]:max-[1023.99px]:pb-[calc(var(--gap)/2+var(--ov-b,0px))] min-[901px]:max-[1023.99px]:pt-[calc(var(--gap)/2+var(--ov-t,0px))] min-[901px]:max-[1023.99px]:first:pt-[max(0px,calc(50svh-var(--cover-h,400px)/2))] min-[901px]:max-[1023.99px]:last-of-type:pb-[max(0px,calc(50svh-var(--cover-h,400px)/2))] lg:h-svh lg:snap-center lg:py-0 lg:first:pt-0 lg:last-of-type:pb-0 ${base === "archive" ? "lg:last-of-type:mb-[28svh]" : ""}`}
     >
       <motion.div
         style={reduce ? undefined : { opacity, filter, scale }}
