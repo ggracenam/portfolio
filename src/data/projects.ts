@@ -742,7 +742,7 @@ const all: Project[] = [
       {
         type: "images",
         sameHeight: 902,
-        heightScale: 0.8,
+        heightScale: 0.9,
         images: [{ src: "/projects/magnolias/photo-1.jpg", w: 2000, h: 1500, alt: "The three blue magnolia paintings standing side by side in the photo studio" }],
       },
       {
