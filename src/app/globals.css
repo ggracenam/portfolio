@@ -442,6 +442,12 @@ button {
   outline: none;
   text-shadow: 0 0 10px rgb(90 100 110 / 0.35);
 }
+/* iOS Safari zooms the page into any field under 16px and leaves it zoomed after. */
+@media (pointer: coarse) {
+  .intro-input {
+    font-size: 16px;
+  }
+}
 .intro-input::placeholder {
   color: rgb(255 255 255 / 0.85);
 }
