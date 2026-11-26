@@ -9,6 +9,7 @@ export type Exhibition = {
 
 // [title, venue, city, date, note?]
 const rows: [string, string, string, string, string?][] = [
+  ["James Turrell: Something Old, Something New, Something Borrowed, Something Blue", "Almine Rech", "New York", "11.2026"],
   ["Artists at the Café: From the Impressionists, Van Gogh and Toulouse-Lautrec to Picasso", "Mitsubishi Ichigokan Museum", "Tokyo", "08.2026"],
   ["ARCHI-DEPOT (ft. Kengo Kuma, Shigeru Ban, etc.)", "WHAT MUSEUM", "Tokyo", "08.2026"],
   ["Corrugated/Coral: Eight Practices to Project Architecture Afar", "WHAT MUSEUM", "Tokyo", "08.2026"],
