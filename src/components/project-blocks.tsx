@@ -168,17 +168,13 @@ function BlockView({ block }: { block: Block }) {
             <div className="flex flex-col min-[901px]:hidden">
               {(() => {
                 let at = 0;
+                const cols = Math.max(...block.mobile.rows);
                 return block.mobile.rows.map((n, r) => {
                   const row = block.mobile!.images.slice(at, at + n);
                   at += n;
                   return (
                     <Reveal key={r}>
-                      <div
-                        className="grid"
-                        style={{
-                          gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))`,
-                        }}
-                      >
+                      <div className="flex justify-center">
                         {row.map((img) => (
                           <Image
                             key={img.src}
@@ -187,7 +183,8 @@ function BlockView({ block }: { block: Block }) {
                             width={img.w}
                             height={img.h}
                             sizes="(min-width: 990px) 463px, 100vw"
-                            className="h-auto w-full"
+                            className="h-auto"
+                            style={{ width: `${100 / cols}%` }}
                           />
                         ))}
                       </div>
