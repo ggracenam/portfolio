@@ -525,36 +525,33 @@ button {
 ::view-transition-new(root) {
   animation: none;
 }
-/* Timings measured on dmcg.co: the old page fades out with a 10px blur in 260ms (ease-in), then the
-   new one fades in from an 8px blur over 560ms while settling from a 1.012 scale. */
+/* Flowing blur: the old page drifts up and melts out while the new one rises through a heavier blur and
+   settles, overlapping so it reads like water rather than a cut (dmcg.co exits in ~260ms ease-in and
+   enters over ~560ms with the same ease). */
 ::view-transition-old(.page-exit) {
-  animation: vt-out 260ms cubic-bezier(0.4, 0, 1, 1) both;
+  animation: vt-out 340ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 ::view-transition-new(.page-enter) {
   animation:
-    vt-in 560ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both,
-    vt-settle 620ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
+    vt-in 640ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both,
+    vt-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both,
+    vt-settle 900ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
 }
 @keyframes vt-out {
-  to {
-    opacity: 0;
-    filter: blur(10px);
-  }
+  to { opacity: 0; filter: blur(14px); translate: 0 -10px; }
 }
 @keyframes vt-in {
-  from {
-    opacity: 0;
-    filter: blur(8px);
-  }
+  from { opacity: 0; filter: blur(14px); }
+}
+@keyframes vt-rise {
+  from { translate: 0 22px; }
 }
 @keyframes vt-settle {
-  from {
-    scale: 1.012;
-  }
+  from { scale: 1.015; }
 }
 /* Fallback for browsers without View Transitions. */
 @supports not (view-transition-name: none) {
   .page-fade {
-    animation: vt-in 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: vt-in 640ms cubic-bezier(0.22, 1, 0.36, 1) both, vt-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 }
