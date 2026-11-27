@@ -78,10 +78,16 @@ export function SiteHeader() {
         {/* soft fade so content slides under the bar */}
         <div
           aria-hidden
-          className={cn("absolute inset-x-0 top-0 h-28 veil-top transition-opacity duration-300", open && "max-[900.99px]:opacity-0")}
+          className={cn(
+            "absolute inset-x-0 top-0 h-28 veil-top transition-opacity duration-300",
+            open && "max-[900.99px]:opacity-0",
+          )}
         />
         <div className="pointer-events-auto relative grid grid-cols-[1fr_auto_1fr] items-start px-[var(--edge)] py-5">
-          <nav aria-label="Primary" className="hidden items-center gap-7 min-[901px]:flex">
+          <nav
+            aria-label="Primary"
+            className="hidden items-center gap-7 min-[901px]:flex"
+          >
             <NavLink href="/about" label="About" />
             <ContactPill email={site.email} />
           </nav>
@@ -97,8 +103,13 @@ export function SiteHeader() {
             <svg
               aria-hidden
               viewBox="0 0 24 17"
-              className={cn("col-start-1 row-start-1 h-[17px] w-6 transition-[opacity,filter,scale] duration-300", open && "scale-[0.8] opacity-0 blur-[4px]")}
-              style={{ transitionTimingFunction: "cubic-bezier(0.22,1,0.36,1)" }}
+              className={cn(
+                "col-start-1 row-start-1 h-[17px] w-6 transition-[opacity,filter,scale] duration-300",
+                open && "scale-[0.8] opacity-0 blur-[4px]",
+              )}
+              style={{
+                transitionTimingFunction: "cubic-bezier(0.22,1,0.36,1)",
+              }}
               fill="none"
               stroke="currentColor"
               strokeWidth="1.1"
@@ -108,8 +119,13 @@ export function SiteHeader() {
             <svg
               aria-hidden
               viewBox="0 0 30 30"
-              className={cn("col-start-1 row-start-1 size-[30px] transition-[opacity,filter,scale] duration-300", !open && "scale-[0.8] opacity-0 blur-[4px]")}
-              style={{ transitionTimingFunction: "cubic-bezier(0.22,1,0.36,1)" }}
+              className={cn(
+                "col-start-1 row-start-1 size-[30px] transition-[opacity,filter,scale] duration-300",
+                !open && "scale-[0.8] opacity-0 blur-[4px]",
+              )}
+              style={{
+                transitionTimingFunction: "cubic-bezier(0.22,1,0.36,1)",
+              }}
               fill="none"
               stroke="currentColor"
               strokeWidth="0.8"
@@ -131,7 +147,10 @@ export function SiteHeader() {
           </Link>
 
           <div className="flex items-center justify-end gap-7">
-            <nav aria-label="Secondary" className="hidden items-center gap-7 min-[901px]:flex">
+            <nav
+              aria-label="Secondary"
+              className="hidden items-center gap-7 min-[901px]:flex"
+            >
               {right.map((l) => (
                 <NavLink key={l.href} {...l} />
               ))}
@@ -157,15 +176,6 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
   const panel = useRef<HTMLDivElement>(null);
   const [h, setH] = useState(300);
   const { copied, copy } = useCopy(site.email);
-  const measure = useRef<HTMLSpanElement>(null);
-  const [pillW, setPillW] = useState(200);
-
-  useLayoutEffect(() => {
-    if (!open || !measure.current) return;
-    const fs = parseFloat(getComputedStyle(measure.current).fontSize);
-    setPillW(Math.ceil(measure.current.offsetWidth + fs * (0.9643 + 0.875)));
-  }, [open]);
-
   useLayoutEffect(() => {
     if (!open || !panel.current) return;
     const el = panel.current;
@@ -191,18 +201,34 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
   ];
   const item = (i: number) => ({
     initial: { opacity: 0, filter: "blur(8px)", y: -4 },
-    animate: { opacity: 1, filter: "blur(0px)", y: 0, transition: { duration: 0.5, delay: 0.06 + i * 0.05, ease: EASE } },
-    exit: { opacity: 0, filter: "blur(8px)", y: -4, transition: { duration: 0.2 } },
+    animate: {
+      opacity: 1,
+      filter: "blur(0px)",
+      y: 0,
+      transition: { duration: 0.5, delay: 0.06 + i * 0.05, ease: EASE },
+    },
+    exit: {
+      opacity: 0,
+      filter: "blur(8px)",
+      y: -4,
+      transition: { duration: 0.2 },
+    },
   });
   const row = "menu-label";
   const here = pathname.replace(/\/$/, "") || "/";
   const isActive = (href: string) =>
-    href === "/" ? here === "/" || here.startsWith("/projects") : here.startsWith(href);
+    href === "/"
+      ? here === "/" || here.startsWith("/projects")
+      : here.startsWith(href);
 
   return (
     <AnimatePresence>
       {open && (
-        <motion.div key="mobile-menu" className="fixed inset-0 z-[48] min-[901px]:hidden" exit={{ pointerEvents: "none" }}>
+        <motion.div
+          key="mobile-menu"
+          className="fixed inset-0 z-[48] min-[901px]:hidden"
+          exit={{ pointerEvents: "none" }}
+        >
           {/* Tap outside the tray to close. */}
           <div className="absolute inset-0" onClick={close} aria-hidden />
           {blurs.map((b, i) => (
@@ -216,8 +242,14 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                 WebkitMaskImage: `linear-gradient(to bottom, #000 ${reach + b.from}px, transparent ${reach + b.to}px)`,
               }}
               initial={{ backdropFilter: "blur(0px)" }}
-              animate={{ backdropFilter: `blur(${b.px}px)`, transition: { duration: 0.7, ease: EASE } }}
-              exit={{ backdropFilter: "blur(0px)", transition: { duration: 0.3, ease: "easeOut" } }}
+              animate={{
+                backdropFilter: `blur(${b.px}px)`,
+                transition: { duration: 0.7, ease: EASE },
+              }}
+              exit={{
+                backdropFilter: "blur(0px)",
+                transition: { duration: 0.3, ease: "easeOut" },
+              }}
             />
           ))}
           <motion.div
@@ -236,13 +268,30 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
             className="absolute inset-x-2 top-2 overflow-hidden bg-white/85 backdrop-blur-[14px] [border-radius:calc(12.16px*var(--sq))] [corner-shape:superellipse(2)]"
             style={{ height: h, transformOrigin: "50% 0" }}
             initial={{ opacity: 0, scale: 0.98, y: -6 }}
-            animate={{ opacity: 1, scale: 1, y: 0, transition: { duration: 0.55, ease: EASE } }}
-            exit={{ opacity: 0, scale: 0.98, y: -6, transition: { duration: 0.3, ease: "easeOut" } }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              transition: { duration: 0.55, ease: EASE },
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.98,
+              y: -6,
+              transition: { duration: 0.3, ease: "easeOut" },
+            }}
           >
-            <div ref={panel} className="px-[max(26px,calc(50%-210px))] pb-[27px] pt-[73px] text-fg">
+            <div
+              ref={panel}
+              className="px-[max(26px,calc(50%-210px))] pb-[27px] pt-[73px] text-fg"
+            >
               <ul className="m-0 list-none p-0">
                 {rows.map((l, i) => (
-                  <motion.li key={l.href} {...item(i)} className="border-b border-black/10 first:border-t">
+                  <motion.li
+                    key={l.href}
+                    {...item(i)}
+                    className="border-b border-black/10 first:border-t"
+                  >
                     <Link
                       href={l.href}
                       onClick={() => {
@@ -251,7 +300,10 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                       }}
                       className="flex h-10 w-full items-center justify-center active:opacity-50"
                     >
-                      <span className={row} data-current={isActive(l.href) || undefined}>
+                      <span
+                        className={row}
+                        data-current={isActive(l.href) || undefined}
+                      >
                         {l.label}
                       </span>
                     </Link>
@@ -266,7 +318,12 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                     }}
                     className="flex h-10 w-full items-center justify-center active:opacity-50"
                   >
-                    <span className={row} data-current={here === "/about" || undefined}>About</span>
+                    <span
+                      className={row}
+                      data-current={here === "/about" || undefined}
+                    >
+                      About
+                    </span>
                   </button>
                 </motion.li>
                 <motion.li {...item(3)} className="border-b border-black/10">
@@ -279,35 +336,58 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                     {/* The word gives way to a small frosted pill showing the address that was copied (as on dmcg.co). */}
                     <motion.span
                       className={row}
-                      animate={copied ? { opacity: 0, filter: "blur(3px)" } : { opacity: 1, filter: "blur(0px)" }}
+                      animate={
+                        copied
+                          ? { opacity: 0, filter: "blur(3px)" }
+                          : { opacity: 1, filter: "blur(0px)" }
+                      }
                       transition={{ duration: 0.2 }}
                     >
                       Contact
                     </motion.span>
-                    {/* Hidden copy of the pill's text, only to measure how wide the pill grows. */}
-                    <span ref={measure} aria-hidden className="invisible absolute flex w-max items-baseline gap-[0.4821em] text-[length:var(--fs)] tracking-[0.02em]">
-                      <span>{site.email}</span>
-                      <span className="text-[0.7143em]">Copied ✓</span>
-                    </span>
                     <AnimatePresence>
                       {copied && (
                         <motion.span
                           key="pill"
                           role="status"
-                          className="sq pointer-events-none absolute left-1/2 top-1/2 flex h-[calc(16px+1.3572em)] -translate-x-1/2 -translate-y-1/2 items-baseline overflow-hidden whitespace-nowrap rounded-[1.2024em] bg-[rgb(243_243_243/0.3)] pt-[0.6786em] shadow-[inset_0_0_0_1px_rgb(0_0_0/0.1)] backdrop-blur-[10px] text-[length:var(--fs)] leading-4"
+                          className="sq pointer-events-none absolute left-1/2 top-1/2 flex h-[calc(16px+1.3572em)] w-max -translate-x-1/2 -translate-y-1/2 items-baseline overflow-hidden whitespace-nowrap rounded-[1.2024em] bg-[rgb(243_243_243/0.3)] pt-[0.6786em] shadow-[inset_0_0_0_1px_rgb(0_0_0/0.1)] backdrop-blur-[10px] text-[length:var(--fs)] leading-4"
                           style={{ transformOrigin: "50% 50%" }}
-                          initial={{ opacity: 0, scale: 0.6, width: 32 }}
-                          animate={{ opacity: 1, scale: 1, width: pillW, transition: { duration: 0.45, ease: EASE } }}
-                          exit={{ opacity: 0, scale: 0.6, width: 32, transition: { duration: 0.3, ease: EASE } }}
+                          initial={{ opacity: 0, scale: 0.6 }}
+                          animate={{
+                            opacity: 1,
+                            scale: 1,
+                            transition: { duration: 0.45, ease: EASE },
+                          }}
+                          exit={{
+                            opacity: 0,
+                            scale: 0.6,
+                            transition: { duration: 0.3, ease: EASE },
+                          }}
                         >
                           <motion.span
                             className="flex items-baseline gap-[0.4821em] pl-[0.9643em] pr-[0.875em]"
                             initial={{ opacity: 0, filter: "blur(3px)" }}
-                            animate={{ opacity: 1, filter: "blur(0px)", transition: { duration: 0.3, delay: 0.1, ease: "easeOut" } }}
-                            exit={{ opacity: 0, filter: "blur(3px)", transition: { duration: 0.15 } }}
+                            animate={{
+                              opacity: 1,
+                              filter: "blur(0px)",
+                              transition: {
+                                duration: 0.3,
+                                delay: 0.1,
+                                ease: "easeOut",
+                              },
+                            }}
+                            exit={{
+                              opacity: 0,
+                              filter: "blur(3px)",
+                              transition: { duration: 0.15 },
+                            }}
                           >
-                            <span className="tracking-[0.02em]">{site.email}</span>
-                            <span className="text-[0.7143em] tracking-[0.02em] text-black/40">Copied ✓</span>
+                            <span className="tracking-[0.02em]">
+                              {site.email}
+                            </span>
+                            <span className="text-[0.7143em] tracking-[0.02em] text-black/40">
+                              Copied ✓
+                            </span>
                           </motion.span>
                         </motion.span>
                       )}
@@ -315,7 +395,10 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                   </button>
                 </motion.li>
               </ul>
-              <motion.div {...item(4)} className="mt-5 grid grid-cols-[1fr_auto] items-center">
+              <motion.div
+                {...item(4)}
+                className="mt-5 grid grid-cols-[1fr_auto] items-center"
+              >
                 <a
                   href={site.links.linkedin}
                   target="_blank"
