@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ContactPill, useCopy } from "@/components/contact-pill";
@@ -173,6 +173,7 @@ const rows = [
 /** Phone / tablet menu: a frosted tray under the title, with the page blurring away beneath it (as on dmcg.co). */
 function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
   const pathname = usePathname();
+  const router = useRouter();
   const panel = useRef<HTMLDivElement>(null);
   const [h, setH] = useState(300);
   const { copied, copy } = useCopy(site.email);
@@ -294,9 +295,18 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                   >
                     <Link
                       href={l.href}
-                      onClick={() => {
+                      onClick={(e) => {
                         if (l.href === "/") showScrollView();
-                        close();
+                        // Let the menu melt away first, then change page (as on dmcg.co).
+                        if (
+                          here !== (l.href === "/" ? "/" : l.href) &&
+                          !e.metaKey &&
+                          !e.ctrlKey
+                        ) {
+                          e.preventDefault();
+                          close();
+                          window.setTimeout(() => router.push(l.href), 380);
+                        } else close();
                       }}
                       className="flex h-10 w-full items-center justify-center active:opacity-50"
                     >

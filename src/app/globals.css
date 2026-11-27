@@ -35,11 +35,31 @@
 }
 
 /* Registered so a project's colours fade in and out instead of snapping. */
-@property --bg { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
-@property --fg { syntax: "<color>"; inherits: true; initial-value: #000000; }
-@property --muted { syntax: "<color>"; inherits: true; initial-value: #8b8b8b; }
-@property --line { syntax: "<color>"; inherits: true; initial-value: rgb(0 0 0 / 0.1); }
-@property --pill { syntax: "<color>"; inherits: true; initial-value: rgb(255 255 255 / 0.82); }
+@property --bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffffff;
+}
+@property --fg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #000000;
+}
+@property --muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #8b8b8b;
+}
+@property --line {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgb(0 0 0 / 0.1);
+}
+@property --pill {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgb(255 255 255 / 0.82);
+}
 :root {
   transition:
     --bg 0.7s cubic-bezier(0.45, 0, 0.2, 1),
@@ -55,8 +75,8 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-pill: var(--pill);
-  --font-sans: "Inter Tight Variable", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+  --font-sans:
+    "Inter Tight Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* ---------- Base ---------- */
@@ -116,20 +136,20 @@ button {
   html {
     scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
 }
 
 /* Home: cursor-following label on mouse devices. Touch screens show no label under the images
    (to bring it back, change .label-static to display: inline-flex). */
-.label-hover { display: none; }
-.label-static { display: none; }
+.label-hover {
+  display: none;
+}
+.label-static {
+  display: none;
+}
 @media (hover: hover) and (pointer: fine) {
-  .label-hover { display: inline-flex; }
+  .label-hover {
+    display: inline-flex;
+  }
 }
 
 /* Halo cursor: a soft ring of warm light (replaces the arrow on mouse devices). */
@@ -207,7 +227,9 @@ button {
 .slide-caption {
   width: var(
     --cap-w,
-    calc(min(var(--slide-h), calc(var(--avail-w) / var(--ratio))) * var(--ratio))
+    calc(
+      min(var(--slide-h), calc(var(--avail-w) / var(--ratio))) * var(--ratio)
+    )
   );
 }
 @media (min-width: 1024px) {
@@ -248,7 +270,9 @@ button {
 }
 
 /* Project pages: every image is capped to fit one screen (below the header), width follows its proportions. */
-:root { --fit-h: calc(100svh - 150px); }
+:root {
+  --fit-h: calc(100svh - 150px);
+}
 
 /* Pages that opt out of the hairline outline on images. */
 .no-outline .media-round::after {
@@ -455,10 +479,18 @@ button {
   animation: intro-shake 0.45s;
 }
 @keyframes intro-shake {
-  20% { translate: -8px 0; }
-  40% { translate: 8px 0; }
-  60% { translate: -5px 0; }
-  80% { translate: 4px 0; }
+  20% {
+    translate: -8px 0;
+  }
+  40% {
+    translate: 8px 0;
+  }
+  60% {
+    translate: -5px 0;
+  }
+  80% {
+    translate: 4px 0;
+  }
 }
 
 /* Defrost: the blur and the frosted tint melt away. */
@@ -504,19 +536,20 @@ button {
     vt-settle 620ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
 }
 @keyframes vt-out {
-  to { opacity: 0; filter: blur(10px); }
+  to {
+    opacity: 0;
+    filter: blur(10px);
+  }
 }
 @keyframes vt-in {
-  from { opacity: 0; filter: blur(8px); }
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
 }
 @keyframes vt-settle {
-  from { scale: 1.012; }
-}
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 0.01ms;
-    animation-delay: 0s;
+  from {
+    scale: 1.012;
   }
 }
 /* Fallback for browsers without View Transitions. */
