@@ -1,7 +1,12 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { animate, useAnimationFrame, useMotionValue, useReducedMotion } from "motion/react";
+import {
+  animate,
+  useAnimationFrame,
+  useMotionValue,
+  useReducedMotion,
+} from "motion/react";
 import type { Project } from "@/data/projects";
 
 const H0 = 745; // stage height in px (the poster is drawn at this size, then scaled to fit)
@@ -12,7 +17,17 @@ const M = 16; // strips per side of the centre line
  * thin vertical strips hinged to each other (centre outwards), so it bends smoothly instead of tilting as one piece.
  * The curl grows toward the edges, the right edge (the windward side) lifts most, and a slow ripple runs through it.
  */
-export function WindCover({ project, hovered, reduce, width }: { project: Project; hovered: boolean; reduce: boolean | null; width?: string }) {
+export function WindCover({
+  project,
+  hovered,
+  reduce,
+  width,
+}: {
+  project: Project;
+  hovered: boolean;
+  reduce: boolean | null;
+  width?: string;
+}) {
   const img = project.cover!;
   const W0 = Math.round((img.w / img.h) * H0);
   const sw = W0 / 2 / M;
@@ -39,7 +54,13 @@ export function WindCover({ project, hovered, reduce, width }: { project: Projec
 
   useLayoutEffect(() => {
     if (reduce) return;
-    const c = animate(lift, hovered ? 1 : 0, hovered ? { type: "spring", stiffness: 36, damping: 9, mass: 1 } : { type: "spring", stiffness: 60, damping: 14 });
+    const c = animate(
+      lift,
+      hovered ? 1 : 0,
+      hovered
+        ? { type: "spring", stiffness: 36, damping: 9, mass: 1 }
+        : { type: "spring", stiffness: 60, damping: 14 },
+    );
     return () => c.stop();
   }, [hovered, reduce, lift]);
 
@@ -65,16 +86,20 @@ export function WindCover({ project, hovered, reduce, width }: { project: Projec
       const al = (cumL * Math.PI) / 180;
       const r = right.current[j];
       const l = left.current[j];
-      if (r) r.style.transform = `translate3d(${rx - (W0 / 2 + j * sw)}px,0,${rz}px) rotateY(${cumR}deg)`;
-      if (l) l.style.transform = `translate3d(${lx - (W0 / 2 - j * sw)}px,0,${lz}px) rotateY(${cumL}deg)`;
+      if (r)
+        r.style.transform = `translate3d(${rx - (W0 / 2 + j * sw)}px,0,${rz}px) rotateY(${cumR}deg)`;
+      if (l)
+        l.style.transform = `translate3d(${lx - (W0 / 2 - j * sw)}px,0,${lz}px) rotateY(${cumL}deg)`;
       rx += sw * Math.cos(ar);
       rz -= sw * Math.sin(ar);
       lx -= sw * Math.cos(al);
       lz += sw * Math.sin(al);
       const rs = rightShade.current[j];
       const ls = leftShade.current[j];
-      if (rs) rs.style.opacity = String(Math.min(0.22, Math.abs(Math.sin(ar)) * 0.3));
-      if (ls) ls.style.opacity = String(Math.min(0.22, Math.abs(Math.sin(al)) * 0.3));
+      if (rs)
+        rs.style.opacity = String(Math.min(0.22, Math.abs(Math.sin(ar)) * 0.3));
+      if (ls)
+        ls.style.opacity = String(Math.min(0.22, Math.abs(Math.sin(al)) * 0.3));
     }
   });
 
@@ -86,7 +111,9 @@ export function WindCover({ project, hovered, reduce, width }: { project: Projec
     return (
       <div
         key={`${side}${j}`}
-        ref={(el) => { refs.current[j] = el; }}
+        ref={(el) => {
+          refs.current[j] = el;
+        }}
         style={{
           position: "absolute",
           top: 0,
@@ -99,19 +126,46 @@ export function WindCover({ project, hovered, reduce, width }: { project: Projec
           backgroundPosition: `${-(x0 - 0)}px 0px`,
         }}
       >
-        <div ref={(el) => { shades.current[j] = el; }} className="absolute inset-0 bg-black" style={{ opacity: 0 }} />
+        <div
+          ref={(el) => {
+            shades.current[j] = el;
+          }}
+          className="absolute inset-0 bg-black"
+          style={{ opacity: 0 }}
+        />
       </div>
     );
   };
 
   return (
-    <div ref={boxRef} className="relative" style={{ aspectRatio: ratio, width: width ?? `min(82vw, clamp(560px, 32vw, 800px), calc(56svh * ${ratio}))` }}>
+    <div
+      ref={boxRef}
+      className="relative"
+      style={{
+        aspectRatio: ratio,
+        width:
+          width ??
+          `min(82vw, clamp(560px, 32vw, 800px), calc(56svh * ${ratio}))`,
+      }}
+    >
       <div
         className="absolute left-0 top-0"
-        style={{ width: W0, height: H0, transform: `scale(${scale})`, transformOrigin: "0 0", filter: "drop-shadow(0 30px 24px rgb(0 0 0 / 0.16))" }}
+        style={{
+          width: W0,
+          height: H0,
+          transform: `scale(${scale})`,
+          transformOrigin: "0 0",
+          filter: "drop-shadow(0 30px 24px rgb(0 0 0 / 0.16))",
+        }}
       >
-        <div className="absolute inset-0" style={{ perspective: W0 * 2.4, perspectiveOrigin: "50% 50%" }}>
-          <div className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
+        <div
+          className="absolute inset-0"
+          style={{ perspective: W0 * 2.4, perspectiveOrigin: "50% 50%" }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{ transformStyle: "preserve-3d" }}
+          >
             {Array.from({ length: M }, (_, j) => strip("r", j))}
             {Array.from({ length: M }, (_, j) => strip("l", j))}
           </div>
@@ -139,7 +193,7 @@ export function WindHero({ project }: { project: Project }) {
         project={{ ...project, cover: hero }}
         hovered={hovered}
         reduce={reduce}
-        width={`min(${project.heroMax ?? 942}px, calc(100vw - 48px), calc(var(--fit-h) * ${ratio}))`}
+        width={`min(${project.heroMax ?? 942}px, 100cqw, calc(var(--fit-h) * ${ratio}))`}
       />
     </div>
   );
