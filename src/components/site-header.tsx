@@ -74,7 +74,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
+      <header className="site-header pointer-events-none fixed inset-x-0 top-0 z-50">
         {/* soft fade so content slides under the bar */}
         <div
           aria-hidden
@@ -352,16 +352,19 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                           role="status"
                           className="sq pointer-events-none absolute left-1/2 top-1/2 flex h-[calc(16px+1.3572em)] w-max -translate-x-1/2 -translate-y-1/2 items-baseline overflow-hidden whitespace-nowrap rounded-[1.2024em] bg-[rgb(243_243_243/0.3)] pt-[0.6786em] shadow-[inset_0_0_0_1px_rgb(0_0_0/0.1)] backdrop-blur-[10px] text-[length:var(--fs)] leading-4"
                           style={{ transformOrigin: "50% 50%" }}
-                          initial={{ opacity: 0, scale: 0.6 }}
+                          initial={{ opacity: 0, scale: 0.85 }}
                           animate={{
                             opacity: 1,
                             scale: 1,
-                            transition: { duration: 0.45, ease: EASE },
+                            transition: {
+                              opacity: { duration: 0.18, ease: "easeOut" },
+                              scale: { duration: 0.45, ease: EASE },
+                            },
                           }}
                           exit={{
                             opacity: 0,
-                            scale: 0.6,
-                            transition: { duration: 0.3, ease: EASE },
+                            scale: 0.85,
+                            transition: { duration: 0.25, ease: EASE },
                           }}
                         >
                           <motion.span
@@ -371,9 +374,9 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                               opacity: 1,
                               filter: "blur(0px)",
                               transition: {
-                                duration: 0.3,
-                                delay: 0.1,
-                                ease: "easeOut",
+                                duration: 0.36,
+                                delay: 0.14,
+                                ease: EASE,
                               },
                             }}
                             exit={{

@@ -471,3 +471,57 @@ button {
     backdrop-filter 1.5s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 1.4s cubic-bezier(0.4, 0, 0.6, 1) 0.2s;
 }
+
+/* Page transitions: the old page blurs and fades out, then the new one melts in (the same blur-fade as
+   the rest of the site). The header stays put. Works on desktop and phones. */
+.site-header {
+  view-transition-name: site-header;
+}
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-group(site-header) {
+  animation-duration: 0s;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+/* Timings measured on dmcg.co: the old page fades out with a 10px blur in 260ms (ease-in), then the
+   new one fades in from an 8px blur over 560ms while settling from a 1.012 scale. */
+::view-transition-old(.page-exit) {
+  animation: vt-out 260ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+::view-transition-new(.page-enter) {
+  animation:
+    vt-in 560ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both,
+    vt-settle 620ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
+}
+@keyframes vt-out {
+  to { opacity: 0; filter: blur(10px); }
+}
+@keyframes vt-in {
+  from { opacity: 0; filter: blur(8px); }
+}
+@keyframes vt-settle {
+  from { scale: 1.012; }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.01ms;
+    animation-delay: 0s;
+  }
+}
+/* Fallback for browsers without View Transitions. */
+@supports not (view-transition-name: none) {
+  .page-fade {
+    animation: vt-in 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
