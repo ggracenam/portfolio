@@ -176,6 +176,7 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
   const router = useRouter();
   const panel = useRef<HTMLDivElement>(null);
   const [h, setH] = useState(300);
+  const [leaving, setLeaving] = useState(false);
   const { copied, copy } = useCopy(site.email);
   useLayoutEffect(() => {
     if (!open || !panel.current) return;
@@ -189,6 +190,7 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
 
   // Navigating closes the menu.
   useEffect(() => {
+    setLeaving(false);
     close();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
@@ -230,8 +232,6 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
           className="fixed inset-0 z-[48] min-[901px]:hidden"
           exit={{ pointerEvents: "none" }}
         >
-          {/* Tap outside the tray to close. */}
-          <div className="absolute inset-0" onClick={close} aria-hidden />
           {blurs.map((b, i) => (
             <motion.div
               key={i}
@@ -245,11 +245,11 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
               initial={{ backdropFilter: "blur(0px)" }}
               animate={{
                 backdropFilter: `blur(${b.px}px)`,
-                transition: { duration: 0.7, ease: EASE },
+                transition: { duration: 0.45, ease: EASE },
               }}
               exit={{
                 backdropFilter: "blur(0px)",
-                transition: { duration: 0.3, ease: "easeOut" },
+                transition: { duration: 0.5, ease: EASE },
               }}
             />
           ))}
@@ -265,168 +265,195 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
             exit={{ opacity: 0, transition: { duration: 0.3 } }}
           />
 
-          <motion.div
-            className="absolute inset-x-2 top-2 overflow-hidden bg-white/85 backdrop-blur-[14px] [border-radius:calc(12.16px*var(--sq))] [corner-shape:superellipse(2)]"
-            style={{ height: h, transformOrigin: "50% 0" }}
-            initial={{ opacity: 0, scale: 0.98, y: -6 }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              y: 0,
-              transition: { duration: 0.55, ease: EASE },
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.98,
-              y: -6,
-              transition: { duration: 0.3, ease: "easeOut" },
-            }}
-          >
-            <div
-              ref={panel}
-              className="px-[max(26px,calc(50%-210px))] pb-[27px] pt-[73px] text-fg"
-            >
-              <ul className="m-0 list-none p-0">
-                {rows.map((l, i) => (
-                  <motion.li
-                    key={l.href}
-                    {...item(i)}
-                    className="border-b border-black/10 first:border-t"
-                  >
-                    <Link
-                      href={l.href}
-                      onClick={(e) => {
-                        if (l.href === "/") showScrollView();
-                        // Let the menu melt away first, then change page (as on dmcg.co).
-                        if (
-                          here !== (l.href === "/" ? "/" : l.href) &&
-                          !e.metaKey &&
-                          !e.ctrlKey
-                        ) {
-                          e.preventDefault();
-                          close();
-                          window.setTimeout(() => router.push(l.href), 380);
-                        } else close();
-                      }}
-                      className="flex h-10 w-full items-center justify-center active:opacity-50"
-                    >
-                      <span
-                        className={row}
-                        data-current={isActive(l.href) || undefined}
-                      >
-                        {l.label}
-                      </span>
-                    </Link>
-                  </motion.li>
-                ))}
-                <motion.li {...item(2)} className="border-b border-black/10">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      close();
-                      window.setTimeout(openAbout, 120);
-                    }}
-                    className="flex h-10 w-full items-center justify-center active:opacity-50"
-                  >
-                    <span
-                      className={row}
-                      data-current={here === "/about" || undefined}
-                    >
-                      About
-                    </span>
-                  </button>
-                </motion.li>
-                <motion.li {...item(3)} className="border-b border-black/10">
-                  <button
-                    type="button"
-                    onClick={copy}
-                    aria-label={`Contact: copy ${site.email}`}
-                    className="relative flex h-10 w-full items-center justify-center active:opacity-50"
-                  >
-                    {/* The word gives way to a small frosted pill showing the address that was copied (as on dmcg.co). */}
-                    <motion.span
-                      className={row}
-                      animate={
-                        copied
-                          ? { opacity: 0, filter: "blur(3px)" }
-                          : { opacity: 1, filter: "blur(0px)" }
-                      }
-                      transition={{ duration: 0.2 }}
-                    >
-                      Contact
-                    </motion.span>
-                    <AnimatePresence>
-                      {copied && (
-                        <motion.span
-                          key="pill"
-                          role="status"
-                          className="sq pointer-events-none absolute left-1/2 top-1/2 flex h-[calc(16px+1.3572em)] w-max -translate-x-1/2 -translate-y-1/2 items-baseline overflow-hidden whitespace-nowrap rounded-[1.2024em] bg-[rgb(243_243_243/0.3)] pt-[0.6786em] shadow-[inset_0_0_0_1px_rgb(0_0_0/0.1)] backdrop-blur-[10px] text-[length:var(--fs)] leading-4"
-                          style={{ transformOrigin: "50% 50%" }}
-                          initial={{ opacity: 0, scale: 0.85 }}
-                          animate={{
-                            opacity: 1,
-                            scale: 1,
-                            transition: {
-                              opacity: { duration: 0.18, ease: "easeOut" },
-                              scale: { duration: 0.45, ease: EASE },
-                            },
-                          }}
-                          exit={{
-                            opacity: 0,
-                            scale: 0.85,
-                            transition: { duration: 0.25, ease: EASE },
-                          }}
-                        >
-                          <motion.span
-                            className="flex items-baseline gap-[0.4821em] pl-[0.9643em] pr-[0.875em]"
-                            initial={{ opacity: 0, filter: "blur(3px)" }}
-                            animate={{
-                              opacity: 1,
-                              filter: "blur(0px)",
-                              transition: {
-                                duration: 0.36,
-                                delay: 0.14,
-                                ease: EASE,
-                              },
-                            }}
-                            exit={{
-                              opacity: 0,
-                              filter: "blur(3px)",
-                              transition: { duration: 0.15 },
-                            }}
-                          >
-                            <span className="tracking-[0.02em]">
-                              {site.email}
-                            </span>
-                            <span className="text-[0.7143em] tracking-[0.02em] text-black/40">
-                              Copied ✓
-                            </span>
-                          </motion.span>
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </button>
-                </motion.li>
-              </ul>
-              <motion.div
-                {...item(4)}
-                className="mt-5 grid grid-cols-[1fr_auto] items-center"
-              >
-                <a
-                  href={site.links.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="justify-self-start"
+          <AnimatePresence>
+            {!leaving && (
+              <>
+                {/* Tap outside the tray to close. */}
+                <div
+                  key="catch"
+                  className="absolute inset-0"
+                  onClick={close}
+                  aria-hidden
+                />
+                <motion.div
+                  key="tray"
+                  className="absolute inset-x-2 top-2 overflow-hidden bg-white/85 backdrop-blur-[14px] [border-radius:calc(12.16px*var(--sq))] [corner-shape:superellipse(2)]"
+                  style={{ height: h, transformOrigin: "50% 0" }}
+                  initial={{ opacity: 0, scale: 0.98, y: -6 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    transition: { duration: 0.55, ease: EASE },
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.98,
+                    y: -6,
+                    transition: { duration: 0.3, ease: "easeOut" },
+                  }}
                 >
-                  LinkedIn
-                </a>
-                <span className="now-pill justify-self-end">
-                  <span className="now-pill-dot" aria-hidden="true" />
-                  <span>Available</span>
-                </span>
-              </motion.div>
-            </div>
-          </motion.div>
+                  <div
+                    ref={panel}
+                    className="px-[max(26px,calc(50%-210px))] pb-[27px] pt-[73px] text-fg"
+                  >
+                    <ul className="m-0 list-none p-0">
+                      {rows.map((l, i) => (
+                        <motion.li
+                          key={l.href}
+                          {...item(i)}
+                          className="border-b border-black/10 first:border-t"
+                        >
+                          <Link
+                            href={l.href}
+                            onClick={(e) => {
+                              if (l.href === "/") showScrollView();
+                              // The tray melts away but the page stays blurred; the new page then sharpens
+                              // out of that blur (as on dmcg.co).
+                              if (
+                                here !== (l.href === "/" ? "/" : l.href) &&
+                                !e.metaKey &&
+                                !e.ctrlKey
+                              ) {
+                                e.preventDefault();
+                                setLeaving(true);
+                                window.setTimeout(
+                                  () => router.push(l.href),
+                                  300,
+                                );
+                              } else close();
+                            }}
+                            className="flex h-10 w-full items-center justify-center active:opacity-50"
+                          >
+                            <span
+                              className={row}
+                              data-current={isActive(l.href) || undefined}
+                            >
+                              {l.label}
+                            </span>
+                          </Link>
+                        </motion.li>
+                      ))}
+                      <motion.li
+                        {...item(2)}
+                        className="border-b border-black/10"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            close();
+                            window.setTimeout(openAbout, 120);
+                          }}
+                          className="flex h-10 w-full items-center justify-center active:opacity-50"
+                        >
+                          <span
+                            className={row}
+                            data-current={here === "/about" || undefined}
+                          >
+                            About
+                          </span>
+                        </button>
+                      </motion.li>
+                      <motion.li
+                        {...item(3)}
+                        className="border-b border-black/10"
+                      >
+                        <button
+                          type="button"
+                          onClick={copy}
+                          aria-label={`Contact: copy ${site.email}`}
+                          className="relative flex h-10 w-full items-center justify-center active:opacity-50"
+                        >
+                          {/* The word gives way to a small frosted pill showing the address that was copied (as on dmcg.co). */}
+                          <motion.span
+                            className={row}
+                            animate={
+                              copied
+                                ? { opacity: 0, filter: "blur(3px)" }
+                                : { opacity: 1, filter: "blur(0px)" }
+                            }
+                            transition={{ duration: 0.2 }}
+                          >
+                            Contact
+                          </motion.span>
+                          <AnimatePresence>
+                            {copied && (
+                              <motion.span
+                                key="pill"
+                                role="status"
+                                className="sq pointer-events-none absolute left-1/2 top-1/2 flex h-[calc(16px+1.3572em)] w-max -translate-x-1/2 -translate-y-1/2 items-baseline overflow-hidden whitespace-nowrap rounded-[1.2024em] bg-[rgb(243_243_243/0.3)] pt-[0.6786em] shadow-[inset_0_0_0_1px_rgb(0_0_0/0.1)] backdrop-blur-[10px] text-[length:var(--fs)] leading-4"
+                                style={{ transformOrigin: "50% 50%" }}
+                                initial={{ opacity: 0, scale: 0.85 }}
+                                animate={{
+                                  opacity: 1,
+                                  scale: 1,
+                                  transition: {
+                                    opacity: {
+                                      duration: 0.18,
+                                      ease: "easeOut",
+                                    },
+                                    scale: { duration: 0.45, ease: EASE },
+                                  },
+                                }}
+                                exit={{
+                                  opacity: 0,
+                                  scale: 0.85,
+                                  transition: { duration: 0.25, ease: EASE },
+                                }}
+                              >
+                                <motion.span
+                                  className="flex items-baseline gap-[0.4821em] pl-[0.9643em] pr-[0.875em]"
+                                  initial={{ opacity: 0, filter: "blur(3px)" }}
+                                  animate={{
+                                    opacity: 1,
+                                    filter: "blur(0px)",
+                                    transition: {
+                                      duration: 0.36,
+                                      delay: 0.14,
+                                      ease: EASE,
+                                    },
+                                  }}
+                                  exit={{
+                                    opacity: 0,
+                                    filter: "blur(3px)",
+                                    transition: { duration: 0.15 },
+                                  }}
+                                >
+                                  <span className="tracking-[0.02em]">
+                                    {site.email}
+                                  </span>
+                                  <span className="text-[0.7143em] tracking-[0.02em] text-black/40">
+                                    Copied ✓
+                                  </span>
+                                </motion.span>
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+                        </button>
+                      </motion.li>
+                    </ul>
+                    <motion.div
+                      {...item(4)}
+                      className="mt-5 grid grid-cols-[1fr_auto] items-center"
+                    >
+                      <a
+                        href={site.links.linkedin}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="justify-self-start"
+                      >
+                        LinkedIn
+                      </a>
+                      <span className="now-pill justify-self-end">
+                        <span className="now-pill-dot" aria-hidden="true" />
+                        <span>Available</span>
+                      </span>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
