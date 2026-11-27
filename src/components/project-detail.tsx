@@ -136,7 +136,7 @@ export function ProjectDetail({
                         : "media-round mx-auto"
                   }
                   style={{
-                    width: `min(${project.video && !project.hero ? "520px" : project.hero ? `${project.heroMax ?? 760}px` : "942px"}, 100%, calc(${project.heroFull ? "4000px" : project.heroPlain ? "var(--fit-h)" : project.hero ? "max(300px, 100svh - 390px)" : "var(--fit-h)"} * ${(project.hero ?? project.cover).w / (project.hero ?? project.cover).h}))`,
+                    width: `min(${project.video && !project.hero ? "520px" : project.hero ? `${project.heroMax ?? 760}px` : "942px"}, 100%, calc(${project.heroFull ? "4000px" : project.heroPlain ? "var(--hero-fit-h)" : project.hero ? "max(300px, 100svh - 390px)" : "var(--fit-h)"} * ${(project.hero ?? project.cover).w / (project.hero ?? project.cover).h}))`,
                   }}
                 >
                   <Image

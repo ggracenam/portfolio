@@ -13,14 +13,24 @@ export function HoverHero({ project }: { project: Project }) {
   return (
     <div
       className="relative mx-auto"
-      style={{ width: `min(${project.heroMax ?? 942}px, 100%, calc(var(--fit-h) * ${ratio}))`, aspectRatio: ratio }}
+      style={{
+        width: `min(${project.heroMax ?? 942}px, 100%, calc(var(--hero-fit-h) * ${ratio}))`,
+        aspectRatio: ratio,
+      }}
       onPointerEnter={(e) => e.pointerType === "mouse" && setOn(true)}
       onPointerLeave={() => setOn(false)}
       onFocus={() => setOn(true)}
       onBlur={() => setOn(false)}
       tabIndex={0}
     >
-      <Image src={img.src} alt={img.alt} fill priority sizes="(min-width: 990px) 942px, 100vw" className="object-contain" />
+      <Image
+        src={img.src}
+        alt={img.alt}
+        fill
+        priority
+        sizes="(min-width: 990px) 942px, 100vw"
+        className="object-contain"
+      />
       <Image
         src={alt.src}
         alt=""

@@ -193,7 +193,7 @@ export function WindHero({ project }: { project: Project }) {
         project={{ ...project, cover: hero }}
         hovered={hovered}
         reduce={reduce}
-        width={`min(${project.heroMax ?? 942}px, 100cqw, calc(var(--fit-h) * ${ratio}))`}
+        width={`min(${project.heroMax ?? 942}px, 100cqw, calc(var(--hero-fit-h) * ${ratio}))`}
       />
     </div>
   );

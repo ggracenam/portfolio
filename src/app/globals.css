@@ -272,6 +272,13 @@ button {
 /* Project pages: every image is capped to fit one screen (below the header), width follows its proportions. */
 :root {
   --fit-h: calc(100svh - 150px);
+  /* Hero images: on phones a tall (portrait) hero is capped so it reads about the same size as the wide ones. */
+  --hero-fit-h: var(--fit-h);
+}
+@media (max-width: 900.99px) {
+  :root {
+    --hero-fit-h: min(var(--fit-h), 48svh);
+  }
 }
 
 /* Pages that opt out of the hairline outline on images. */
