@@ -15,18 +15,32 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const SEEN = "intro-seen";
 const PASS_SALT = "d72992c1514d157c04ddab98b4b16ae2";
-const PASS_KEY = "8d217c17c47f2655452aaf58e954d843fab42af370c959c038d91ec3b864d0cf"; // PBKDF2-SHA256 of the lower-case password
+const PASS_KEY =
+  "8d217c17c47f2655452aaf58e954d843fab42af370c959c038d91ec3b864d0cf"; // PBKDF2-SHA256 of the lower-case password
 const PASS_ROUNDS = 310000;
 const MELT_MS = 1700;
 
-const hex = (b: Uint8Array) => Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
-const unhex = (s: string) => new Uint8Array(s.match(/../g)!.map((h) => parseInt(h, 16)));
+const hex = (b: Uint8Array) =>
+  Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
+const unhex = (s: string) =>
+  new Uint8Array(s.match(/../g)!.map((h) => parseInt(h, 16)));
 
 /** Slow on purpose: each guess costs a fraction of a second, so guessing in bulk is expensive. */
 async function derive(pw: string) {
-  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveBits"]);
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(pw),
+    "PBKDF2",
+    false,
+    ["deriveBits"],
+  );
   const bits = await crypto.subtle.deriveBits(
-    { name: "PBKDF2", hash: "SHA-256", salt: unhex(PASS_SALT), iterations: PASS_ROUNDS },
+    {
+      name: "PBKDF2",
+      hash: "SHA-256",
+      salt: unhex(PASS_SALT),
+      iterations: PASS_ROUNDS,
+    },
     key,
     256,
   );
@@ -43,6 +57,15 @@ export function IntroCard() {
   const inerted = useRef<Element[]>([]);
   const reduce = useRef(false);
 
+  // Phones scroll the page when the keyboard opens and keep that offset afterwards, so after
+  // unlocking start at the very top.
+  const toTop = useCallback(() => {
+    inputRef.current?.blur();
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
+
   const finish = useCallback(() => {
     if (done.current) return;
     done.current = true;
@@ -51,10 +74,11 @@ export function IntroCard() {
     } catch {}
     document.documentElement.classList.add("intro-seen");
     document.documentElement.style.overflow = "";
+    toTop();
     inerted.current.forEach((el) => el.removeAttribute("inert"));
     inerted.current = [];
     setOn(false);
-  }, []);
+  }, [toTop]);
 
   // Show the lock on every page, once per session unless "?intro".
   useEffect(() => {
@@ -159,6 +183,7 @@ export function IntroCard() {
               ok = (await derive(v)) === PASS_KEY;
             } catch {}
             if (ok) {
+              toTop();
               if (reduce.current) finish();
               else setMelting(true);
             } else {
