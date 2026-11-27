@@ -195,13 +195,6 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const reach = 8 + h;
-  const blurs = [
-    { px: 55, from: 0, to: 40 },
-    { px: 33, from: 40, to: 90 },
-    { px: 16, from: 90, to: 140 },
-    { px: 8, from: 140, to: 200 },
-  ];
   const item = (i: number) => ({
     initial: { opacity: 0, filter: "blur(8px)", y: -4 },
     animate: {
@@ -232,37 +225,13 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
           className="fixed inset-0 z-[48] min-[901px]:hidden"
           exit={{ pointerEvents: "none" }}
         >
-          {blurs.map((b, i) => (
-            <motion.div
-              key={i}
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0"
-              style={{
-                height: reach + b.to,
-                maskImage: `linear-gradient(to bottom, #000 ${reach + b.from}px, transparent ${reach + b.to}px)`,
-                WebkitMaskImage: `linear-gradient(to bottom, #000 ${reach + b.from}px, transparent ${reach + b.to}px)`,
-              }}
-              initial={{ backdropFilter: "blur(0px)" }}
-              animate={{
-                backdropFilter: `blur(${b.px}px)`,
-                transition: { duration: 0.45, ease: EASE },
-              }}
-              exit={{
-                backdropFilter: "blur(0px)",
-                transition: { duration: 0.5, ease: EASE },
-              }}
-            />
-          ))}
+          {/* One light blur over the whole page (two cheap layers instead of four heavy masked ones). */}
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[rgb(128_128_128/0.1)]"
-            style={{
-              maskImage: `linear-gradient(to bottom, #000 ${reach}px, transparent ${reach + 160}px)`,
-              WebkitMaskImage: `linear-gradient(to bottom, #000 ${reach}px, transparent ${reach + 160}px)`,
-            }}
+            className="pointer-events-none absolute inset-0 bg-[rgb(128_128_128/0.08)] backdrop-blur-[14px] [-webkit-backdrop-filter:blur(14px)]"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.5 } }}
-            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+            animate={{ opacity: 1, transition: { duration: 0.4, ease: EASE } }}
+            exit={{ opacity: 0, transition: { duration: 0.45, ease: EASE } }}
           />
 
           <AnimatePresence>
@@ -284,7 +253,7 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                     opacity: 1,
                     scale: 1,
                     y: 0,
-                    transition: { duration: 0.55, ease: EASE },
+                    transition: { duration: 0.55, delay: 0.1, ease: EASE },
                   }}
                   exit={{
                     opacity: 0,
@@ -317,10 +286,14 @@ function MobileMenu({ open, close }: { open: boolean; close: () => void }) {
                               ) {
                                 e.preventDefault();
                                 setLeaving(true);
-                                window.setTimeout(
-                                  () => router.push(l.href),
-                                  300,
-                                );
+                                window.setTimeout(() => {
+                                  const root = document.documentElement;
+                                  root.dataset.menuNav = "1";
+                                  router.push(l.href);
+                                  window.setTimeout(() => {
+                                    delete root.dataset.menuNav;
+                                  }, 1200);
+                                }, 300);
                               } else close();
                             }}
                             className="flex h-10 w-full items-center justify-center active:opacity-50"

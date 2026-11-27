@@ -549,6 +549,17 @@ button {
 @keyframes vt-settle {
   from { scale: 1.015; }
 }
+/* Navigating from the menu: the page is already blurred under the veil, so just fade the new page in
+   (no second blur/rise and no replay of the old page). */
+html[data-menu-nav] ::view-transition-old(.page-exit) {
+  animation: none;
+}
+html[data-menu-nav] ::view-transition-new(.page-enter) {
+  animation: vt-in-plain 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes vt-in-plain {
+  from { opacity: 0; }
+}
 /* Fallback for browsers without View Transitions. */
 @supports not (view-transition-name: none) {
   .page-fade {
