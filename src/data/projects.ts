@@ -36,6 +36,8 @@ export type Block =
       pull?: number;
       /** Blend a white-backed picture into the page colour (white takes on the background, everything darker is left alone). */
       blend?: boolean;
+      /** Phone-only layout: separate pictures in rows (e.g. [2,2,3]); the main `images` are then shown only on larger screens. */
+      mobile?: { rows: number[]; images: Img[] };
       /** A small muted line under the images (e.g. to credit work that is not mine). */
       caption?: string;
       /** Show the images without the rounded frame and hairline outline. */
@@ -384,6 +386,7 @@ const all: Project[] = [
         fitH: "4000px",
         maxWidth: 1232,
         images: [{ src: "/projects/umgpt/flow-desktop.jpg", w: 1884, h: 1046, alt: "Desktop screens in the order a user moves through them" }],
+        mobile: { rows: [1, 1, 1, 1, 1], images: [{ src: "/projects/umgpt/flow-desktop-1.jpg", w: 664, h: 474, alt: "Desktop screen 1 of 5" },{ src: "/projects/umgpt/flow-desktop-2.jpg", w: 664, h: 474, alt: "Desktop screen 2 of 5" },{ src: "/projects/umgpt/flow-desktop-3.jpg", w: 664, h: 474, alt: "Desktop screen 3 of 5" },{ src: "/projects/umgpt/flow-desktop-4.jpg", w: 664, h: 474, alt: "Desktop screen 4 of 5" },{ src: "/projects/umgpt/flow-desktop-5.jpg", w: 664, h: 474, alt: "Desktop screen 5 of 5" }] },
       },
       {
         type: "text",
@@ -395,6 +398,7 @@ const all: Project[] = [
         type: "images",
         fitH: "4000px",
         images: [{ src: "/projects/umgpt/flow-mobile.jpg", w: 1884, h: 1626, alt: "Mobile screens in the order a user moves through them" }],
+        mobile: { rows: [2, 2, 3], images: [{ src: "/projects/umgpt/flow-mobile-1.jpg", w: 471, h: 807, alt: "Mobile screen 1 of 7" },{ src: "/projects/umgpt/flow-mobile-2.jpg", w: 471, h: 807, alt: "Mobile screen 2 of 7" },{ src: "/projects/umgpt/flow-mobile-3.jpg", w: 471, h: 807, alt: "Mobile screen 3 of 7" },{ src: "/projects/umgpt/flow-mobile-4.jpg", w: 471, h: 807, alt: "Mobile screen 4 of 7" },{ src: "/projects/umgpt/flow-mobile-5.jpg", w: 471, h: 807, alt: "Mobile screen 5 of 7" },{ src: "/projects/umgpt/flow-mobile-6.jpg", w: 471, h: 807, alt: "Mobile screen 6 of 7" },{ src: "/projects/umgpt/flow-mobile-7.jpg", w: 471, h: 807, alt: "Mobile screen 7 of 7" }] },
       },
 
       {

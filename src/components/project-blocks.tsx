@@ -141,6 +141,7 @@ function BlockView({ block }: { block: Block }) {
             className={cn(
               "mx-auto grid gap-4 max-[900.99px]:gap-6 min-[901px]:grid-cols-2",
               block.sameHeight && "max-[900.99px]:!w-full",
+              block.mobile && "max-[900.99px]:hidden",
             )}
             style={{
               width: block.sameHeight
@@ -163,6 +164,39 @@ function BlockView({ block }: { block: Block }) {
               );
             })}
           </div>
+          {block.mobile && (
+            <div className="flex flex-col min-[901px]:hidden">
+              {(() => {
+                let at = 0;
+                return block.mobile.rows.map((n, r) => {
+                  const row = block.mobile!.images.slice(at, at + n);
+                  at += n;
+                  return (
+                    <Reveal key={r}>
+                      <div
+                        className="grid"
+                        style={{
+                          gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))`,
+                        }}
+                      >
+                        {row.map((img) => (
+                          <Image
+                            key={img.src}
+                            src={img.src}
+                            alt={img.alt}
+                            width={img.w}
+                            height={img.h}
+                            sizes="(min-width: 990px) 463px, 100vw"
+                            className="h-auto w-full"
+                          />
+                        ))}
+                      </div>
+                    </Reveal>
+                  );
+                });
+              })()}
+            </div>
+          )}
           {block.caption && (
             <p className="mx-auto w-[min(942px,100%)] text-muted">
               {block.caption}
