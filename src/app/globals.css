@@ -124,12 +124,12 @@ button {
   }
 }
 
-/* Home: cursor-following label on mouse devices, static label under image on touch. */
+/* Home: cursor-following label on mouse devices. Touch screens show no label under the images
+   (to bring it back, change .label-static to display: inline-flex). */
 .label-hover { display: none; }
-.label-static { display: inline-flex; }
+.label-static { display: none; }
 @media (hover: hover) and (pointer: fine) {
   .label-hover { display: inline-flex; }
-  .label-static { display: none; }
 }
 
 /* Halo cursor: a soft ring of warm light (replaces the arrow on mouse devices). */
