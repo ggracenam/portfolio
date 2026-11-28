@@ -9,13 +9,13 @@ export type Exhibition = {
 
 // [title, venue, city, date, note?]
 const rows: [string, string, string, string, string?][] = [
-  ["James Turrell: Something Old, Something New, Something Borrowed, Something Blue", "Almine Rech", "New York", "11.2026"],
   ["Georg Baselitz: Meine Schule", "Gagosian", "New York", "11.2026"],
   ["Larry Pitman: The Remedy of Analog Space and Time", "Lehmann Maupin", "New York", "11.2026"],
   ["Robert H. Colescott: Cairo", "Gladstone Gallery", "New York", "11.2026"],
   ["Sandra Cinto: The Path to Stars", "Tanya Bonakdar Gallery", "New York", "11.2026"],
   ["Yoshitomo Nara", "David Zwirner", "New York", "11.2026"],
   ["Brice Marden: I am Plane Image", "Gagosian", "New York", "11.2026"],
+  ["James Turrell: Something Old, Something New, Something Borrowed, Something Blue", "Almine Rech", "New York", "11.2026"],
   ["Artists at the Café: From the Impressionists, Van Gogh and Toulouse-Lautrec to Picasso", "Mitsubishi Ichigokan Museum", "Tokyo", "08.2026"],
   ["ARCHI-DEPOT (ft. Kengo Kuma, Shigeru Ban, etc.)", "WHAT MUSEUM", "Tokyo", "08.2026"],
   ["Corrugated/Coral: Eight Practices to Project Architecture Afar", "WHAT MUSEUM", "Tokyo", "08.2026"],
