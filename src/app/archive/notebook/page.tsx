@@ -6,9 +6,8 @@ import { notebook } from "@/data/media";
 export const metadata: Metadata = { title: "Notebook" };
 
 const story = [
-  "In the summer of 2026, I hurt my back so badly that I couldn’t stand up or walk. A herniated disc at L4/L5 had left my spinal canal severely compressed, and I was stuck at home, staring at my bedroom ceiling.",
-  "So I picked up drawing again. I made an account just for my illustrations and started posting, with no plan beyond giving the days something to hold onto. Then a piece of fan art was noticed by the art community, and people began to find me. Somewhere between the pain and the long days indoors, I found a community.",
-  "Since then, my illustrations have reached an audience I never expected, with one of my most widely viewed reels reaching 1.47M views and 198K likes. More recently, I’ve shifted towards sharing individual illustrations as posts, choosing a closer-knit community and more meaningful conversations over numbers.",
+  "In the summer of 2026, I hurt my back so badly I couldn’t stand or walk. Stuck at home, I picked up drawing again and started posting under an account made just for my illustrations, with no plan beyond giving the days something to hold onto.",
+  "A piece of fan art was noticed by the art community, and people began to find me. One reel reached 1.47M views. Since then I’ve shifted toward sharing individual illustrations as posts, choosing a closer-knit community and more meaningful conversations over numbers.",
 ];
 
 /** Bolds the reach numbers in a paragraph. */
