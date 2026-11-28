@@ -10,6 +10,7 @@ import { IntroCard } from "@/components/intro-card";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://yourimnam.com"),
   title: {
     default: `${site.name} — ${site.title}`,
     template: `%s — ${site.name}`,
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     description: site.description,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: `${site.name} — ${site.title}`,
     description: site.description,
   },
